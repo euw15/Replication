@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package connectionManagement;
 
 import RPConectionData.RPConection;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -19,26 +18,24 @@ import javax.swing.JOptionPane;
  *
  * @author Jason
  */
-public class RPMysqlConcreteConection implements RPConnectionRepository{
-    
+public class RPMysqlConcreteConection implements RPConnectionInterface {
+
     RPConection conection;
-    
-    public RPMysqlConcreteConection(RPConection conection){
-        this.conection.driver = conection.driver;
-        this.conection.pass = conection.pass;
-        this.conection.user = conection.user;
-        this.conection.database = conection.database;
+
+    public RPMysqlConcreteConection() {
+       
     }
 
-    
-    @Override
-    public ResultSet makeQuery() {
+    @Override  //
+    public ResultSet makeQuery(String query) {
         ResultSet rs = null;
         try {
-            Class.forName(conection.driver);
-            Connection conectionMySQL = DriverManager.getConnection(conection.database, conection.user, conection.pass);
+            Class.forName(this.conection.getDriver());
+            
+            Connection conectionMySQL = DriverManager.getConnection("jdbc:mysql://" + conection.getIp() + ":" + conection.getPort()
+                    + "/" + conection.getDatabase(), conection.getUser(), conection.getPass());
             Statement statement = conectionMySQL.createStatement();
-             rs = statement.executeQuery("SELECT * FROM mierda");
+            rs = statement.executeQuery(query);
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println("Error al recuperar conexion "
                     + e.toString());
@@ -47,13 +44,12 @@ public class RPMysqlConcreteConection implements RPConnectionRepository{
 
         }
         return rs;
-         
-            
-        
-        //falta return
-        
+    }
+    
+    @Override
+    public void setConection(RPConection mConection)
+    {
+        this.conection = mConection;
     }
 
-    
-    
 }

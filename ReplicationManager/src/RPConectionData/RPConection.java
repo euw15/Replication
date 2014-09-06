@@ -6,8 +6,6 @@
 
 package RPConectionData;
 
-import java.sql.Connection;
-import java.sql.Statement;
 
 /**
  *
@@ -19,13 +17,22 @@ public class RPConection {
      public String database ;
      public String user ;
      public String pass ;
- 
+     public String port ;
+     public String ip;
+     
      public RPConection(RPConection mConection)
      {
          this.driver   = mConection.driver;
          this.database = mConection.database;
          this.user     = mConection.user;
          this.pass     = mConection.pass;
+         this.port     = mConection.port;
+         this.ip       = mConection.ip;
+  
+     }
+     
+     public RPConection()
+     {
      }
 
     /**
@@ -82,6 +89,34 @@ public class RPConection {
      */
     public void setPass(String pass) {
         this.pass = pass;
+    }
+
+    /**
+     * @return the port
+     */
+    public String getPort() {
+        return port;
+    }
+
+    /**
+     * @param port the port to set
+     */
+    public void setPort(String port) {
+        this.port = port;
+    }
+
+    /**
+     * @return the ip
+     */
+    public String getIp() {
+        return ip;
+    }
+
+    /**
+     * @param ip the ip to set
+     */
+    public void setIp(String ip) {
+        this.ip = ip;
     }
      
      
