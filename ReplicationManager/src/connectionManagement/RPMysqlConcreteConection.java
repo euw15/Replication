@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
  */
 public class RPMysqlConcreteConection implements RPConnectionInterface {
 
-    RPConection conection;
+    public RPConection conection;
 
     public RPMysqlConcreteConection() {
        
@@ -30,10 +30,10 @@ public class RPMysqlConcreteConection implements RPConnectionInterface {
     public ResultSet makeQuery(String query) {
         ResultSet rs = null;
         try {
-            Class.forName(this.conection.getDriver());
+            Class.forName(this.getConection().getDriver());
             
-            Connection conectionMySQL = DriverManager.getConnection("jdbc:mysql://" + conection.getIp() + ":" + conection.getPort()
-                    + "/" + conection.getDatabase(), conection.getUser(), conection.getPass());
+            Connection conectionMySQL = DriverManager.getConnection("jdbc:mysql://" + getConection().getIp() + ":" + getConection().getPort()
+                    + "/" + getConection().getDatabase(), getConection().getUser(), getConection().getPass());
             Statement statement = conectionMySQL.createStatement();
             rs = statement.executeQuery(query);
         } catch (ClassNotFoundException | SQLException e) {
@@ -50,6 +50,14 @@ public class RPMysqlConcreteConection implements RPConnectionInterface {
     public void setConection(RPConection mConection)
     {
         this.conection = mConection;
+    }
+
+    /**
+     * @return the conection
+     */
+    @Override
+    public RPConection getConection() {
+        return conection;
     }
 
 }

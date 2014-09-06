@@ -22,5 +22,6 @@ public interface RPConnectionInterface {
     public ResultSet makeQuery(String query);
 
    public void setConection(RPConection mConection);
+   public RPConection getConection();
     
 }

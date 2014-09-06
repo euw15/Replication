@@ -10,6 +10,8 @@ import connectionManagement.RPConnectionInterface;
 import connectionManagement.RPConnectionsFactory;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,13 +38,17 @@ public class ReplicationManager {
         RPConnectionInterface test = RPConnectionsFactory.createConnection("MySQL");
         test.setConection(conectionMySql);
         
-        ResultSet makeQuery = test.makeQuery("select * from Billing");
-        try {
-            while (makeQuery.next()) {
-                System.out.println(makeQuery.getInt("tax"));
+        
+        RPBaseInformation prueba = new RPBaseInformation(test);
+         ArrayList<String> listTables = prueba.getTables();//getMetaData("billing");//test.makeQuery("select * from Billing");
+        List<List<String>> metaData = prueba.getMetaData(listTables);
+        
+        for (int i = 0; i < metaData.size(); i++) {
+            for (int j = 0; j < metaData.get(i).size(); j++) {
+                System.out.print(metaData.get(i).get(j) + " - ");
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(ReplicationManager.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("");
+            
         }
     }
 

@@ -51,4 +51,9 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface{
     {
         this.conection = mConection;
     }
+
+    @Override
+    public RPConection getConection() {
+        return conection;
+    }
 }
