@@ -9,8 +9,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 
 /**
@@ -26,9 +24,9 @@ public abstract class SettingBD implements Setting {
     final String database = "jdbc:mysql://localhost:3306/replication";
     final String user = "root";
     final String pass = "123456";
-    Connection conection = null;
-    Statement statement = null;
-    DateFormat dateFormat = new SimpleDateFormat("EEEE");//formato fecha act
+    Connection conection ;
+    Statement statement ;
+   // DateFormat dateFormat = new SimpleDateFormat("EEEE");//formato fecha act
 
     public SettingBD() {
         try {
