@@ -12,7 +12,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -25,29 +24,31 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
     public RPMSSQLConcreteConection() {
     }
 
-    @Override  //
+    @Override
     public ResultSet makeQuery(String query) {
         ResultSet rs = null;
         try {
             Class.forName(this.conection.getDriver());
 
-            Connection conectionMySQL = DriverManager.getConnection("jdbc:sqlserver://" + conection.getIp() + ":" + conection.getPort()
-                    + ";dataBaseName=" + conection.getDatabase(), conection.getUser(), conection.getPass());
+            Connection conectionMySQL = DriverManager.getConnection("jdbc:"
+                    + "sqlserver://"
+                    + conection.getIp() + ":"
+                    + conection.getPort() + ";dataBaseName="
+                    + conection.getDatabase(), conection.getUser(),
+                    conection.getPass());
+
             Statement statement = conectionMySQL.createStatement();
             rs = statement.executeQuery(query);
-        } catch (ClassNotFoundException | SQLException e) {
-            System.out.println("Error al recuperar conexion "
-                    + e.toString());
-            
+
+        } catch (SQLException e) {
+            InfError.showInformation(null, "Error al recuperar la conexion");
+
+        } catch (ClassNotFoundException ex) {
+            InfError.showInformation(null, "Error al conectar a la base de datos");
         }
-            finally 
-        {
-            InfError.showInformation(null, "No existe la base de datos");
-        }
-     
+
         return rs;
 
-        //falta return
     }
 
     @Override

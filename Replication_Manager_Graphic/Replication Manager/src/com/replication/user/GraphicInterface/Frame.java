@@ -7,12 +7,16 @@ package com.replication.user.GraphicInterface;
 
 import com.replication.admin.ConnectionManagement.RPConnectionInterface;
 import com.replication.admin.ConnectionManagement.RPConnectionsFactory;
+import com.replication.admin.DataStructure.RPTableSLL;
 import com.replication.admin.RPConectionData.RPBaseInformation;
 import com.replication.admin.RPConectionData.RPConection;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -29,7 +33,10 @@ import javax.swing.table.TableColumn;
 public class Frame extends javax.swing.JFrame {
 
     private final ImageIcon iconEdit;
+    private final ImageIcon iconTables;
     private int rowCount;
+
+    private final List<RPTableSLL> DataBases;
 
     /**
      * Creates new form Frame
@@ -40,8 +47,11 @@ public class Frame extends javax.swing.JFrame {
 
         iconEdit = new javax.swing.ImageIcon(getClass().
                 getResource("/com/replication/user/images/sync.png"));
-
+        iconTables = new javax.swing.ImageIcon(getClass().
+                getResource("/com/replication/user/images/sql.png"));
         rowCount = 0;
+
+        DataBases = new LinkedList<>();
     }
 
     /**
@@ -60,83 +70,95 @@ public class Frame extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Replication Manager");
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font("Calibri Light", 0, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Replication Manager");
 
         table.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        table.setFont(new java.awt.Font("Calibri Light", 0, 14)); // NOI18N
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Motor Origen", "IP Origen", "Nombre BD", "Usuario Origen", "Contraseña Origen", "", "Motor Destino", "IP Destino", "Nombre BD", "Usuario Destino", "Contraseña Destino", "Sincronizar"
+                "Motor Origen\n", "IP Origen\n", "Nombre BD\n", "Usuario Origen\n", "Contraseña Origen\n", "\n-\n", "Motor Destino\n", "IP Destino\n", "Nombre BD\n", "Usuario Destino\n", "Contraseña Destino\n", "Sincronizar\n"
             }
-        ));
-        table.setCellSelectionEnabled(true);
-        table.setGridColor(new java.awt.Color(153, 153, 153));
-        table.setShowHorizontalLines(false);
-        table.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(table);
+        ){
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,java.lang.String.class,java.lang.String.class,java.lang.String.class,java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, true, true, true, true, true, true, true,true,true,true,true
+            };
 
-        jButton1.setText("Agregar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
             }
-        });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(505, 505, 505)
-                                .addComponent(jLabel1))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jButton1)))
-                        .addGap(0, 614, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(10, 10, 10)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 669, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        }
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
+    );
+    table.setCellSelectionEnabled(true);
+    table.setFocusable(false);
+    table.setGridColor(new java.awt.Color(204, 204, 204));
+    table.setRowHeight(20);
+    table.getTableHeader().setReorderingAllowed(false);
+    jScrollPane1.setViewportView(table);
 
-        pack();
+    jButton1.setText("Agregar");
+    jButton1.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jButton1ActionPerformed(evt);
+        }
+    });
+
+    javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+    jPanel1.setLayout(jPanel1Layout);
+    jPanel1Layout.setHorizontalGroup(
+        jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel1Layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jScrollPane1)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addComponent(jButton1)
+                    .addGap(0, 1371, Short.MAX_VALUE))
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addContainerGap())
+    );
+    jPanel1Layout.setVerticalGroup(
+        jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel1Layout.createSequentialGroup()
+            .addContainerGap()
+            .addComponent(jLabel1)
+            .addGap(10, 10, 10)
+            .addComponent(jButton1)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 669, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addContainerGap())
+    );
+
+    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+    getContentPane().setLayout(layout);
+    layout.setHorizontalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+    );
+    layout.setVerticalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+    );
+
+    pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -151,6 +173,8 @@ public class Frame extends javax.swing.JFrame {
         exp3.setCellEditor(new ComboBoxEditor());
 
         table.setValueAt(iconEdit, rowCount, 11);
+
+        table.setValueAt(iconTables, rowCount, 5);
 
         rowCount++;
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -170,7 +194,8 @@ public class Frame extends javax.swing.JFrame {
 
         DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
         centerRender.setHorizontalAlignment(JLabel.CENTER);
-        table.setRowHeight(30);
+
+        table.setRowHeight(35);
 
         table.getColumnModel().getColumn(0).setCellRenderer(centerRender);
         table.getColumnModel().getColumn(1).setCellRenderer(centerRender);
@@ -189,6 +214,12 @@ public class Frame extends javax.swing.JFrame {
         table.getTableHeader().setResizingAllowed(true);
         table.getTableHeader().setFont(new Font("Calibri Light", Font.PLAIN, 30));
 
+        MultiLineHeaderRenderer renderer = new MultiLineHeaderRenderer();
+        Enumeration e = table.getColumnModel().getColumns();
+
+        while (e.hasMoreElements()) {
+            ((TableColumn) e.nextElement()).setHeaderRenderer(renderer);
+        }
         Action accion;
         accion = new AbstractAction() {
             @Override
@@ -211,6 +242,7 @@ public class Frame extends javax.swing.JFrame {
                 }
                 RPConection conectionMySql = new RPConection();
                 RPConnectionInterface RPconnect;
+                
                 SeleccionarTablas selector = new SeleccionarTablas(null, true);
 
                 switch (Motor_Origen) {
@@ -228,14 +260,20 @@ public class Frame extends javax.swing.JFrame {
 
                         RPBaseInformation baseInformation = new RPBaseInformation(RPconnect);
 
-                        ArrayList<String> data = selector.showDialog(baseInformation.getTablesMySQL());
+                        ArrayList<String> tablesMySQL = baseInformation.getTablesMySQL();
 
-                        data.stream().forEach((data1) -> {
-                            System.out.println(data1);
-                        });
+                        if (!tablesMySQL.isEmpty()) {
+                            ArrayList<String> data = selector.showDialog(tablesMySQL);
 
+//                            RPTableSLL tablesList = new RPTableSLL(IP_Origen + "::" + Nombre_BD);//Se crea una lista de tablas
+//
+//                            data.stream().forEach((data1) -> {
+//                                tablesList.insert(data1);// se insertan las tablas
+//                                DataBases.add(tablesList);//se agrega a la lisat de bases de datos
+//                            });
+                        }
                         break;
-                        
+
                     case "SQL SERVER":
 
                         conectionMySql.setDatabase(Nombre_BD);
@@ -250,16 +288,23 @@ public class Frame extends javax.swing.JFrame {
 
                         RPBaseInformation baseInformation1 = new RPBaseInformation(RPconnect);
 
-                        ArrayList<String> data1 = selector.showDialog(baseInformation1.getTablesMSSQL());
+                        ArrayList<String> tablesMS_SQL = baseInformation1.getTablesMySQL();
+                        if (!tablesMS_SQL.isEmpty()) {
+                            ArrayList<String> data = selector.showDialog(tablesMS_SQL);
 
-                        data1.stream().forEach((data2) -> {
-                            System.out.println(data2);
-                        });
+                            RPTableSLL tablesList = new RPTableSLL(IP_Origen + "::" + Nombre_BD);//Se crea una lista de tablas
+                            data.stream().forEach((data1) -> {
+
+                                tablesList.insert(data1);// se insertan las tablas
+
+                                DataBases.add(tablesList);//se agrega a la lista de bases de datos
+                            });
+                        }
 
                         break;
-                        
+
                     default:
-                           System.out.println("No se ha creado codigo para ello");
+                        System.out.println("No se ha creado codigo para ello");
                 }
 
             }

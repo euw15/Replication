@@ -14,7 +14,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -28,26 +27,26 @@ public class RPMysqlConcreteConection implements RPConnectionInterface {
 
     }
 
-    @Override  //
+    @Override
     public ResultSet makeQuery(String query) {
         ResultSet rs = null;
         try {
+
             Class.forName(this.getConection().getDriver());
 
-            Connection conectionMySQL = DriverManager.getConnection("jdbc:mysql://" + getConection().getIp() + ":" + getConection().getPort()
-                    + "/" + getConection().getDatabase(), getConection().getUser(), getConection().getPass());
+            Connection conectionMySQL = DriverManager.getConnection("jdbc:"
+                    + "mysql://" + getConection().getIp() + ":"
+                    + getConection().getPort() + "/" + getConection().getDatabase(),
+                    getConection().getUser(), getConection().getPass());
+
             Statement statement = conectionMySQL.createStatement();
             rs = statement.executeQuery(query);
+
         } catch (SQLException e) {
-            System.out.println("Error al recuperar conexion "
-                    + e.toString());
-            
+            InfError.showInformation(null, "Error al recuperar la conexion");
 
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(RPMysqlConcreteConection.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally {
-            InfError.showInformation(null, "No existe la base de datos");
+            InfError.showInformation(null, "Error al conectar a la base de datos");
         }
         return rs;
     }
