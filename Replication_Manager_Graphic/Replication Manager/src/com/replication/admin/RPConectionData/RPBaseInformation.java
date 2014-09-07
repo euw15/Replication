@@ -6,8 +6,8 @@
 package com.replication.admin.RPConectionData;
 
 import com.replication.admin.ConnectionManagement.RPConnectionInterface;
-import com.replication.admin.DataStructure.RPColumna;
-import com.replication.admin.DataStructure.RPColunmSLL;
+import com.replication.admin.DataStructure.RPColumn;
+import com.replication.admin.DataStructure.RPColumnSLL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -90,9 +90,9 @@ public class RPBaseInformation {
         return this.connection.makeQuery("SELECT * FROM INFORMATION_SCHEMA.TRIGGERS WHERE TRIGGER_SCHEMA='" + connection.getConection().getDatabase() + "';");
     }
 
-    public RPColunmSLL getColumnsMYSQL(String Tabla) {
+    public RPColumnSLL getColumnsMYSQL(String Tabla) {
 
-        RPColunmSLL listColums = new RPColunmSLL();
+        RPColumnSLL listColums = new RPColumnSLL();
         try {
             ResultSet resultset = this.connection.makeQuery("SHOW COLUMNS FROM " + connection.getConection().getDatabase() + "." + Tabla + ";");
             while (resultset.next()) {

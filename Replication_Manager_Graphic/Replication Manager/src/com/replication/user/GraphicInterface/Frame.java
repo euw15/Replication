@@ -292,11 +292,11 @@ public class Frame extends javax.swing.JFrame {
                             RPTableSLL tablesList = new RPTableSLL(IP_Origen + "::" + Nombre_BD);//Se crea una lista de tablas
 
                             data.stream().forEach((data1) -> {
-                                tablesList.insert(data1);// se insertan las tablas
-                                DataBases.add(tablesList);//se agrega a la lisat de bases de datos
+                                tablesList.insert(data1);// se insertan las tablas                             
                             });
                             RPAccessTableColumns access = new RPAccessTableColumns(tablesList, Motor_Origen, RPconnect);
                             access.getTableColums();
+                            DataBases.add(tablesList);//se agrega a la lista de bases de datos
                         }
                         break;
 

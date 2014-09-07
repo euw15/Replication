@@ -13,18 +13,18 @@ public class RPTabla {
 
     protected RPTabla succ;
     protected final String name;
-    protected RPColunmSLL colums;
+    protected RPColumnSLL colums;
 
     public RPTabla(String tableName) {
         this.name = tableName;
-        colums = new RPColunmSLL();
+        colums = new RPColumnSLL();
     }
 
     public void insertColumn(String nameColumn, String tipo, boolean isPK) {
         colums.insert(nameColumn, tipo, isPK);
     }
 
-    public void insertColumns(RPColunmSLL listColums) {
+    public void insertColumns(RPColumnSLL listColums) {
         this.colums = listColums;
     }
 
