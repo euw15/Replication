@@ -6,6 +6,7 @@
 package com.replication.admin.ConnectionManagement;
 
 import com.replication.admin.RPConectionData.RPConection;
+import com.replication.user.Error.InfError;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -37,10 +38,13 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println("Error al recuperar conexion "
                     + e.toString());
-            JOptionPane.showMessageDialog(null,
-                    "No se pudo conectar a la base de datos.");
-
+            
         }
+            finally 
+        {
+            InfError.showInformation(null, "No existe la base de datos");
+        }
+     
         return rs;
 
         //falta return
