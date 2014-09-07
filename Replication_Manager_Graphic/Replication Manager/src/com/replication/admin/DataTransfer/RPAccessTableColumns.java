@@ -30,6 +30,12 @@ public class RPAccessTableColumns {
                 curr.insertColumns(baseInformation.getColumnsMYSQL(curr.getName()));
             }
         }
+
+        if ("SQL SERVER".equals(Motor_BD)) {
+            for (RPTabla curr = tableList.getFirst(); curr != null; curr = curr.getSucc()) {
+                curr.insertColumns(baseInformation.getColumnsSQLMS(curr.getName()));
+            }
+        }
     }
 
 }

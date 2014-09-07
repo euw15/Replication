@@ -301,7 +301,8 @@ public class Frame extends javax.swing.JFrame {
                         break;
 
                     case "SQL SERVER":
-
+                        System.out.println("ldfkgdfgdfg");
+                        
                         conectionMySql.setDatabase(Nombre_BD);
                         conectionMySql.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
                         conectionMySql.setUser(Usuario);
@@ -314,19 +315,24 @@ public class Frame extends javax.swing.JFrame {
 
                         RPBaseInformation baseInformation1 = new RPBaseInformation(RPconnect);
 
-                        ArrayList<String> tablesMS_SQL = baseInformation1.getTablesMySQL();
+                        ArrayList<String> tablesMS_SQL = baseInformation1.getTablesMSSQL();
+                       
+                        
+                        
                         if (!tablesMS_SQL.isEmpty()) {
+
                             ArrayList<String> data = selector.showDialog(tablesMS_SQL);
 
                             RPTableSLL tablesList = new RPTableSLL(IP_Origen + "::" + Nombre_BD);//Se crea una lista de tablas
+
                             data.stream().forEach((data1) -> {
-
-                                tablesList.insert(data1);// se insertan las tablas
-
-                                DataBases.add(tablesList);//se agrega a la lista de bases de datos
+                                tablesList.insert(data1);// se insertan las tablas                             
                             });
+                            
+                            RPAccessTableColumns access = new RPAccessTableColumns(tablesList, Motor_Origen, RPconnect);
+                            access.getTableColums();
+                            DataBases.add(tablesList);//se agrega a la lista de bases de datos
                         }
-
                         break;
 
                     default:

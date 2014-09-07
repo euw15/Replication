@@ -6,7 +6,6 @@
 package com.replication.admin.RPConectionData;
 
 import com.replication.admin.ConnectionManagement.RPConnectionInterface;
-import com.replication.admin.DataStructure.RPColumn;
 import com.replication.admin.DataStructure.RPColumnSLL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -115,13 +114,22 @@ public class RPBaseInformation {
 
     }
 
-     public RPColunmSLL getColumnsSQLMS(String Tabla) {
+    public RPColumnSLL getColumnsSQLMS(String Tabla) {
 
-        RPColunmSLL listColums = new RPColunmSLL();
+        RPColumnSLL listColums = new RPColumnSLL();
         try {
-            ResultSet resultset = this.connection.makeQuery("SELECT COLLATION_NAME,DATA_TYPE,IS_NULLABLE"
-                    + "FROM INFORMATION_SCHEMA.COLUMNS " +
-                        "WHERE TABLE_NAME'"+Tabla+"'");
+
+            
+            ResultSet resultset = this.connection.makeQuery("SELECT COLUMN_NAME,DATA_TYPE,IS_NULLABLE"
+                    + " FROM INFORMATION_SCHEMA.COLUMNS "
+                    + "WHERE TABLE_NAME ='" + Tabla + "'");
+            
+            if(resultset == null){
+                System.out.println("nulllllllllllllllllllllllllll");
+            }
+            
+            
+            
             while (resultset.next()) {
 
                 String name = resultset.getString("COLUMN_NAME");
@@ -136,5 +144,5 @@ public class RPBaseInformation {
         return listColums;
 
     }
-     
+
 }
