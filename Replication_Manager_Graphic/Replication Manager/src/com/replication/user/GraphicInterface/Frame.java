@@ -301,7 +301,7 @@ public class Frame extends javax.swing.JFrame {
                         break;
 
                     case "SQL SERVER":
-                        System.out.println("ldfkgdfgdfg");
+                        
                         
                         conectionMySql.setDatabase(Nombre_BD);
                         conectionMySql.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");

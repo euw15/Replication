@@ -20,9 +20,9 @@ public class RPTabla {
         colums = new RPColumnSLL();
     }
 
-    public void insertColumn(String nameColumn, String tipo, boolean isPK) {
+   /* public void insertColumn(String nameColumn, String tipo, boolean isPK) {
         colums.insert(nameColumn, tipo, isPK);
-    }
+    }*/
 
     public void insertColumns(RPColumnSLL listColums) {
         this.colums = listColums;

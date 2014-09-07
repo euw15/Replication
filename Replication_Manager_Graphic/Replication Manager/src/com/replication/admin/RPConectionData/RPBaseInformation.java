@@ -96,19 +96,19 @@ public class RPBaseInformation {
             ResultSet resultset = this.connection.makeQuery("SHOW COLUMNS FROM " + connection.getConection().getDatabase() + "." + Tabla + ";");
             while (resultset.next()) {
 
-                String name = resultset.getString("Field");
-                String tipo = resultset.getString("Type");
-                String key = resultset.getString("Key");
-                boolean isPk = false;
-                if (key.equals("PRI")) {
-                    isPk = true;
-                }
+                String _column_Name = resultset.getString("Field");
+                String _type = resultset.getString("Type");
+                String _null = resultset.getString("Null");
+                String _key = resultset.getString("Key");
+                String _default = resultset.getString("Default");
+                String _extra = resultset.getString("Extra");
 
-                listColums.insert(name, tipo, isPk);
+                listColums.insert(_column_Name, _type, _null, _key, _default, _extra);
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(RPBaseInformation.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RPBaseInformation.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return listColums;
 
@@ -119,27 +119,21 @@ public class RPBaseInformation {
         RPColumnSLL listColums = new RPColumnSLL();
         try {
 
-            
             ResultSet resultset = this.connection.makeQuery("SELECT COLUMN_NAME,DATA_TYPE,IS_NULLABLE"
                     + " FROM INFORMATION_SCHEMA.COLUMNS "
                     + "WHERE TABLE_NAME ='" + Tabla + "'");
-            
-            if(resultset == null){
-                System.out.println("nulllllllllllllllllllllllllll");
-            }
-            
-            
-            
-            while (resultset.next()) {
 
+            while (resultset.next()) {
                 String name = resultset.getString("COLUMN_NAME");
                 String tipo = resultset.getString("DATA_TYPE");
                 boolean isPk = resultset.getBoolean("IS_NULLABLE");
-                listColums.insert(name, tipo, isPk);
+            //    listColums.insert(name, tipo, isPk);
+
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(RPBaseInformation.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RPBaseInformation.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return listColums;
 

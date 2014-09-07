@@ -17,9 +17,9 @@ public class RPColumnSLL {
         this.first = null;
     }
 
-    public void insert(String columnName, String tipo, boolean isPK) {
+    public void insert(String columnName, String tipo, String _null, String _key, String _default, String extra) {
 
-        RPColumn newly = new RPColumn(columnName, tipo, isPK);
+        RPColumn newly = new RPColumn(columnName, tipo, _null, _key, _default, extra);
 
         if (first == null) {
             first = newly;
@@ -92,7 +92,7 @@ public class RPColumnSLL {
 
     public void printColums() {
         for (RPColumn curr = first; curr != null; curr = curr.succ) {
-            System.out.println(curr.column_name);
+            System.out.println(curr._column_name);
         }
         System.out.println("");
     }
