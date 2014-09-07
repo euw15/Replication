@@ -115,4 +115,26 @@ public class RPBaseInformation {
 
     }
 
+     public RPColunmSLL getColumnsSQLMS(String Tabla) {
+
+        RPColunmSLL listColums = new RPColunmSLL();
+        try {
+            ResultSet resultset = this.connection.makeQuery("SELECT COLLATION_NAME,DATA_TYPE,IS_NULLABLE"
+                    + "FROM INFORMATION_SCHEMA.COLUMNS " +
+                        "WHERE TABLE_NAME'"+Tabla+"'");
+            while (resultset.next()) {
+
+                String name = resultset.getString("COLUMN_NAME");
+                String tipo = resultset.getString("DATA_TYPE");
+                boolean isPk = resultset.getBoolean("IS_NULLABLE");
+                listColums.insert(name, tipo, isPk);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(RPBaseInformation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listColums;
+
+    }
+     
 }
