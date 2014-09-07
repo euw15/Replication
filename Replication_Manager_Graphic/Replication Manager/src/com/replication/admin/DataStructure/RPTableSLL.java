@@ -12,7 +12,6 @@ package com.replication.admin.DataStructure;
 public class RPTableSLL {
 
     private RPTabla first;
-
     protected String Identifier;
 
     public RPTableSLL(String Identifier) {
@@ -85,6 +84,18 @@ public class RPTableSLL {
 
     public RPTabla getFirst() {
         return first;
+    }
+
+    public void printTables() {
+        
+        for (RPTabla curr = first; curr != null; curr = curr.succ) {
+           
+            System.out.println("-----------------");
+            System.out.println(curr.name);
+            System.out.println("-----------------");
+            curr.colums.printColums();
+        }
+        System.out.println("");
     }
 
 }

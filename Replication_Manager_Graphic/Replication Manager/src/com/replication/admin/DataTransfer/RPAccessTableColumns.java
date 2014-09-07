@@ -22,14 +22,13 @@ public class RPAccessTableColumns {
     }
 
     public void getTableColums() {
-        
+
         RPBaseInformation baseInformation = new RPBaseInformation(connect);
 
         for (RPTabla curr = tableList.getFirst(); curr != null; curr = curr.getSucc()) {
-            curr.insertColumn(baseInformation.getColumnsMYSQL(curr.getName()));
+            curr.insertColumns(baseInformation.getColumnsMYSQL(curr.getName()));
         }
 
-        
     }
 
 }

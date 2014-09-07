@@ -24,8 +24,8 @@ public class RPTabla {
         colums.insert(nameColumn, tipo, isPK);
     }
 
-    public void insertColumn(RPColumna column) {
-        colums.insert(column);
+    public void insertColumns(RPColunmSLL listColums) {
+        this.colums = listColums;
     }
 
     public RPTabla getSucc() {

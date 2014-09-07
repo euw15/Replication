@@ -13,7 +13,7 @@ public class RPColunmSLL {
 
     private RPColumna first;
 
-    protected RPColunmSLL() {
+    public RPColunmSLL() {
         this.first = null;
     }
 
@@ -88,6 +88,13 @@ public class RPColunmSLL {
             }
         }
         return aux;
+    }
+
+    public void printColums() {
+        for (RPColumna curr = first; curr != null; curr = curr.succ) {
+            System.out.println(curr.name);
+        }
+        System.out.println("");
     }
 
     boolean isEmpty() {

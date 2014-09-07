@@ -7,6 +7,7 @@ package com.replication.admin.RPConectionData;
 
 import com.replication.admin.ConnectionManagement.RPConnectionInterface;
 import com.replication.admin.DataStructure.RPColumna;
+import com.replication.admin.DataStructure.RPColunmSLL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -89,8 +90,29 @@ public class RPBaseInformation {
         return this.connection.makeQuery("SELECT * FROM INFORMATION_SCHEMA.TRIGGERS WHERE TRIGGER_SCHEMA='" + connection.getConection().getDatabase() + "';");
     }
 
-    public RPColumna getColumnsMYSQL(String Tabla) {
-        return null;
+    public RPColunmSLL getColumnsMYSQL(String Tabla) {
+
+        RPColunmSLL listColums = new RPColunmSLL();
+        try {
+            ResultSet resultset = this.connection.makeQuery("SHOW COLUMNS FROM " + connection.getConection().getDatabase() + "." + Tabla + ";");
+            while (resultset.next()) {
+
+                String name = resultset.getString("Field");
+                String tipo = resultset.getString("Type");
+                String key = resultset.getString("Key");
+                boolean isPk = false;
+                if (key.equals("PRI")) {
+                    isPk = true;
+                }
+
+                listColums.insert(name, tipo, isPk);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(RPBaseInformation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listColums;
+
     }
 
 }

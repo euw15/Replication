@@ -8,6 +8,7 @@ package com.replication.user.GraphicInterface;
 import com.replication.admin.ConnectionManagement.RPConnectionInterface;
 import com.replication.admin.ConnectionManagement.RPConnectionsFactory;
 import com.replication.admin.DataStructure.RPTableSLL;
+import com.replication.admin.DataTransfer.RPAccessTableColumns;
 import com.replication.admin.RPConectionData.RPBaseInformation;
 import com.replication.admin.RPConectionData.RPConection;
 import java.awt.Font;
@@ -68,6 +69,7 @@ public class Frame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Replication Manager");
@@ -121,6 +123,13 @@ public class Frame extends javax.swing.JFrame {
         }
     });
 
+    jButton2.setText("jButton2");
+    jButton2.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jButton2ActionPerformed(evt);
+        }
+    });
+
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
@@ -128,10 +137,12 @@ public class Frame extends javax.swing.JFrame {
         .addGroup(jPanel1Layout.createSequentialGroup()
             .addContainerGap()
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1442, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addComponent(jButton1)
-                    .addGap(0, 1371, Short.MAX_VALUE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jButton2)
+                    .addGap(0, 0, Short.MAX_VALUE))
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addContainerGap())
     );
@@ -141,7 +152,9 @@ public class Frame extends javax.swing.JFrame {
             .addContainerGap()
             .addComponent(jLabel1)
             .addGap(10, 10, 10)
-            .addComponent(jButton1)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jButton1)
+                .addComponent(jButton2))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 669, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addContainerGap())
@@ -179,9 +192,19 @@ public class Frame extends javax.swing.JFrame {
         rowCount++;
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+
+        for (RPTableSLL get : DataBases) {
+            System.out.println("****************************************");
+            get.printTables();
+        }
+
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -242,7 +265,7 @@ public class Frame extends javax.swing.JFrame {
                 }
                 RPConection conectionMySql = new RPConection();
                 RPConnectionInterface RPconnect;
-                
+
                 SeleccionarTablas selector = new SeleccionarTablas(null, true);
 
                 switch (Motor_Origen) {
@@ -263,14 +286,17 @@ public class Frame extends javax.swing.JFrame {
                         ArrayList<String> tablesMySQL = baseInformation.getTablesMySQL();
 
                         if (!tablesMySQL.isEmpty()) {
+
                             ArrayList<String> data = selector.showDialog(tablesMySQL);
 
-//                            RPTableSLL tablesList = new RPTableSLL(IP_Origen + "::" + Nombre_BD);//Se crea una lista de tablas
-//
-//                            data.stream().forEach((data1) -> {
-//                                tablesList.insert(data1);// se insertan las tablas
-//                                DataBases.add(tablesList);//se agrega a la lisat de bases de datos
-//                            });
+                            RPTableSLL tablesList = new RPTableSLL(IP_Origen + "::" + Nombre_BD);//Se crea una lista de tablas
+
+                            data.stream().forEach((data1) -> {
+                                tablesList.insert(data1);// se insertan las tablas
+                                DataBases.add(tablesList);//se agrega a la lisat de bases de datos
+                            });
+                            RPAccessTableColumns access = new RPAccessTableColumns(tablesList, Motor_Origen, RPconnect);
+                            access.getTableColums();
                         }
                         break;
 
