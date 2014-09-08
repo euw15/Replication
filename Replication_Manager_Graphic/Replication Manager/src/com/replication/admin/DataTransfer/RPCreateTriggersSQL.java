@@ -39,7 +39,7 @@ public class RPCreateTriggersSQL {
             String finalInsert   = "end end";
              
             //obtiene columnas de la tablaactual
-            RPColumnSLL ColumnasActuales = tablaActual.getColumns();
+            RPColumnSLL ColumnasActuales = tablaActual.getColums();
             
             //Crea statement de inserts
             String statementInsert= "";
