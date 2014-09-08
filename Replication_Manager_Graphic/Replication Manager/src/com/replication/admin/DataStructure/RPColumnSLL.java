@@ -92,7 +92,7 @@ public class RPColumnSLL {
 
     public void printColums() {
         for (RPColumn curr = first; curr != null; curr = curr.succ) {
-            System.out.println(curr._column_name);
+            System.out.println(curr._column_name+" "+curr._default+" "+curr._extra+" "+curr._key+" "+curr._isPK+" "+curr._null+" "+curr._type);
         }
         System.out.println("");
     }

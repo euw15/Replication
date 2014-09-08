@@ -95,6 +95,7 @@ public class RPTableSLL {
             System.out.println(curr.name);
             System.out.println("-----------------");
             curr.colums.printColums();
+            
         }
         System.out.println("");
     }

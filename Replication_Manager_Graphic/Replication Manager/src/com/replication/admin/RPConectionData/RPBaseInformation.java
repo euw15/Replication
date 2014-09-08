@@ -118,16 +118,30 @@ public class RPBaseInformation {
 
         RPColumnSLL listColums = new RPColumnSLL();
         try {
-
-            ResultSet resultset = this.connection.makeQuery("SELECT COLUMN_NAME,DATA_TYPE,IS_NULLABLE"
-                    + " FROM INFORMATION_SCHEMA.COLUMNS "
-                    + "WHERE TABLE_NAME ='" + Tabla + "'");
+            String sql= "SELECT Columna.COLUMN_NAME, Llave.CONSTRAINT_NAME as [Key], Columna.IS_NULLABLE, COLUMN_DEFAULT as [Default] ,Iden.is_identity as [Extra], Columna.DATA_TYPE, Columna.CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS as Columna left join information_schema.key_column_usage as Llave on Columna.COLUMN_NAME = Llave.COLUMN_NAME left join sys.columns as Iden on object_id = object_id(Columna.TABLE_NAME) and name = Columna.COLUMN_NAME WHERE Columna.TABLE_NAME = '"+ Tabla + "'";
+            System.out.println(sql);
+            ResultSet resultset = this.connection.makeQuery(sql);
 
             while (resultset.next()) {
-                String name = resultset.getString("COLUMN_NAME");
-                String tipo = resultset.getString("DATA_TYPE");
-                boolean isPk = resultset.getBoolean("IS_NULLABLE");
-            //    listColums.insert(name, tipo, isPk);
+                String _column_Name = resultset.getString("COLUMN_NAME");
+                String _type = resultset.getString("DATA_TYPE");
+                String _null = resultset.getString("IS_NULLABLE");
+                String _key = resultset.getString("Key");
+                String _default = resultset.getString("Default");
+                int _extra = resultset.getInt("Extra");
+                
+                String keyString = "no ";
+                
+                if(_key!=null){
+                if(_key.contains("PK")){
+                    keyString= "PRI";
+                }}
+                String extraString = null;
+                if(_extra==1){
+                    extraString = "auto_increment";
+                }
+  
+                listColums.insert(_column_Name, _type, _null, keyString, _default, extraString);
 
             }
 
