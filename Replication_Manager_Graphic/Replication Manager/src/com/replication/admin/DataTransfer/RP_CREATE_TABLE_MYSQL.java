@@ -44,8 +44,8 @@ public class RP_CREATE_TABLE_MYSQL {
 
             }
             _script = _script.substring(0, _script.length() - 2);
-            _script += "\n);";
-            table.setScript_MYSQL(_script);
+            _script += "\n);\n";
+            table.setScript_MSSQL(_script);
 
         }
 

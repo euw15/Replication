@@ -12,6 +12,7 @@ import com.replication.admin.DataTransfer.RPAccessTableColumns;
 import com.replication.admin.DataTransfer.RP_CREATE_TABLE_MYSQL;
 import com.replication.admin.RPConectionData.RPBaseInformation;
 import com.replication.admin.RPConectionData.RPConection;
+import com.replication.admin.RPConectionData.RP_CREATE_BASE;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -214,7 +215,9 @@ public class Frame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       RP_CREATE_TABLE_MYSQL rp_create = new RP_CREATE_TABLE_MYSQL(DataBases.get(0));
+
+        //  RP_CREATE_TABLE_MYSQL rp_create = new RP_CREATE_TABLE_MYSQL(DataBases.get(0));
+      //  DataBases.get(0).printTables();
     }//GEN-LAST:event_jButton3ActionPerformed
 
 
@@ -265,21 +268,14 @@ public class Frame extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                String Motor_Origen = "";
-                String IP_Origen = "";
-                String Nombre_BD = "";
-                String Usuario = "";
-                String Contraseña = "";
-
                 int fila = table.getSelectedRow();
 
-                for (int i = 0; i < 4; i++) {
-                    Motor_Origen = table.getValueAt(fila, 0).toString();
-                    IP_Origen = table.getValueAt(fila, 1).toString();
-                    Nombre_BD = table.getValueAt(fila, 2).toString();
-                    Usuario = table.getValueAt(fila, 3).toString();
-                    Contraseña = table.getValueAt(fila, 4).toString();
-                }
+                String Motor_Origen = table.getValueAt(fila, 0).toString();
+                String IP_Origen = table.getValueAt(fila, 1).toString();
+                String Nombre_BD = table.getValueAt(fila, 2).toString();
+                String Usuario = table.getValueAt(fila, 3).toString();
+                String Contraseña = table.getValueAt(fila, 4).toString();
+
                 RPConection conectionMySql = new RPConection();
                 RPConnectionInterface RPconnect;
 
@@ -318,8 +314,7 @@ public class Frame extends javax.swing.JFrame {
                         break;
 
                     case "SQL SERVER":
-                        
-                        
+
                         conectionMySql.setDatabase(Nombre_BD);
                         conectionMySql.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
                         conectionMySql.setUser(Usuario);
@@ -332,10 +327,13 @@ public class Frame extends javax.swing.JFrame {
 
                         RPBaseInformation baseInformation1 = new RPBaseInformation(RPconnect);
 
+                        
                         ArrayList<String> tablesMS_SQL = baseInformation1.getTablesMSSQL();
-                       
                         
                         
+                        
+                        
+
                         if (!tablesMS_SQL.isEmpty()) {
 
                             ArrayList<String> data = selector.showDialog(tablesMS_SQL);
@@ -345,7 +343,7 @@ public class Frame extends javax.swing.JFrame {
                             data.stream().forEach((data1) -> {
                                 tablesList.insert(data1);// se insertan las tablas                             
                             });
-                            
+
                             RPAccessTableColumns access = new RPAccessTableColumns(tablesList, Motor_Origen, RPconnect);
                             access.getTableColums();
                             DataBases.add(tablesList);//se agrega a la lista de bases de datos
@@ -362,9 +360,61 @@ public class Frame extends javax.swing.JFrame {
         ButtonColumn buttonViewTables = new ButtonColumn(table, accion, 5);
         buttonViewTables.setMnemonic(KeyEvent.VK_DELETE);
 
-        ButtonColumn buttonSync = new ButtonColumn(table, accion, 11);
+        ButtonColumn buttonSync = new ButtonColumn(table, hola, 11);
         buttonSync.setMnemonic(KeyEvent.VK_DELETE);
 
     }
+    Action hola = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
 
+            int fila = table.getSelectedRow();
+
+            String Motor_Destino = table.getValueAt(fila, 6).toString();
+            String IP_Destino = table.getValueAt(fila, 7).toString();
+            String Nombre_BD = table.getValueAt(fila, 8).toString();
+            String Usuario_Destino = table.getValueAt(fila, 9).toString();
+            String Contraseña_Destino = table.getValueAt(fila, 10).toString();
+
+            RPConection conectionMySql = new RPConection();
+            RPConnectionInterface RPconnect;
+
+            switch (Motor_Destino) {
+                case "MYSQL":
+//-----------------------------
+                    conectionMySql.setDatabase(Nombre_BD);
+                    conectionMySql.setDriver("com.mysql.jdbc.Driver");
+                    conectionMySql.setUser(Usuario_Destino);
+                    conectionMySql.setPass(Contraseña_Destino);
+                    conectionMySql.setIp(IP_Destino);
+                    conectionMySql.setPort("3306");
+
+                    RPconnect = RPConnectionsFactory.createConnection("MySQL");
+                    RPconnect.setConection(conectionMySql);
+
+                    break;
+
+                case "SQL SERVER":
+
+                    conectionMySql.setDatabase(Nombre_BD);
+                    conectionMySql.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                    conectionMySql.setUser(Usuario_Destino);
+                    conectionMySql.setPass(Contraseña_Destino);
+                    conectionMySql.setIp(IP_Destino);
+                    conectionMySql.setPort("1433");
+
+                    RPconnect = RPConnectionsFactory.createConnection("SQLMS");
+                    RPconnect.setConection(conectionMySql);
+
+                    RP_CREATE_BASE creator = new RP_CREATE_BASE(RPconnect);
+                    creator.replicTables(DataBases.get(0));
+
+                    break;
+
+                default:
+                    System.out.println("No se ha creado codigo para ello");
+            }
+
+        }
+    };
 }

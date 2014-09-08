@@ -51,4 +51,8 @@ public class RPTable {
         return colums;
     }
 
+    public String getScript_MSSQL() {
+        return _Script_MSSQL;
+    }
+
 }
