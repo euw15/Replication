@@ -9,8 +9,9 @@ import com.replication.admin.ConnectionManagement.RPConnectionInterface;
 import com.replication.admin.ConnectionManagement.RPConnectionsFactory;
 import com.replication.admin.DataStructure.RPTableSLL;
 import com.replication.admin.DataTransfer.RPAccessTableColumns;
+import com.replication.admin.DataTransfer.RPCreateTableMSQL;
+import com.replication.admin.DataTransfer.RPCreateTableMYSQL;
 import com.replication.admin.DataTransfer.RPCreateTriggersSQL;
-import com.replication.admin.DataTransfer.RP_CREATE_TABLE_MYSQL;
 import com.replication.admin.RPConectionData.RPBaseInformation;
 import com.replication.admin.RPConectionData.RPConection;
 import com.replication.admin.RPConectionData.RP_CREATE_BASE;
@@ -220,8 +221,10 @@ public class Frame extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 
-        //  RP_CREATE_TABLE_MYSQL rp_create = new RP_CREATE_TABLE_MYSQL(DataBases.get(0));
-      //  DataBases.get(0).printTables();
+        //  RPCreateTableMSQL rp_create = new RPCreateTableMSQL(DataBases.get(0));
+        RPCreateTableMYSQL rp_create = new RPCreateTableMYSQL(DataBases.get(0));
+
+        //  DataBases.get(0).printTables();
     }//GEN-LAST:event_jButton3ActionPerformed
 
 
@@ -331,12 +334,7 @@ public class Frame extends javax.swing.JFrame {
 
                         RPBaseInformation baseInformation1 = new RPBaseInformation(RPconnect);
 
-                        
                         ArrayList<String> tablesMS_SQL = baseInformation1.getTablesMSSQL();
-                        
-                        
-                        
-                        
 
                         if (!tablesMS_SQL.isEmpty()) {
 

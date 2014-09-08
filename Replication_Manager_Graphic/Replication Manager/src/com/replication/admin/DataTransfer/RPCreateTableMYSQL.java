@@ -14,11 +14,11 @@ import com.replication.admin.DataStructure.RPTableSLL;
  *
  * @author Melvin
  */
-public class RP_CREATE_TABLE_MYSQL {
+public class RPCreateTableMYSQL {
 
     private final RPTableSLL tableList;
 
-    public RP_CREATE_TABLE_MYSQL(RPTableSLL tableList) {
+    public RPCreateTableMYSQL(RPTableSLL tableList) {
         this.tableList = tableList;
 
         createScript();
@@ -28,25 +28,24 @@ public class RP_CREATE_TABLE_MYSQL {
 
         for (RPTable table = tableList.getFirst(); table != null; table = table.getSucc()) {
 
-            String _script = "-- Crea la tabla " + table.getName() + "\n" + "CREATE TABLE " + table.getName() + "(\n";
+            String _script = "# Crea la tabla " + table.getName() + "\n" + "CREATE TABLE IF NOT EXISTS " + table.getName() + "(\n";
 
             RPColumnSLL columsSLL = table.getColums();
             for (RPColumn column = columsSLL.getFirst(); column != null; column = column.getSucc()) {
 
-                String type_check = typeCheck(column.getType());
                 String null_check = nullCheck(column.getNull());
                 String primary_check = primaryCheck(column.isIsPK(), column.getColumn_name());
                 String default_check = defaultCheck(column.getDefault());
                 String extra_check = extraCheck(column.getExtra());
-                String key_check = keyCheck(column.getKey());
+                String key_check = keyCheck(column.getKey(), column.getColumn_name());
 
-                _script += "    " + column.getColumn_name() + "     " + type_check + extra_check + "  " + null_check + key_check + default_check + primary_check;
-
+                _script += "    " + column.getColumn_name() + "     " + column.getType() + extra_check + "  " + null_check + default_check + primary_check;
+                _script += key_check;
             }
             _script = _script.substring(0, _script.length() - 2);
             _script += "\n);\n";
             table.setScript_MSSQL(_script);
-
+            System.out.println(_script);
         }
 
     }
@@ -76,7 +75,8 @@ public class RP_CREATE_TABLE_MYSQL {
 
     private String defaultCheck(String Default) {
         if (Default != null) {
-            return " DEFAULT (1)";
+            Default = Default.substring(1, Default.length() - 1);
+            return " DEFAULT " + Default + " ";
         } else {
             return "";
         }
@@ -85,18 +85,17 @@ public class RP_CREATE_TABLE_MYSQL {
     private String extraCheck(String extra) {
 
         if ("auto_increment".equals(extra)) {
-            return " IDENTITY(1,1) ";
+            return " AUTO_INCREMENT ";
         } else {
             return "";
         }
     }
 
-    private String keyCheck(String key) {
+    private String keyCheck(String key, String column_name) {
 
         if ("UNI".equals(key)) {
-            return " UNIQUE ";
+            return "    UNIQUE (" + column_name + "),\n";
         }
         return "";
     }
-
 }
