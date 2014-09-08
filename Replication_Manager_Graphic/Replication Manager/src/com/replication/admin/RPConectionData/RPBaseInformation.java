@@ -131,7 +131,12 @@ public class RPBaseInformation {
                 String _key = resultset.getString("Key");
                 String _default = resultset.getString("Default");
                 int _extra = resultset.getInt("Extra");
-
+                String largoString= resultset.getString("CHARACTER_MAXIMUM_LENGTH");
+                
+                if(largoString!=null)
+                {
+                    _type+="("+largoString+")";
+                }
                 String keyString = "no ";
 
                 if (_key != null) {
