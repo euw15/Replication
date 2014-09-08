@@ -217,7 +217,7 @@ public class Frame extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 
-        //  RPCreateTableMSQL rp_create = new RPCreateTableMSQL(DataBases.get(0));
+     //   RPCreateTableMSQL rp_create = new RPCreateTableMSQL(DataBases.get(0));
         RPCreateTableMYSQL rp_create = new RPCreateTableMYSQL(DataBases.get(0));
 
         //  DataBases.get(0).printTables();
@@ -310,6 +310,7 @@ public class Frame extends javax.swing.JFrame {
                             data.stream().forEach((data1) -> {
                                 tablesList.insert(data1);// se insertan las tablas                             
                             });
+
                             RPAccessTableColumns access = new RPAccessTableColumns(tablesList, Motor_Origen, RPconnect);
                             access.getTableColums();
                             DataBases.add(tablesList);//se agrega a la lista de bases de datos
