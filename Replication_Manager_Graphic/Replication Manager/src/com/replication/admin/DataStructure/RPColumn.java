@@ -13,8 +13,6 @@ public class RPColumn {
 
     protected RPColumn succ;
 
- 
-
     protected String _column_name;
     protected String _type;
     protected String _null;
@@ -36,11 +34,9 @@ public class RPColumn {
             this._isPK = true;
         }
 
-  
     }
-    
-    public RPColumn getSucc() 
-    {
+
+    public RPColumn getSucc() {
         return succ;
     }
 
@@ -48,57 +44,27 @@ public class RPColumn {
         return _column_name;
     }
 
-    public void setColumn_name(String _column_name) {
-        this._column_name = _column_name;
+    public String getType() {
+        return _type;
     }
 
     public String getNull() {
         return _null;
     }
 
-    public void setNull(String _null) {
-        this._null = _null;
-    }
-
     public String getKey() {
         return _key;
-    }
-
-    public void setKey(String _key) {
-        this._key = _key;
     }
 
     public String getDefault() {
         return _default;
     }
 
-    public void setDefault(String _default) {
-        this._default = _default;
-    }
-
     public String getExtra() {
         return _extra;
-    }
-
-    public void setExtra(String _extra) {
-        this._extra = _extra;
     }
 
     public boolean isIsPK() {
         return _isPK;
     }
-
-    public void setIsPK(boolean _isPK) {
-        this._isPK = _isPK;
-    }
-
-    public String getType() {
-        return _type;
-    }
-
-    public void setType(String _type) {
-        this._type = _type;
-    }
-    
-    
 }

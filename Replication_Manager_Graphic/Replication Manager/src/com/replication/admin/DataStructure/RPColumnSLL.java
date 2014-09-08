@@ -101,8 +101,7 @@ public class RPColumnSLL {
         return getNodes() == 0;
     }
 
-     public RPColumn getFirst() {
+    public RPColumn getFirst() {
         return first;
     }
-     
 }
