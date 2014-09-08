@@ -47,12 +47,14 @@ public class RPBaseInformation {
 
         ArrayList<String> listTables = new ArrayList<>();
         ResultSet makeQuery = this.connection.makeQuery("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES");
-        try {
-            while (makeQuery.next()) {
-                listTables.add(makeQuery.getString(1));
+        if (makeQuery != null) {
+            try {
+                while (makeQuery.next()) {
+                    listTables.add(makeQuery.getString(1));
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(RPBaseInformation.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(RPBaseInformation.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listTables;
     }
@@ -118,7 +120,7 @@ public class RPBaseInformation {
 
         RPColumnSLL listColums = new RPColumnSLL();
         try {
-            String sql= "SELECT Columna.COLUMN_NAME, Llave.CONSTRAINT_NAME as [Key], Columna.IS_NULLABLE, COLUMN_DEFAULT as [Default] ,Iden.is_identity as [Extra], Columna.DATA_TYPE, Columna.CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS as Columna left join information_schema.key_column_usage as Llave on Columna.COLUMN_NAME = Llave.COLUMN_NAME left join sys.columns as Iden on object_id = object_id(Columna.TABLE_NAME) and name = Columna.COLUMN_NAME WHERE Columna.TABLE_NAME = '"+ Tabla + "'";
+            String sql = "SELECT Columna.COLUMN_NAME, Llave.CONSTRAINT_NAME as [Key], Columna.IS_NULLABLE, COLUMN_DEFAULT as [Default] ,Iden.is_identity as [Extra], Columna.DATA_TYPE, Columna.CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS as Columna left join information_schema.key_column_usage as Llave on Columna.COLUMN_NAME = Llave.COLUMN_NAME left join sys.columns as Iden on object_id = object_id(Columna.TABLE_NAME) and name = Columna.COLUMN_NAME WHERE Columna.TABLE_NAME = '" + Tabla + "'";
             System.out.println(sql);
             ResultSet resultset = this.connection.makeQuery(sql);
 
@@ -129,18 +131,19 @@ public class RPBaseInformation {
                 String _key = resultset.getString("Key");
                 String _default = resultset.getString("Default");
                 int _extra = resultset.getInt("Extra");
-                
+
                 String keyString = "no ";
-                
-                if(_key!=null){
-                if(_key.contains("PK")){
-                    keyString= "PRI";
-                }}
+
+                if (_key != null) {
+                    if (_key.contains("PK")) {
+                        keyString = "PRI";
+                    }
+                }
                 String extraString = null;
-                if(_extra==1){
+                if (_extra == 1) {
                     extraString = "auto_increment";
                 }
-  
+
                 listColums.insert(_column_Name, _type, _null, keyString, _default, extraString);
 
             }
