@@ -1,7 +1,7 @@
 package com.replication.admin.DataTransfer;
 
 import com.replication.admin.ConnectionManagement.RPConnectionInterface;
-import com.replication.admin.DataStructure.RPTabla;
+import com.replication.admin.DataStructure.RPTable;
 import com.replication.admin.DataStructure.RPTableSLL;
 import com.replication.admin.RPConectionData.RPBaseInformation;
 
@@ -26,13 +26,13 @@ public class RPAccessTableColumns {
         RPBaseInformation baseInformation = new RPBaseInformation(connect);
 
         if ("MYSQL".equals(Motor_BD)) {
-            for (RPTabla curr = tableList.getFirst(); curr != null; curr = curr.getSucc()) {
+            for (RPTable curr = tableList.getFirst(); curr != null; curr = curr.getSucc()) {
                 curr.insertColumns(baseInformation.getColumnsMYSQL(curr.getName()));
             }
         }
 
         if ("SQL SERVER".equals(Motor_BD)) {
-            for (RPTabla curr = tableList.getFirst(); curr != null; curr = curr.getSucc()) {
+            for (RPTable curr = tableList.getFirst(); curr != null; curr = curr.getSucc()) {
                 curr.insertColumns(baseInformation.getColumnsSQLMS(curr.getName()));
             }
         }

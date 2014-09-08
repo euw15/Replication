@@ -35,6 +35,37 @@ public class RPColumn {
             this._isPK = true;
         }
 
-  
+    }
+
+    public RPColumn getSucc() {
+        return succ;
+    }
+
+    public String getColumn_name() {
+        return _column_name;
+    }
+
+    public String getType() {
+        return _type;
+    }
+
+    public String getNull() {
+        return _null;
+    }
+
+    public String getKey() {
+        return _key;
+    }
+
+    public String getDefault() {
+        return _default;
+    }
+
+    public String getExtra() {
+        return _extra;
+    }
+
+    public boolean isIsPK() {
+        return _isPK;
     }
 }

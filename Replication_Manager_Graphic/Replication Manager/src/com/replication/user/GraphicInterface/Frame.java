@@ -9,6 +9,7 @@ import com.replication.admin.ConnectionManagement.RPConnectionInterface;
 import com.replication.admin.ConnectionManagement.RPConnectionsFactory;
 import com.replication.admin.DataStructure.RPTableSLL;
 import com.replication.admin.DataTransfer.RPAccessTableColumns;
+import com.replication.admin.DataTransfer.RP_CREATE_TABLE_MYSQL;
 import com.replication.admin.RPConectionData.RPBaseInformation;
 import com.replication.admin.RPConectionData.RPConection;
 import java.awt.Font;
@@ -70,6 +71,7 @@ public class Frame extends javax.swing.JFrame {
         table = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Replication Manager");
@@ -130,6 +132,13 @@ public class Frame extends javax.swing.JFrame {
         }
     });
 
+    jButton3.setText("jButton3");
+    jButton3.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jButton3ActionPerformed(evt);
+        }
+    });
+
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
@@ -142,6 +151,8 @@ public class Frame extends javax.swing.JFrame {
                     .addComponent(jButton1)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jButton2)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jButton3)
                     .addGap(0, 0, Short.MAX_VALUE))
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addContainerGap())
@@ -154,7 +165,8 @@ public class Frame extends javax.swing.JFrame {
             .addGap(10, 10, 10)
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jButton1)
-                .addComponent(jButton2))
+                .addComponent(jButton2)
+                .addComponent(jButton3))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 669, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addContainerGap())
@@ -201,10 +213,15 @@ public class Frame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+       RP_CREATE_TABLE_MYSQL rp_create = new RP_CREATE_TABLE_MYSQL(DataBases.get(0));
+    }//GEN-LAST:event_jButton3ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
