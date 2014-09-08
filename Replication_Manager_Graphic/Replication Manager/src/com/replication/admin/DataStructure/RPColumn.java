@@ -19,7 +19,6 @@ public class RPColumn {
     protected String _key;
     protected String _default;
     protected String _extra;
-
     protected boolean _isPK;
 
     public RPColumn(String columnName, String tipo, String _null, String _key, String _default, String extra) {
@@ -30,7 +29,7 @@ public class RPColumn {
         this._key = _key;
         this._default = _default;
         this._extra = extra;
-
+     
         if (_key.equals("PRI")) {
             this._isPK = true;
         }
