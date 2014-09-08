@@ -55,4 +55,8 @@ public class RPTable {
         return _Script_MSSQL;
     }
 
+    public RPColumnSLL getColumns() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

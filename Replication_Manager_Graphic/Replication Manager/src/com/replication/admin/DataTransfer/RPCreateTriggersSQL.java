@@ -8,7 +8,7 @@ package com.replication.admin.DataTransfer;
 
 import com.replication.admin.DataStructure.RPColumn;
 import com.replication.admin.DataStructure.RPColumnSLL;
-import com.replication.admin.DataStructure.RPTabla;
+import com.replication.admin.DataStructure.RPTable;
 import com.replication.admin.DataStructure.RPTableSLL;
 
 /**
@@ -29,7 +29,7 @@ public class RPCreateTriggersSQL {
         String  queryCompleto = "";
        
         //recorre todas las tablas
-        for (RPTabla tablaActual = database.getFirst(); tablaActual != null; tablaActual = tablaActual.getSucc())
+        for (RPTable tablaActual = database.getFirst(); tablaActual != null; tablaActual = tablaActual.getSucc())
         {
             String completeTriggerTable= "";
             
