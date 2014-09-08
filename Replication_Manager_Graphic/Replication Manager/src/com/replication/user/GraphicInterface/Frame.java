@@ -9,6 +9,7 @@ import com.replication.admin.ConnectionManagement.RPConnectionInterface;
 import com.replication.admin.ConnectionManagement.RPConnectionsFactory;
 import com.replication.admin.DataStructure.RPTableSLL;
 import com.replication.admin.DataTransfer.RPAccessTableColumns;
+import com.replication.admin.DataTransfer.RPCreateTriggersSQL;
 import com.replication.admin.RPConectionData.RPBaseInformation;
 import com.replication.admin.RPConectionData.RPConection;
 import java.awt.Font;
@@ -197,6 +198,8 @@ public class Frame extends javax.swing.JFrame {
         for (RPTableSLL get : DataBases) {
             System.out.println("****************************************");
             get.printTables();
+            RPCreateTriggersSQL createTrigger= new RPCreateTriggersSQL(get);
+            createTrigger.createTriggersOnDataBase(get);
         }
 
     }//GEN-LAST:event_jButton2ActionPerformed

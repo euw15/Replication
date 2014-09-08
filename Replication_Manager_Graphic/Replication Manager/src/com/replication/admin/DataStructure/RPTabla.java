@@ -35,5 +35,8 @@ public class RPTabla {
     public String getName() {
         return name;
     }
-
+    
+    public RPColumnSLL getColumns(){
+        return colums;
+    }
 }
