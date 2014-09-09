@@ -9,7 +9,6 @@ import com.replication.admin.ConnectionManagement.RPConnectionInterface;
 import com.replication.admin.ConnectionManagement.RPConnectionsFactory;
 import com.replication.admin.DataStructure.RPTableSLL;
 import com.replication.admin.DataTransfer.RPAccessTableColumns;
-import com.replication.admin.DataTransfer.RPCreateTableMSQL;
 import com.replication.admin.DataTransfer.RPCreateTableMYSQL;
 import com.replication.admin.DataTransfer.RPCreateTriggersSQL;
 import com.replication.admin.RPConectionData.RPBaseInformation;
@@ -212,7 +211,7 @@ public class Frame extends javax.swing.JFrame {
         for (RPTableSLL get : DataBases) {
             System.out.println("****************************************");
             get.printTables();
-            
+
             RPCreateTriggersSQL createTrigers = new RPCreateTriggersSQL(get);
             createTrigers.createTriggersOnDataBase(get);
         }
@@ -221,7 +220,7 @@ public class Frame extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 
-     //   RPCreateTableMSQL rp_create = new RPCreateTableMSQL(DataBases.get(0));
+        //   RPCreateTableMSQL rp_create = new RPCreateTableMSQL(DataBases.get(0));
         RPCreateTableMYSQL rp_create = new RPCreateTableMYSQL(DataBases.get(0));
 
         //  DataBases.get(0).printTables();
@@ -363,11 +362,11 @@ public class Frame extends javax.swing.JFrame {
         ButtonColumn buttonViewTables = new ButtonColumn(table, accion, 5);
         buttonViewTables.setMnemonic(KeyEvent.VK_DELETE);
 
-        ButtonColumn buttonSync = new ButtonColumn(table, hola, 11);
+        ButtonColumn buttonSync = new ButtonColumn(table, syncDataBases, 11);
         buttonSync.setMnemonic(KeyEvent.VK_DELETE);
 
     }
-    Action hola = new AbstractAction() {
+    Action syncDataBases = new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
 
