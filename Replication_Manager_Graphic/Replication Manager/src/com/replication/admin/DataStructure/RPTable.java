@@ -16,7 +16,7 @@ public class RPTable {
     protected RPColumnSLL colums;
 
     protected String _Script_MYSQL;
-
+    
     protected String _Script_MSSQL;
 
     public RPTable(String tableName) {

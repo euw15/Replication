@@ -88,4 +88,20 @@ public class RPMysqlConcreteConection implements RPConnectionInterface {
         }
     }
 
+   @Override
+     public void execute(String query) {
+
+        try {
+            makeConnection();
+
+            if (conectionMySQL != null) {
+                Statement statement = conectionMySQL.createStatement();
+                statement.execute(query);
+            }
+
+        } catch (SQLException e) {
+            InfError.showInformation(null, "Error al realizar consulta");
+        }
+
+    } 
 }

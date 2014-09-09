@@ -213,8 +213,21 @@ public class Frame extends javax.swing.JFrame {
             System.out.println("****************************************");
             get.printTables();
             
-            RPCreateTriggersSQL createTrigers = new RPCreateTriggersSQL(get);
-            createTrigers.createTriggersOnDataBase(get);
+           
+            RPConection conectionMySql = new RPConection();
+                        conectionMySql.setDatabase("ReadingDBLog");
+                        conectionMySql.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                        conectionMySql.setUser("sa");
+                        conectionMySql.setPass("123456");
+                        conectionMySql.setIp("localhost");
+                        conectionMySql.setPort("1433");
+                        
+             RPConnectionInterface base= RPConnectionsFactory.createConnection("SQLMS");
+             base.setConection(conectionMySql);
+             
+            RPCreateTriggersSQL.CreateInsertTrigger(get, base);
+            RPCreateTriggersSQL.CreateUpdateTrigger(get, base);
+            RPCreateTriggersSQL.CreateDeleteTrigger(get, base);
         }
 
     }//GEN-LAST:event_jButton2ActionPerformed
