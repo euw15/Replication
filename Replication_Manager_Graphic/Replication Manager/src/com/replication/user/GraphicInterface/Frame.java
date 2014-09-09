@@ -234,19 +234,18 @@ public class Frame extends javax.swing.JFrame {
         for (RPTableSLL get : DataBases) {
             System.out.println("****************************************");
             get.printTables();
-            
-           
+
             RPConection conectionMySql = new RPConection();
-                        conectionMySql.setDatabase("ReadingDBLog");
-                        conectionMySql.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                        conectionMySql.setUser("sa");
-                        conectionMySql.setPass("123456");
-                        conectionMySql.setIp("localhost");
-                        conectionMySql.setPort("1433");
-                        
-             RPConnectionInterface base= RPConnectionsFactory.createConnection("SQLMS");
-             base.setConection(conectionMySql);
-             
+            conectionMySql.setDatabase("ReadingDBLog");
+            conectionMySql.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            conectionMySql.setUser("sa");
+            conectionMySql.setPass("123456");
+            conectionMySql.setIp("localhost");
+            conectionMySql.setPort("1433");
+
+            RPConnectionInterface base = RPConnectionsFactory.createConnection("SQLMS");
+            base.setConection(conectionMySql);
+
             RPCreateTriggersSQL.CreateInsertTrigger(get, base);
             RPCreateTriggersSQL.CreateUpdateTrigger(get, base);
             RPCreateTriggersSQL.CreateDeleteTrigger(get, base);
@@ -257,8 +256,7 @@ public class Frame extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 
         //   RPCreateTableMSQL rp_create = new RPCreateTableMSQL(DataBases.get(0));
-        RPCreateTableMYSQL rp_create = new RPCreateTableMYSQL(DataBases.get(0));
-
+        //   RPCreateTableMYSQL rp_create = new RPCreateTableMYSQL(DataBases.get(0));
         //  DataBases.get(0).printTables();
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -291,12 +289,8 @@ public class Frame extends javax.swing.JFrame {
         String IP_Destino = table.getValueAt(fila, 7).toString();
         String Nombre_BD = table.getValueAt(fila, 8).toString();
         String Usuario_Destino = table.getValueAt(fila, 9).toString();
-        
         String Contraseña_Destino = table.getValueAt(fila, 10).toString();
 
-
-        
-        
         RPConection conectionMySql = new RPConection();
         RPConnectionInterface RPconnect;
 
@@ -304,23 +298,23 @@ public class Frame extends javax.swing.JFrame {
 
             case "MYSQL":
 
-                RPCreateTableMYSQL rp_createMYSQL = new RPCreateTableMYSQL(DataBases.get(0));
+                RPCreateTableMYSQL rp_createMYSQL = new RPCreateTableMYSQL(DataBases.get(0), Nombre_BD);
 
-                conectionMySql.setDatabase("test");
+                conectionMySql.setDatabase("dbo");
                 conectionMySql.setDriver("com.mysql.jdbc.Driver");
-                conectionMySql.setUser("root");
-                conectionMySql.setPass("mjgv12");
-                conectionMySql.setIp("localhost");
+                conectionMySql.setUser(Usuario_Destino);
+                conectionMySql.setPass(Contraseña_Destino);
+                conectionMySql.setIp(IP_Destino);
                 conectionMySql.setPort("3306");
 
                 RPconnect = RPConnectionsFactory.createConnection("MySQL");
                 RPconnect.setConection(conectionMySql);
 
                 RP_CREATE_BASE creatorMYSQL = new RP_CREATE_BASE(RPconnect);
-                creatorMYSQL.replicTables(DataBases.get(0), "MYSQL", "TOME_PLAYO");
+                creatorMYSQL.replicTables(DataBases.get(0), "MYSQL", Nombre_BD);
 
-             //   RPCreateHistoricalMYSQL hist = new RPCreateHistoricalMYSQL(RPconnect);
-            //    hist.createHistorical();
+                RPCreateHistoricalMYSQL hist = new RPCreateHistoricalMYSQL(RPconnect);
+                hist.createHistorical();
 
                 break;
 

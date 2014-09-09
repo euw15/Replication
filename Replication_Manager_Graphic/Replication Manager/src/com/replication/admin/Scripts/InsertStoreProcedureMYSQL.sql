@@ -1,7 +1,6 @@
 CREATE PROCEDURE  addLogTrigger(IN tableName VARCHAR(255), IN pkField VARCHAR(255))
 
 BEGIN
-
   DECLARE done BOOLEAN DEFAULT 0;
   DECLARE _output TEXT DEFAULT '';
   DECLARE _partial TEXT DEFAULT '';

@@ -29,8 +29,10 @@ public class RPCreateHistoricalMYSQL {
 
             String path = "/com/replication/admin/Scripts/InsertHistorical.sql";
             String path1 = "/com/replication/admin/Scripts/InsertStoreProcedureMYSQL.sql";
-            this.connection.executeUpdate(readQuery(path));
-            this.connection.executeUpdate(readQuery(path1));
+            
+           // this.connection.executeUpdate(readQuery(path));
+           this.connection.executeUpdate(readQuery(path1));
+            
         } catch (Exception ex) {
             InfError.showInformation(null, "No se pudo crear la tabla historial en la base de datos MYSQL");
         }

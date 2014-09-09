@@ -19,7 +19,6 @@ public class RP_CREATE_BASE {
 
     public RP_CREATE_BASE(RPConnectionInterface connection) {
         this.connection = connection;
-
     }
 
     public void replicTables(RPTableSLL tableList, String MotorDestino, String BaseName) {
@@ -35,17 +34,24 @@ public class RP_CREATE_BASE {
                 break;
             }
             case "MYSQL": {
-                String script = "";
+
+                String crearBase = "CREATE DATABASE IF NOT EXISTS `" + BaseName + "`;";
+                System.out.println(crearBase);
+                connection.execute(crearBase);
+
                 for (RPTable table = tableList.getFirst(); table != null; table = table.getSucc()) {
-                    script += table.getScript_MYSQL();
+                    System.out.println(table.getScript_MYSQL());
+                    connection.execute(table.getScript_MYSQL());
                 }
-                String query = "CREATE DATABASE IF NOT EXISTS " + BaseName + ";\n\n" + "USE " + BaseName + ";\n\n";
-                query += script;
-                System.out.println(query);
-                this.connection.executeUpdate(query);
                 break;
             }
         }
     }
 
 }
+
+/*                String crearBase = "CREATE DATABASE IF NOT EXISTS `" + BaseName + "`;";
+ this.connection.execute(query);
+ String usarBase = "USE `" + BaseName + "`;\n";
+ this.connection.execute(query);
+ */

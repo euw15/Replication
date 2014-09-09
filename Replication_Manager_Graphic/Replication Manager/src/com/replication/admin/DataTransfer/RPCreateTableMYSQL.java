@@ -17,9 +17,11 @@ import com.replication.admin.DataStructure.RPTableSLL;
 public class RPCreateTableMYSQL {
 
     private final RPTableSLL tableList;
+    private final String DataBaseName;
 
-    public RPCreateTableMYSQL(RPTableSLL tableList) {
+    public RPCreateTableMYSQL(RPTableSLL tableList, String DataBaseName) {
         this.tableList = tableList;
+        this.DataBaseName = DataBaseName;
         createScript();
     }
 
@@ -27,7 +29,7 @@ public class RPCreateTableMYSQL {
 
         for (RPTable table = tableList.getFirst(); table != null; table = table.getSucc()) {
 
-            String _script = "# Crea la tabla " + table.getName() + "\n" + "CREATE TABLE IF NOT EXISTS " + table.getName() + "(\n";
+            String _script = "# Crea la tabla " + table.getName() + "\n" + "CREATE TABLE IF NOT EXISTS `" + DataBaseName + "`.`" + table.getName() + "` (\n";
             RPColumnSLL columsSLL = table.getColums();
             for (RPColumn column = columsSLL.getFirst(); column != null; column = column.getSucc()) {
 
