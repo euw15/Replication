@@ -231,6 +231,8 @@ public class Frame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        insertHistoryEvent(1022,"Prueba");
+        
         for (RPTableSLL get : DataBases) {
             System.out.println("****************************************");
             get.printTables();
@@ -249,6 +251,7 @@ public class Frame extends javax.swing.JFrame {
             RPCreateTriggersSQL.CreateInsertTrigger(get, base);
             RPCreateTriggersSQL.CreateUpdateTrigger(get, base);
             RPCreateTriggersSQL.CreateDeleteTrigger(get, base);
+        
         }
 
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -570,6 +573,30 @@ public class Frame extends javax.swing.JFrame {
 
     }
 
+    private void insertHistoryEvent(int typeEvent,String description){
+         try {
+            RPConnectionInterface RPconnect;
+
+            RPConection connection = new RPConection();
+            connection.setDatabase("RPDataBase");
+            connection.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            connection.setIp("localhost");
+            connection.setPass("1234");
+            connection.setPort("1433");
+            connection.setUser("sa");
+
+            RPconnect = RPConnectionsFactory.createConnection("SQLMS");
+            RPconnect.setConection(connection);
+
+            RPconnect.executeUpdate("exec InsertHistoryEvent  @typeEvent = "+typeEvent+","
+                    + " @description  	= '"+description+"';");
+           
+         } catch (Exception e) {
+            System.out.println("Error al ejecutar proceso InsertTable");
+
+        }
+            
+    }
     private void RPSaveConnecton(String dbmsInput, String ipInput,
             String dbNameInput, String userInput, String passwordInput,
             String dbmsOutput, String ipOutput, String dbNameOutput,
