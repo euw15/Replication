@@ -9,7 +9,6 @@ import com.replication.admin.ConnectionManagement.RPConnectionInterface;
 import com.replication.admin.ConnectionManagement.RPConnectionsFactory;
 import com.replication.admin.DataStructure.RPTableSLL;
 import com.replication.admin.DataTransfer.RPAccessTableColumns;
-import com.replication.admin.DataTransfer.RPCreateTableMSQL;
 import com.replication.admin.DataTransfer.RPCreateTableMYSQL;
 import com.replication.admin.DataTransfer.RPCreateTriggersSQL;
 import com.replication.admin.RPConectionData.RPBaseInformation;
@@ -208,7 +207,6 @@ public class Frame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-
         for (RPTableSLL get : DataBases) {
             System.out.println("****************************************");
             get.printTables();
@@ -234,7 +232,7 @@ public class Frame extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 
-        //  RPCreateTableMSQL rp_create = new RPCreateTableMSQL(DataBases.get(0));
+        //   RPCreateTableMSQL rp_create = new RPCreateTableMSQL(DataBases.get(0));
         RPCreateTableMYSQL rp_create = new RPCreateTableMYSQL(DataBases.get(0));
 
         //  DataBases.get(0).printTables();
@@ -327,6 +325,7 @@ public class Frame extends javax.swing.JFrame {
                             data.stream().forEach((data1) -> {
                                 tablesList.insert(data1);// se insertan las tablas                             
                             });
+
                             RPAccessTableColumns access = new RPAccessTableColumns(tablesList, Motor_Origen, RPconnect);
                             access.getTableColums();
                             DataBases.add(tablesList);//se agrega a la lista de bases de datos
@@ -375,11 +374,11 @@ public class Frame extends javax.swing.JFrame {
         ButtonColumn buttonViewTables = new ButtonColumn(table, accion, 5);
         buttonViewTables.setMnemonic(KeyEvent.VK_DELETE);
 
-        ButtonColumn buttonSync = new ButtonColumn(table, hola, 11);
+        ButtonColumn buttonSync = new ButtonColumn(table, syncDataBases, 11);
         buttonSync.setMnemonic(KeyEvent.VK_DELETE);
 
     }
-    Action hola = new AbstractAction() {
+    Action syncDataBases = new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
 
@@ -397,39 +396,102 @@ public class Frame extends javax.swing.JFrame {
             switch (Motor_Destino) {
                 case "MYSQL":
 //-----------------------------
-                    conectionMySql.setDatabase(Nombre_BD);
-                    conectionMySql.setDriver("com.mysql.jdbc.Driver");
-                    conectionMySql.setUser(Usuario_Destino);
-                    conectionMySql.setPass(Contraseña_Destino);
-                    conectionMySql.setIp(IP_Destino);
-                    conectionMySql.setPort("3306");
+                 /*   conectionMySql.setDatabase(Nombre_BD);
+                     conectionMySql.setDriver("com.mysql.jdbc.Driver");
+                     conectionMySql.setUser(Usuario_Destino);
+                     conectionMySql.setPass(Contraseña_Destino);
+                     conectionMySql.setIp(IP_Destino);
+                     conectionMySql.setPort("3306");
 
-                    RPconnect = RPConnectionsFactory.createConnection("MySQL");
-                    RPconnect.setConection(conectionMySql);
+                     RPconnect = RPConnectionsFactory.createConnection("MySQL");
+                     RPconnect.setConection(conectionMySql);
+                     */
+
+                    RPSaveConnecton("DBMSInput", "ipInput", "DBNameInput",
+                            "userInput", "passwordInput", "DBMSOutput", "ipOutput",
+                            "DBNameOutput", "userOutput", "passwordOutput");
 
                     break;
 
                 case "SQL SERVER":
 
-                    conectionMySql.setDatabase(Nombre_BD);
-                    conectionMySql.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                    conectionMySql.setUser(Usuario_Destino);
-                    conectionMySql.setPass(Contraseña_Destino);
-                    conectionMySql.setIp(IP_Destino);
-                    conectionMySql.setPort("1433");
+                    /*      conectionMySql.setDatabase(Nombre_BD);
+                     conectionMySql.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                     conectionMySql.setUser(Usuario_Destino);
+                     conectionMySql.setPass(Contraseña_Destino);
+                     conectionMySql.setIp(IP_Destino);
+                     conectionMySql.setPort("1433");
 
-                    RPconnect = RPConnectionsFactory.createConnection("SQLMS");
-                    RPconnect.setConection(conectionMySql);
+                     RPconnect = RPConnectionsFactory.createConnection("SQLMS");
+                     RPconnect.setConection(conectionMySql);
 
-                    RP_CREATE_BASE creator = new RP_CREATE_BASE(RPconnect);
-                    creator.replicTables(DataBases.get(0));
-
+                     RP_CREATE_BASE creator = new RP_CREATE_BASE(RPconnect);
+                     creator.replicTables(DataBases.get(0));
+                     */
+                    RPSaveConnecton("DBMSInput", "ipInput", "DBNameInput",
+                            "userInput", "passwordInput", "DBMSOutput", "ipOutput",
+                            "DBNameOutput", "userOutput", "passwordOutput");
                     break;
 
                 default:
-                    System.out.println("No se ha creado codigo para ello");
+                    System.out.println("error");
             }
 
         }
+
     };
+
+    void setActiveOrPause(int idConnection) {
+        try {
+            RPConnectionInterface RPconnect;
+
+            RPConection connection = new RPConection();
+            connection.setDatabase("RPDataBase");
+            connection.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            connection.setIp("localhost");
+            connection.setPass("1234");
+            connection.setPort("1433");
+            connection.setUser("sa");
+
+            RPconnect = RPConnectionsFactory.createConnection("SQLMS");
+            RPconnect.setConection(connection);
+
+            RPconnect.executeUpdate("exec setActiveOrPause   @idConnection =" + idConnection + ";");
+
+        } catch (Exception e) {
+            System.out.println("Error al ejecutar proceso setActiveOrPause");
+
+        }
+
+    }
+
+    private void RPSaveConnecton(String dbmsInput, String ipInput,
+            String dbNameInput, String userInput, String passwordInput,
+            String dbmsOutput, String ipOutput, String dbNameOutput,
+            String userOutput, String passwordOutput) {
+        try {
+            RPConnectionInterface RPconnect;
+
+            RPConection connection = new RPConection();
+            connection.setDatabase("RPDataBase");
+            connection.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            connection.setIp("localhost");
+            connection.setPass("1234");
+            connection.setPort("1433");
+            connection.setUser("sa");
+
+            RPconnect = RPConnectionsFactory.createConnection("SQLMS");
+            RPconnect.setConection(connection);
+
+            RPconnect.executeUpdate("InsertConnection  '" + dbmsInput + "','" + ipInput + "','" + dbNameInput
+                    + "','" + userInput + "','" + passwordInput + "','" + dbmsOutput + "','" + ipOutput + "','" + dbNameOutput + "','"
+                    + userOutput + "','"
+                    + passwordOutput + "';");
+
+        } catch (Exception e) {
+            System.out.println("Error al ejecutar proceso InsertTable");
+
+        }
+
+    }
 }
