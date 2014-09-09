@@ -6,7 +6,7 @@
 package com.replication.admin.RPConectionData;
 
 import com.replication.admin.ConnectionManagement.RPConnectionInterface;
-import com.replication.admin.DataStructure.RPColumna;
+import com.replication.admin.DataStructure.RPColumnSLL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -47,12 +47,14 @@ public class RPBaseInformation {
 
         ArrayList<String> listTables = new ArrayList<>();
         ResultSet makeQuery = this.connection.makeQuery("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES");
-        try {
-            while (makeQuery.next()) {
-                listTables.add(makeQuery.getString(1));
+        if (makeQuery != null) {
+            try {
+                while (makeQuery.next()) {
+                    listTables.add(makeQuery.getString(1));
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(RPBaseInformation.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(RPBaseInformation.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listTables;
     }
@@ -89,8 +91,84 @@ public class RPBaseInformation {
         return this.connection.makeQuery("SELECT * FROM INFORMATION_SCHEMA.TRIGGERS WHERE TRIGGER_SCHEMA='" + connection.getConection().getDatabase() + "';");
     }
 
-    public RPColumna getColumnsMYSQL(String Tabla) {
-        return null;
+    public RPColumnSLL getColumnsMYSQL(String Tabla) {
+
+        RPColumnSLL listColums = new RPColumnSLL();
+        try {
+            ResultSet resultset = this.connection.makeQuery("SHOW COLUMNS FROM " + connection.getConection().getDatabase() + "." + Tabla + ";");
+            while (resultset.next()) {
+
+                String _column_Name = resultset.getString("Field");
+                String _type = resultset.getString("Type");
+                String _null = resultset.getString("Null");
+                String _key = resultset.getString("Key");
+                String _default = resultset.getString("Default");
+                String _extra = resultset.getString("Extra");
+
+                listColums.insert(_column_Name, _type, _null, _key, _default, _extra);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(RPBaseInformation.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+        return listColums;
+
+    }
+
+    public RPColumnSLL getColumnsSQLMS(String Tabla) {
+
+        RPColumnSLL listColums = new RPColumnSLL();
+        try {
+            String sql = "SELECT DISTINCT  Columna.COLUMN_NAME, Llave.CONSTRAINT_NAME as"
+                    + " [Key], Columna.IS_NULLABLE, COLUMN_DEFAULT as [Default] "
+                    + ",Iden.is_identity as [Extra], Columna.DATA_TYPE, "
+                    + "Columna.CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA."
+                    + "COLUMNS as Columna left join information_schema."
+                    + "key_column_usage as Llave on Columna.COLUMN_NAME = "
+                    + "Llave.COLUMN_NAME left join sys.columns as Iden on "
+                    + "object_id = object_id(Columna.TABLE_NAME) and name = "
+                    + "Columna.COLUMN_NAME WHERE Columna.TABLE_NAME = '"
+                    + Tabla + "'";
+
+            ResultSet resultset = this.connection.makeQuery(sql);
+
+            while (resultset.next()) {
+                String _column_Name = resultset.getString("COLUMN_NAME");
+                String _type = resultset.getString("DATA_TYPE");
+                String _null = resultset.getString("IS_NULLABLE");
+                String _key = resultset.getString("Key");
+                String _default = resultset.getString("Default");
+                int _extra = resultset.getInt("Extra");
+                String largoString = resultset.getString("CHARACTER_MAXIMUM_LENGTH");
+
+                if (largoString != null) {
+                    _type += "(" + largoString + ")";
+                }
+                String keyString = "no ";
+
+                if (_key != null) {
+                    if (_key.contains("PK")) {
+                        keyString = "PRI";
+                    } else if (_key.contains("UQ")) {
+                        keyString = "UNI";
+                    }
+                }
+                String extraString = null;
+                if (_extra == 1) {
+                    extraString = "auto_increment";
+                }
+
+                listColums.insert(_column_Name, _type, _null, keyString, _default, extraString);
+
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(RPBaseInformation.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+        return listColums;
+
     }
 
 }

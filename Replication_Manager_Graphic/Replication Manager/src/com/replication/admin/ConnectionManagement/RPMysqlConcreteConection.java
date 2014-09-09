@@ -12,8 +12,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -21,7 +19,8 @@ import java.util.logging.Logger;
  */
 public class RPMysqlConcreteConection implements RPConnectionInterface {
 
-    public RPConection conection;
+    private RPConection conection;
+    private Connection conectionMySQL;
 
     public RPMysqlConcreteConection() {
 
@@ -31,24 +30,34 @@ public class RPMysqlConcreteConection implements RPConnectionInterface {
     public ResultSet makeQuery(String query) {
         ResultSet rs = null;
         try {
-
-            Class.forName(this.getConection().getDriver());
-
-            Connection conectionMySQL = DriverManager.getConnection("jdbc:"
-                    + "mysql://" + getConection().getIp() + ":"
-                    + getConection().getPort() + "/" + getConection().getDatabase(),
-                    getConection().getUser(), getConection().getPass());
-
-            Statement statement = conectionMySQL.createStatement();
-            rs = statement.executeQuery(query);
-
+            makeConnection();
+            if (conectionMySQL != null) {
+                Statement statement = conectionMySQL.createStatement();
+                rs = statement.executeQuery(query);
+            }
         } catch (SQLException e) {
-            InfError.showInformation(null, "Error al recuperar la conexion");
+            InfError.showInformation(null, "Error al realizar consulta");
 
-        } catch (ClassNotFoundException ex) {
-            InfError.showInformation(null, "Error al conectar a la base de datos");
         }
         return rs;
+    }
+
+    @Override
+    public void executeUpdate(String query) {
+
+        try {
+            Class.forName(this.conection.getDriver());
+
+            makeConnection();
+
+            if (conectionMySQL != null) {
+                Statement statement = conectionMySQL.createStatement();
+                statement.executeUpdate(query);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            InfError.showInformation(null, "Error al realizar consulta");
+        }
+
     }
 
     @Override
@@ -64,4 +73,35 @@ public class RPMysqlConcreteConection implements RPConnectionInterface {
         return conection;
     }
 
+    @Override
+    public void makeConnection() {
+        try {
+            Class.forName(this.getConection().getDriver());
+
+            conectionMySQL = DriverManager.getConnection("jdbc:"
+                    + "mysql://" + getConection().getIp() + ":"
+                    + getConection().getPort() + "/" + getConection().getDatabase(),
+                    getConection().getUser(), getConection().getPass());
+
+        } catch (ClassNotFoundException | SQLException ex) {
+            InfError.showInformation(null, "Error al conectar a Base de Datos");
+        }
+    }
+
+   @Override
+     public void execute(String query) {
+
+        try {
+            makeConnection();
+
+            if (conectionMySQL != null) {
+                Statement statement = conectionMySQL.createStatement();
+                statement.execute(query);
+            }
+
+        } catch (SQLException e) {
+            InfError.showInformation(null, "Error al realizar consulta");
+        }
+
+    } 
 }

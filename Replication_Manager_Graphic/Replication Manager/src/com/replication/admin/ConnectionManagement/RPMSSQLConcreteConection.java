@@ -19,7 +19,8 @@ import java.sql.Statement;
  */
 public class RPMSSQLConcreteConection implements RPConnectionInterface {
 
-    RPConection conection;
+    private RPConection conection;
+    private Connection conectionMS_SQL;
 
     public RPMSSQLConcreteConection() {
     }
@@ -28,29 +29,51 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
     public ResultSet makeQuery(String query) {
         ResultSet rs = null;
         try {
-            Class.forName(this.conection.getDriver());
-
-            Connection conectionMySQL = DriverManager.getConnection("jdbc:"
-                    + "sqlserver://"
-                    + conection.getIp() + ":"
-                    + conection.getPort() + ";dataBaseName="
-                    + conection.getDatabase(), conection.getUser(),
-                    conection.getPass());
-
-            Statement statement = conectionMySQL.createStatement();
-            rs = statement.executeQuery(query);
-
+            makeConnection();
+            if (conectionMS_SQL != null) {
+                Statement statement = conectionMS_SQL.createStatement();
+                rs = statement.executeQuery(query);
+            }
         } catch (SQLException e) {
-            InfError.showInformation(null, "Error al recuperar la conexion");
-
-        } catch (ClassNotFoundException ex) {
-            InfError.showInformation(null, "Error al conectar a la base de datos");
+            InfError.showInformation(null, "Error al realizar consulta");
         }
-
         return rs;
 
     }
 
+    @Override
+    public void executeUpdate(String query) {
+
+        try {
+            makeConnection();
+
+            if (conectionMS_SQL != null) {
+                Statement statement = conectionMS_SQL.createStatement();
+                statement.executeUpdate(query);
+            }
+
+        } catch (SQLException e) {
+            InfError.showInformation(null, "Error al realizar consulta");
+        }
+
+    }
+    
+    @Override
+     public void execute(String query) {
+        try {
+            makeConnection();
+
+            if (conectionMS_SQL != null) {
+                Statement statement = conectionMS_SQL.createStatement();
+                statement.execute(query);
+            }
+
+        } catch (SQLException e) {
+            InfError.showInformation(null, "Error al realizar consulta");
+        }
+
+    }
+     
     @Override
     public void setConection(RPConection mConection) {
         this.conection = mConection;
@@ -60,4 +83,21 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
     public RPConection getConection() {
         return conection;
     }
+
+    @Override
+    public void makeConnection() {
+        try {
+            Class.forName(this.conection.getDriver());
+
+            conectionMS_SQL = DriverManager.getConnection("jdbc:"
+                    + "sqlserver://"
+                    + conection.getIp() + ":"
+                    + conection.getPort() + ";dataBaseName="
+                    + conection.getDatabase(), conection.getUser(),
+                    conection.getPass());
+        } catch (SQLException | ClassNotFoundException ex) {
+            InfError.showInformation(null, "Error al conectar a Base de Datos");
+        }
+    }
+
 }
