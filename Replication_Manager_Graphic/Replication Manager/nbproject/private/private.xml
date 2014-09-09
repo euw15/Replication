@@ -2,16 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/Melvin/Documents/GIT%20PROYECTO/Replication/Replication_Manager_Graphic/Replication%20Manager/src/com/replication/admin/ConnectionManagement/RPConnectionInterface.java</file>
-            <file>file:/C:/Users/Melvin/Documents/GIT%20PROYECTO/Replication/Replication_Manager_Graphic/Replication%20Manager/src/com/replication/admin/ConnectionManagement/RPMSSQLConcreteConection.java</file>
-            <file>file:/C:/Users/Melvin/Documents/GIT%20PROYECTO/Replication/Replication_Manager_Graphic/Replication%20Manager/src/com/replication/user/GraphicInterface/Frame.java</file>
-            <file>file:/C:/Users/Melvin/Documents/GIT%20PROYECTO/Replication/Replication_Manager_Graphic/Replication%20Manager/src/com/replication/admin/DataTransfer/RPCreateTableMYSQL.java</file>
-            <file>file:/C:/Users/Melvin/Documents/GIT%20PROYECTO/Replication/Replication_Manager_Graphic/Replication%20Manager/src/com/replication/admin/DataTransfer/RPAccessTableColumns.java</file>
-            <file>file:/C:/Users/Melvin/Documents/GIT%20PROYECTO/Replication/Replication_Manager_Graphic/Replication%20Manager/src/com/replication/admin/DataStructure/RPTableSLL.java</file>
-            <file>file:/C:/Users/Melvin/Documents/GIT%20PROYECTO/Replication/Replication_Manager_Graphic/Replication%20Manager/src/com/replication/admin/DataTransfer/RPCreateTableMSQL.java</file>
-            <file>file:/C:/Users/Melvin/Documents/GIT%20PROYECTO/Replication/Replication_Manager_Graphic/Replication%20Manager/src/com/replication/admin/DataStructure/RPColumnSLL.java</file>
-            <file>file:/C:/Users/Melvin/Documents/GIT%20PROYECTO/Replication/Replication_Manager_Graphic/Replication%20Manager/src/com/replication/admin/DataStructure/RPColumn.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

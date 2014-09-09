@@ -11,6 +11,7 @@ import com.replication.admin.DataStructure.RPTableSLL;
 import com.replication.admin.DataTransfer.RPAccessTableColumns;
 import com.replication.admin.DataTransfer.RPCreateTableMSQL;
 import com.replication.admin.DataTransfer.RPCreateTableMYSQL;
+import com.replication.admin.DataTransfer.RPCreateTriggersSQL;
 import com.replication.admin.RPConectionData.RPBaseInformation;
 import com.replication.admin.RPConectionData.RPConection;
 import com.replication.admin.RPConectionData.RP_CREATE_BASE;
@@ -211,6 +212,9 @@ public class Frame extends javax.swing.JFrame {
         for (RPTableSLL get : DataBases) {
             System.out.println("****************************************");
             get.printTables();
+            
+            RPCreateTriggersSQL createTrigers = new RPCreateTriggersSQL(get);
+            createTrigers.createTriggersOnDataBase(get);
         }
 
     }//GEN-LAST:event_jButton2ActionPerformed
