@@ -231,8 +231,8 @@ public class Frame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        insertHistoryEvent(1022,"Prueba");
-        
+        insertHistoryEvent(1022, "Prueba");
+
         for (RPTableSLL get : DataBases) {
             System.out.println("****************************************");
             get.printTables();
@@ -251,7 +251,7 @@ public class Frame extends javax.swing.JFrame {
             RPCreateTriggersSQL.CreateInsertTrigger(get, base);
             RPCreateTriggersSQL.CreateUpdateTrigger(get, base);
             RPCreateTriggersSQL.CreateDeleteTrigger(get, base);
-        
+
         }
 
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -316,8 +316,20 @@ public class Frame extends javax.swing.JFrame {
                 RP_CREATE_BASE creatorMYSQL = new RP_CREATE_BASE(RPconnect);
                 creatorMYSQL.replicTables(DataBases.get(0), "MYSQL", Nombre_BD);
 
+                //Se vuelve a conectar la base de datos
+                conectionMySql.setDatabase(Nombre_BD);
+                conectionMySql.setDriver("com.mysql.jdbc.Driver");
+                conectionMySql.setUser(Usuario_Destino);
+                conectionMySql.setPass(Contraseña_Destino);
+                conectionMySql.setIp(IP_Destino);
+                conectionMySql.setPort("3306");
+
+                //se agrega la tabla de historial
                 RPCreateHistoricalMYSQL hist = new RPCreateHistoricalMYSQL(RPconnect);
                 hist.createHistorical();
+                
+                //se agregan los trigers a cada tabla
+                
 
                 break;
 
@@ -573,8 +585,8 @@ public class Frame extends javax.swing.JFrame {
 
     }
 
-    private void insertHistoryEvent(int typeEvent,String description){
-         try {
+    private void insertHistoryEvent(int typeEvent, String description) {
+        try {
             RPConnectionInterface RPconnect;
 
             RPConection connection = new RPConection();
@@ -588,15 +600,16 @@ public class Frame extends javax.swing.JFrame {
             RPconnect = RPConnectionsFactory.createConnection("SQLMS");
             RPconnect.setConection(connection);
 
-            RPconnect.executeUpdate("exec InsertHistoryEvent  @typeEvent = "+typeEvent+","
-                    + " @description  	= '"+description+"';");
-           
-         } catch (Exception e) {
+            RPconnect.executeUpdate("exec InsertHistoryEvent  @typeEvent = " + typeEvent + ","
+                    + " @description  	= '" + description + "';");
+
+        } catch (Exception e) {
             System.out.println("Error al ejecutar proceso InsertTable");
 
         }
-            
+
     }
+
     private void RPSaveConnecton(String dbmsInput, String ipInput,
             String dbNameInput, String userInput, String passwordInput,
             String dbmsOutput, String ipOutput, String dbNameOutput,
