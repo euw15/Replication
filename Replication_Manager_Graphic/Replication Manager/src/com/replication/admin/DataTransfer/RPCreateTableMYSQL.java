@@ -20,7 +20,6 @@ public class RPCreateTableMYSQL {
 
     public RPCreateTableMYSQL(RPTableSLL tableList) {
         this.tableList = tableList;
-
         createScript();
     }
 
@@ -29,7 +28,6 @@ public class RPCreateTableMYSQL {
         for (RPTable table = tableList.getFirst(); table != null; table = table.getSucc()) {
 
             String _script = "# Crea la tabla " + table.getName() + "\n" + "CREATE TABLE IF NOT EXISTS " + table.getName() + "(\n";
-
             RPColumnSLL columsSLL = table.getColums();
             for (RPColumn column = columsSLL.getFirst(); column != null; column = column.getSucc()) {
 
@@ -41,13 +39,12 @@ public class RPCreateTableMYSQL {
 
                 _script += "    " + column.getColumn_name() + "     " + column.getType() + extra_check + "  " + null_check + default_check + primary_check;
                 _script += key_check;
+
             }
             _script = _script.substring(0, _script.length() - 2);
             _script += "\n);\n";
-            table.setScript_MSSQL(_script);
-            System.out.println(_script);
+            table.setScript_MYSQL(_script);
         }
-
     }
 
     private String typeCheck(String type) {
@@ -68,6 +65,7 @@ public class RPCreateTableMYSQL {
 
     private String primaryCheck(boolean isPK, String column_name) {
         if (isPK) {
+
             return ",\n" + "    PRIMARY KEY (" + column_name + "),\n";
         }
         return ",\n";

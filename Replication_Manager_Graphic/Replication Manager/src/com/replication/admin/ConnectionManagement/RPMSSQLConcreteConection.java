@@ -57,7 +57,23 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
         }
 
     }
+    
+    @Override
+     public void execute(String query) {
+        try {
+            makeConnection();
 
+            if (conectionMS_SQL != null) {
+                Statement statement = conectionMS_SQL.createStatement();
+                statement.execute(query);
+            }
+
+        } catch (SQLException e) {
+            InfError.showInformation(null, "Error al realizar consulta");
+        }
+
+    }
+     
     @Override
     public void setConection(RPConection mConection) {
         this.conection = mConection;

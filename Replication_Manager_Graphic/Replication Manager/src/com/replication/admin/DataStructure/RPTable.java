@@ -15,9 +15,8 @@ public class RPTable {
     protected final String name;
     protected RPColumnSLL colums;
 
-    protected String _Script_MYSQL;
-
-    protected String _Script_MSSQL;
+    private String _Script_MYSQL;
+    private String _Script_MSSQL;
 
     public RPTable(String tableName) {
         this.name = tableName;
@@ -53,6 +52,10 @@ public class RPTable {
 
     public String getScript_MSSQL() {
         return _Script_MSSQL;
+    }
+
+    public String getScript_MYSQL() {
+        return _Script_MYSQL;
     }
 
 }

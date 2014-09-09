@@ -13,6 +13,10 @@ public class RPTableSLL {
 
     private RPTable first;
     protected String Identifier;
+
+    public String getIdentifier() {
+        return Identifier;
+    }
    
 
     public RPTableSLL(String Identifier) {

@@ -120,8 +120,17 @@ public class RPBaseInformation {
 
         RPColumnSLL listColums = new RPColumnSLL();
         try {
-            String sql = "SELECT  Columna.COLUMN_NAME, Llave.CONSTRAINT_NAME as [Key], Columna.IS_NULLABLE, COLUMN_DEFAULT as [Default] ,Iden.is_identity as [Extra], Columna.DATA_TYPE, Columna.CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS as Columna left join information_schema.key_column_usage as Llave on Columna.COLUMN_NAME = Llave.COLUMN_NAME left join sys.columns as Iden on object_id = object_id(Columna.TABLE_NAME) and name = Columna.COLUMN_NAME WHERE Columna.TABLE_NAME = '" + Tabla + "'";
-            System.out.println(sql);
+            String sql = "SELECT DISTINCT  Columna.COLUMN_NAME, Llave.CONSTRAINT_NAME as"
+                    + " [Key], Columna.IS_NULLABLE, COLUMN_DEFAULT as [Default] "
+                    + ",Iden.is_identity as [Extra], Columna.DATA_TYPE, "
+                    + "Columna.CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA."
+                    + "COLUMNS as Columna left join information_schema."
+                    + "key_column_usage as Llave on Columna.COLUMN_NAME = "
+                    + "Llave.COLUMN_NAME left join sys.columns as Iden on "
+                    + "object_id = object_id(Columna.TABLE_NAME) and name = "
+                    + "Columna.COLUMN_NAME WHERE Columna.TABLE_NAME = '"
+                    + Tabla + "'";
+
             ResultSet resultset = this.connection.makeQuery(sql);
 
             while (resultset.next()) {

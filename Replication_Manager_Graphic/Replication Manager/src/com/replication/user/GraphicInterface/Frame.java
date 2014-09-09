@@ -9,6 +9,8 @@ import com.replication.admin.ConnectionManagement.RPConnectionInterface;
 import com.replication.admin.ConnectionManagement.RPConnectionsFactory;
 import com.replication.admin.DataStructure.RPTableSLL;
 import com.replication.admin.DataTransfer.RPAccessTableColumns;
+import com.replication.admin.DataTransfer.RPCreateHistoricalMYSQL;
+import com.replication.admin.DataTransfer.RPCreateTableMSQL;
 import com.replication.admin.DataTransfer.RPCreateTableMYSQL;
 import com.replication.admin.DataTransfer.RPCreateTriggersSQL;
 import com.replication.admin.RPConectionData.RPBaseInformation;
@@ -74,6 +76,8 @@ public class Frame extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Replication Manager");
@@ -141,6 +145,20 @@ public class Frame extends javax.swing.JFrame {
         }
     });
 
+    jButton4.setText("Agregar historia lMYSQL");
+    jButton4.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jButton4ActionPerformed(evt);
+        }
+    });
+
+    jButton5.setText("Replicar Informacion");
+    jButton5.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jButton5ActionPerformed(evt);
+        }
+    });
+
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
@@ -155,6 +173,10 @@ public class Frame extends javax.swing.JFrame {
                     .addComponent(jButton2)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addComponent(jButton3)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jButton4)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jButton5)
                     .addGap(0, 0, Short.MAX_VALUE))
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addContainerGap())
@@ -168,7 +190,9 @@ public class Frame extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jButton1)
                 .addComponent(jButton2)
-                .addComponent(jButton3))
+                .addComponent(jButton3)
+                .addComponent(jButton4)
+                .addComponent(jButton5))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 669, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addContainerGap())
@@ -208,14 +232,28 @@ public class Frame extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         insertHistoryEvent(1022,"Prueba");
-        /*
+        
         for (RPTableSLL get : DataBases) {
             System.out.println("****************************************");
             get.printTables();
-
-            RPCreateTriggersSQL createTrigers = new RPCreateTriggersSQL(get);
-            createTrigers.createTriggersOnDataBase(get);
-        }*/
+            
+           
+            RPConection conectionMySql = new RPConection();
+                        conectionMySql.setDatabase("ReadingDBLog");
+                        conectionMySql.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                        conectionMySql.setUser("sa");
+                        conectionMySql.setPass("123456");
+                        conectionMySql.setIp("localhost");
+                        conectionMySql.setPort("1433");
+                        
+             RPConnectionInterface base= RPConnectionsFactory.createConnection("SQLMS");
+             base.setConection(conectionMySql);
+             
+            RPCreateTriggersSQL.CreateInsertTrigger(get, base);
+            RPCreateTriggersSQL.CreateUpdateTrigger(get, base);
+            RPCreateTriggersSQL.CreateDeleteTrigger(get, base);
+        
+        }
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -227,11 +265,98 @@ public class Frame extends javax.swing.JFrame {
         //  DataBases.get(0).printTables();
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+
+        RPConection conectionMySql = new RPConection();
+        RPConnectionInterface RPconnect;
+
+        conectionMySql.setDatabase("test");
+        conectionMySql.setDriver("com.mysql.jdbc.Driver");
+        conectionMySql.setUser("root");
+        conectionMySql.setPass("mjgv12");
+        conectionMySql.setIp("localhost");
+        conectionMySql.setPort("3306");
+
+        RPconnect = RPConnectionsFactory.createConnection("MySQL");
+        RPconnect.setConection(conectionMySql);
+
+        RPCreateHistoricalMYSQL hist = new RPCreateHistoricalMYSQL(RPconnect);
+        hist.createHistorical();
+
+
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+
+        int fila = table.getSelectedRow();
+
+        String Motor_Destino = table.getValueAt(fila, 6).toString();
+        String IP_Destino = table.getValueAt(fila, 7).toString();
+        String Nombre_BD = table.getValueAt(fila, 8).toString();
+        String Usuario_Destino = table.getValueAt(fila, 9).toString();
+        
+        String Contraseña_Destino = table.getValueAt(fila, 10).toString();
+
+
+        
+        
+        RPConection conectionMySql = new RPConection();
+        RPConnectionInterface RPconnect;
+
+        switch (Motor_Destino) {
+
+            case "MYSQL":
+
+                RPCreateTableMYSQL rp_createMYSQL = new RPCreateTableMYSQL(DataBases.get(0));
+
+                conectionMySql.setDatabase("test");
+                conectionMySql.setDriver("com.mysql.jdbc.Driver");
+                conectionMySql.setUser("root");
+                conectionMySql.setPass("mjgv12");
+                conectionMySql.setIp("localhost");
+                conectionMySql.setPort("3306");
+
+                RPconnect = RPConnectionsFactory.createConnection("MySQL");
+                RPconnect.setConection(conectionMySql);
+
+                RP_CREATE_BASE creatorMYSQL = new RP_CREATE_BASE(RPconnect);
+                creatorMYSQL.replicTables(DataBases.get(0), "MYSQL", "TOME_PLAYO");
+
+             //   RPCreateHistoricalMYSQL hist = new RPCreateHistoricalMYSQL(RPconnect);
+            //    hist.createHistorical();
+
+                break;
+
+            case "SQL SERVER":
+
+                RPCreateTableMSQL rp_createMSERVER = new RPCreateTableMSQL(DataBases.get(0));
+
+//                conectionMySql.setDatabase(Nombre_BD);
+//                conectionMySql.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//                conectionMySql.setUser(Usuario_Destino);
+//                conectionMySql.setPass(Contraseña_Destino);
+//                conectionMySql.setIp(IP_Destino);
+//                conectionMySql.setPort("1433");
+                RPconnect = RPConnectionsFactory.createConnection("SQLMS");
+                RPconnect.setConection(conectionMySql);
+
+                RP_CREATE_BASE creator = new RP_CREATE_BASE(RPconnect);
+                creator.replicTables(DataBases.get(0), "SQL SERVER", Nombre_BD);
+
+                break;
+
+            default:
+                System.out.println("No se ha creado codigo para ello");
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

@@ -19,16 +19,19 @@ public class RPColumnSLL {
 
     public void insert(String columnName, String tipo, String _null, String _key, String _default, String extra) {
 
-        RPColumn newly = new RPColumn(columnName, tipo, _null, _key, _default, extra);
+        if (!isOnList(columnName)) {
 
-        if (first == null) {
-            first = newly;
-            first.succ = null;
-        }
-        for (RPColumn curr = first; curr != null; curr = curr.succ) {
-            if (curr.succ == null) {
-                curr.succ = newly;
-                newly.succ = null;
+            RPColumn newly = new RPColumn(columnName, tipo, _null, _key, _default, extra);
+
+            if (first == null) {
+                first = newly;
+                first.succ = null;
+            }
+            for (RPColumn curr = first; curr != null; curr = curr.succ) {
+                if (curr.succ == null) {
+                    curr.succ = newly;
+                    newly.succ = null;
+                }
             }
         }
     }
@@ -77,22 +80,19 @@ public class RPColumnSLL {
         return count--;
     }
 
-    private RPColumn getElement(int pos) {
+    private boolean isOnList(String column) {
 
-        RPColumn aux = null;
-        int i = 0;
-        for (RPColumn curr = first; curr != null; curr = curr.succ, i++) {
-            if (i == pos) {
-                aux = curr;
-                break;
+        for (RPColumn curr = first; curr != null; curr = curr.succ) {
+            if (curr._column_name.equals(column)) {
+                return true;
             }
         }
-        return aux;
+        return false;
     }
 
     public void printColums() {
         for (RPColumn curr = first; curr != null; curr = curr.succ) {
-            System.out.println(curr._column_name+" "+curr._default+" "+curr._extra+" "+curr._key+" "+curr._isPK+" "+curr._null+" "+curr._type);
+            System.out.println(curr._column_name + " " + curr._default + " " + curr._extra + " " + curr._key + " " + curr._isPK + " " + curr._null + " " + curr._type);
         }
         System.out.println("");
     }
