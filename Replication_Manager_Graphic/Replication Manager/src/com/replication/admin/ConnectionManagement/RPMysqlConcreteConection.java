@@ -35,7 +35,6 @@ public class RPMysqlConcreteConection implements RPConnectionInterface {
                 Statement statement = conectionMySQL.createStatement();
                 rs = statement.executeQuery(query);
             }
-        
         } catch (SQLException e) {
             InfError.showInformation(null, "Error al realizar consulta");
 
@@ -55,9 +54,7 @@ public class RPMysqlConcreteConection implements RPConnectionInterface {
                 Statement statement = conectionMySQL.createStatement();
                 statement.executeUpdate(query);
             }
-          
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
             InfError.showInformation(null, "Error al realizar consulta");
         }
 
@@ -79,10 +76,6 @@ public class RPMysqlConcreteConection implements RPConnectionInterface {
     @Override
     public void makeConnection() {
         try {
-            
-            
-            System.out.println(getConection().getPass());
-            
             Class.forName(this.getConection().getDriver());
 
             conectionMySQL = DriverManager.getConnection("jdbc:"
@@ -91,9 +84,24 @@ public class RPMysqlConcreteConection implements RPConnectionInterface {
                     getConection().getUser(), getConection().getPass());
 
         } catch (ClassNotFoundException | SQLException ex) {
-         
             InfError.showInformation(null, "Error al conectar a Base de Datos");
         }
     }
 
+   @Override
+     public void execute(String query) {
+
+        try {
+            makeConnection();
+
+            if (conectionMySQL != null) {
+                Statement statement = conectionMySQL.createStatement();
+                statement.execute(query);
+            }
+
+        } catch (SQLException e) {
+            InfError.showInformation(null, "Error al realizar consulta");
+        }
+
+    } 
 }

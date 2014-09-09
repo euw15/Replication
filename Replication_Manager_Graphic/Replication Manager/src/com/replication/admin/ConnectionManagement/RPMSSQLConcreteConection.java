@@ -34,7 +34,6 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
                 Statement statement = conectionMS_SQL.createStatement();
                 rs = statement.executeQuery(query);
             }
-          
         } catch (SQLException e) {
             InfError.showInformation(null, "Error al realizar consulta");
         }
@@ -52,14 +51,29 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
                 Statement statement = conectionMS_SQL.createStatement();
                 statement.executeUpdate(query);
             }
-         
 
         } catch (SQLException e) {
             InfError.showInformation(null, "Error al realizar consulta");
         }
 
     }
+    
+    @Override
+     public void execute(String query) {
+        try {
+            makeConnection();
 
+            if (conectionMS_SQL != null) {
+                Statement statement = conectionMS_SQL.createStatement();
+                statement.execute(query);
+            }
+
+        } catch (SQLException e) {
+            InfError.showInformation(null, "Error al realizar consulta");
+        }
+
+    }
+     
     @Override
     public void setConection(RPConection mConection) {
         this.conection = mConection;
