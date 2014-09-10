@@ -34,39 +34,34 @@ public class RPCreateTriggersMYSQL {
         //recorre todas las tablas creando trigger insert
         for (RPTable tablaActual = database.getFirst(); tablaActual != null; tablaActual = tablaActual.getSucc()) {
             //obtiene el nombre de la columnaPL
+
             String pkColumna = "";
             RPColumnSLL Columnas = tablaActual.getColums();
+
             for (RPColumn columnaActual = Columnas.getFirst(); columnaActual != null; columnaActual = columnaActual.getSucc()) {
                 if (columnaActual.isIsPK()) {
                     pkColumna = columnaActual.getColumn_name();
                 }
             }
-            System.out.println(tablaActual.getName());
-            System.out.println(pkColumna);
 
             ResultSet makeQuery = connection.makeQuery("call addLogTrigger('" + tablaActual.getName() + "','" + pkColumna + "');");
+            if (makeQuery != null) {
+                try {
+                    while (makeQuery.next()) {
 
-            try {
-                while (makeQuery.next()) {
-                    
-                    String triggersUPDATE = makeQuery.getString("_outputUPDATE");
-                    String triggersINSERT = makeQuery.getString("_outputINSERT");
-                    String triggersDELETE = makeQuery.getString("_outputDELETE");
+                        String triggersUPDATE = makeQuery.getString("_outputUPDATE");
+                        String triggersINSERT = makeQuery.getString("_outputINSERT");
+                        String triggersDELETE = makeQuery.getString("_outputDELETE");
 
-                    System.out.println(triggersINSERT);
-                    System.out.println(triggersUPDATE);
-                    System.out.println(triggersDELETE);
-                    
-                    
-                    
-                    connection.executeUpdate(triggersUPDATE);
-                    connection.executeUpdate(triggersINSERT);
-                    connection.executeUpdate(triggersDELETE);
+                        connection.executeUpdate(triggersUPDATE);
+                        connection.executeUpdate(triggersINSERT);
+                        connection.executeUpdate(triggersDELETE);
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(RPCreateTriggersMYSQL.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (SQLException ex) {
-                Logger.getLogger(RPCreateTriggersMYSQL.class.getName()).log(Level.SEVERE, null, ex);
-            }
 
+            }
         }
     }
 }

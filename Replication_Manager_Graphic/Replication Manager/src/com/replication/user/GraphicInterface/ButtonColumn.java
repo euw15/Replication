@@ -51,9 +51,8 @@ public class ButtonColumn extends AbstractCellEditor
         editButton.setFocusPainted(false);
         editButton.addActionListener(this);
         editButton.setOpaque(false);
-        //  editButton.setIcon(new javax.swing.ImageIcon("edit.png")); // NOI18N
+
         originalBorder = editButton.getBorder();
-        //    setFocusBorder(new LineBorder(Color.BLUE));
 
         TableColumnModel columnModel = table.getColumnModel();
         columnModel.getColumn(column).setCellRenderer(this);

@@ -164,7 +164,7 @@ public class RPCreateTriggersSQL {
 
             }
             completeTriggerTable = insertTrigger + statementDelete + finalInsert;
-            coneccionBaseDatos.makeQuery(completeTriggerTable);
+            coneccionBaseDatos.executeUpdate(completeTriggerTable);
         }
 
     }

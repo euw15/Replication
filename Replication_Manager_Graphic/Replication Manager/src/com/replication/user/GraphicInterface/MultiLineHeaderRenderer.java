@@ -13,7 +13,7 @@ public class MultiLineHeaderRenderer extends JPanel implements TableCellRenderer
 
     public MultiLineHeaderRenderer() {
 
-        Color color = new Color(0, 153, 76);
+        Color color = new Color(76, 0, 153);
         setBackground(color);
     }
 

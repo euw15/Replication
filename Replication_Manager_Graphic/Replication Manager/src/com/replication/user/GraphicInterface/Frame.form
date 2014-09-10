@@ -51,14 +51,6 @@
                       <Component id="jScrollPane1" alignment="0" pref="1442" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Component id="jButton1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jButton2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jButton3" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jButton4" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jButton5" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                       <Component id="jLabel1" alignment="0" max="32767" attributes="0"/>
@@ -73,13 +65,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButton3" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButton4" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButton5" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace pref="33" max="32767" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" pref="669" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -118,7 +104,7 @@
                   <Font name="Calibri Light" size="14" style="0"/>
                 </Property>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new javax.swing.table.DefaultTableModel(&#xa;            new Object [][] {&#xa;&#xa;            },&#xa;            new String [] {&#xa;                &quot;Motor Origen\n&quot;, &quot;IP Origen\n&quot;, &quot;Nombre BD\n&quot;, &quot;Usuario Origen\n&quot;, &quot;Contrase&#xf1;a Origen\n&quot;, &quot;\n-\n&quot;, &quot;Motor Destino\n&quot;, &quot;IP Destino\n&quot;, &quot;Nombre BD\n&quot;, &quot;Usuario Destino\n&quot;, &quot;Contrase&#xf1;a Destino\n&quot;, &quot;Sincronizar\n&quot;&#xa;            }&#xa;){&#xa;    Class[] types = new Class [] {&#xa;        java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,java.lang.String.class,java.lang.String.class,java.lang.String.class,java.lang.String.class&#xa;    };&#xa;    boolean[] canEdit = new boolean [] {&#xa;        true, true, true, true, true, true, true, true,true,true,true,true&#xa;    };&#xa;&#xa;    public Class getColumnClass(int columnIndex) {&#xa;        return types [columnIndex];&#xa;    }&#xa;&#xa;    public boolean isCellEditable(int rowIndex, int columnIndex) {&#xa;        return canEdit [columnIndex];&#xa;    }&#xa;}&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;" type="code"/>
+                  <Connection code="new javax.swing.table.DefaultTableModel(&#xa;            new Object [][] {&#xa;&#xa;            },&#xa;            new String [] {&#xa;                &quot;Motor Origen\n&quot;, &quot;IP Origen\n&quot;, &quot;Nombre BD\n&quot;, &quot;Usuario Origen\n&quot;, &quot;Contrase&#xf1;a\nOrigen\n&quot;, &quot;\n-\n&quot;, &quot;Motor Destino\n&quot;, &quot;IP Destino\n&quot;, &quot;Nombre BD\n&quot;, &quot;Usuario Destino\n&quot;, &quot;Contrase&#xf1;a\nDestino\n&quot;, &quot;Sincronizar\n&quot;, &quot;Acci&#xf3;n\n&quot;&#xa;            }&#xa;){&#xa;    Class[] types = new Class [] {&#xa;        java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,java.lang.String.class,java.lang.String.class,java.lang.String.class,java.lang.String.class,java.lang.String.class&#xa;    };&#xa;    boolean[] canEdit = new boolean [] {&#xa;        true, true, true, true, true, true, true, true,true,true,true,true,true&#xa;    };&#xa;&#xa;    public Class getColumnClass(int columnIndex) {&#xa;        return types [columnIndex];&#xa;    }&#xa;&#xa;    public boolean isCellEditable(int rowIndex, int columnIndex) {&#xa;        return canEdit [columnIndex];&#xa;    }&#xa;}&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;" type="code"/>
                 </Property>
                 <Property name="cellSelectionEnabled" type="boolean" value="true"/>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -142,38 +128,6 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JButton" name="jButton2">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jButton2"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JButton" name="jButton3">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jButton3"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JButton" name="jButton4">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Agregar historia lMYSQL"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JButton" name="jButton5">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Replicar Informacion"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton5ActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

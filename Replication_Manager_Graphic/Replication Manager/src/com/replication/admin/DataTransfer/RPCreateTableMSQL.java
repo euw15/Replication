@@ -17,10 +17,11 @@ import com.replication.admin.DataStructure.RPTableSLL;
 public class RPCreateTableMSQL {
 
     private final RPTableSLL tableList;
+    private final String DataBaseName;
 
-    public RPCreateTableMSQL(RPTableSLL tableList) {
+    public RPCreateTableMSQL(RPTableSLL tableList, String DataBaseName) {
         this.tableList = tableList;
-
+        this.DataBaseName = DataBaseName;
         createScript();
     }
 
@@ -28,8 +29,7 @@ public class RPCreateTableMSQL {
 
         for (RPTable table = tableList.getFirst(); table != null; table = table.getSucc()) {
 
-            String _script = "-- Crea la tabla " + table.getName() + "\n" + "CREATE TABLE " + table.getName() + "(\n";
-
+            String _script = "-- Crea la tabla " + table.getName() + "\n" + "CREATE TABLE [" + "dbo" + "].[" + table.getName() + "] (\n";
             RPColumnSLL columsSLL = table.getColums();
             for (RPColumn column = columsSLL.getFirst(); column != null; column = column.getSucc()) {
 

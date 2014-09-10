@@ -57,9 +57,9 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
         }
 
     }
-    
+
     @Override
-     public void execute(String query) {
+    public void execute(String query) {
         try {
             makeConnection();
 
@@ -69,11 +69,12 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
             }
 
         } catch (SQLException e) {
+            e.printStackTrace();
             InfError.showInformation(null, "Error al realizar consulta");
         }
 
     }
-     
+
     @Override
     public void setConection(RPConection mConection) {
         this.conection = mConection;
@@ -96,8 +97,29 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
                     + conection.getDatabase(), conection.getUser(),
                     conection.getPass());
         } catch (SQLException | ClassNotFoundException ex) {
+            ex.printStackTrace();
             InfError.showInformation(null, "Error al conectar a Base de Datos");
         }
+    }
+
+    @Override
+    public boolean validConnection() {
+        boolean flag = false;
+        try {
+            Class.forName(this.conection.getDriver());
+
+            conectionMS_SQL = DriverManager.getConnection("jdbc:"
+                    + "sqlserver://"
+                    + conection.getIp() + ":"
+                    + conection.getPort() + ";dataBaseName="
+                    + conection.getDatabase(), conection.getUser(),
+                    conection.getPass());
+            flag = true;
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            InfError.showInformation(null, "*Error al conectar a Base de Datos");
+        }
+        return flag;
     }
 
 }

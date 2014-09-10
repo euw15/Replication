@@ -30,5 +30,6 @@ public interface RPConnectionInterface {
     public void makeConnection();
     
     public void execute(String query);
-
+    
+    public boolean validConnection();
 }
