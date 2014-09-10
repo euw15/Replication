@@ -50,8 +50,3 @@ public class RP_CREATE_BASE {
 
 }
 
-/*                String crearBase = "CREATE DATABASE IF NOT EXISTS `" + BaseName + "`;";
- this.connection.execute(query);
- String usarBase = "USE `" + BaseName + "`;\n";
- this.connection.execute(query);
- */

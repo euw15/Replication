@@ -12,6 +12,7 @@ import com.replication.admin.DataTransfer.RPAccessTableColumns;
 import com.replication.admin.DataTransfer.RPCreateHistoricalMYSQL;
 import com.replication.admin.DataTransfer.RPCreateTableMSQL;
 import com.replication.admin.DataTransfer.RPCreateTableMYSQL;
+import com.replication.admin.DataTransfer.RPCreateTriggersMYSQL;
 import com.replication.admin.DataTransfer.RPCreateTriggersSQL;
 import com.replication.admin.RPConectionData.RPBaseInformation;
 import com.replication.admin.RPConectionData.RPConection;
@@ -327,9 +328,10 @@ public class Frame extends javax.swing.JFrame {
                 //se agrega la tabla de historial
                 RPCreateHistoricalMYSQL hist = new RPCreateHistoricalMYSQL(RPconnect);
                 hist.createHistorical();
-                
+
                 //se agregan los trigers a cada tabla
-                
+                RPCreateTriggersMYSQL trigger = new RPCreateTriggersMYSQL(RPconnect, DataBases.get(0));
+                trigger.CreateInsertTrigger();
 
                 break;
 
