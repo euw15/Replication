@@ -40,21 +40,6 @@ public class SeleccionarTablas extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
         configureTableLook();
         data = new ArrayList<>();
-        //      DefaultTableModel model = (DefaultTableModel) table.getModel();
-
-//        try {
-//            ResultSet resultRoutes = MyDb.getRoutes();
-//
-//            while (resultRoutes.next()) {
-//                String nombre_ruta = resultRoutes.getString("nombre_ruta");
-//                String numero_ruta = resultRoutes.getString("idRuta");
-//                Object[] datos = {nombre_ruta + " " + numero_ruta, false, numero_ruta};
-//                model.addRow(datos);
-//            }
-//
-//        } catch (SQLException ex) {
-//            System.out.println("Error al cargar rutas");
-//        }
     }
 
     public ArrayList<String> showDialog(ArrayList<String> listTables) {

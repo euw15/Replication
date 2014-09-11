@@ -18,6 +18,9 @@ public class RPConection {
     private String pass;
     private String port;
     private String ip;
+    private String typeDatabase;
+
+   
 
     public RPConection(RPConection mConection) {
 
@@ -29,7 +32,15 @@ public class RPConection {
         this.ip = mConection.ip;
 
     }
+    
+     public String getTypeDatabase() {
+        return typeDatabase;
+    }
 
+    public void setTypeDatabase(String typeDatabase) {
+        this.typeDatabase = typeDatabase;
+    }
+    
     public RPConection() {
     }
 

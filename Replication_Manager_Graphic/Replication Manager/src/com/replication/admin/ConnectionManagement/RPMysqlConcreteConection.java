@@ -102,7 +102,6 @@ public class RPMysqlConcreteConection implements RPConnectionInterface {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
             InfError.showInformation(null, "Error al realizar consulta");
         }
 
@@ -121,7 +120,7 @@ public class RPMysqlConcreteConection implements RPConnectionInterface {
             flag = true;
 
         } catch (ClassNotFoundException | SQLException ex) {
-            InfError.showInformation(null, "*Error al conectar a Base de Datos");
+            InfError.showInformation(null, "* Error al conectar a Base de Datos");
         }
         return flag;
     }

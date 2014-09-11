@@ -25,7 +25,8 @@ CREATE TABLE connections(
 	@ipOutput		VARCHAR(45),
 	@DBNameOutput	VARCHAR(45),
 	@userOutput		VARCHAR(45),
-	@passwordOutput	VARCHAR(45)
+	@passwordOutput	VARCHAR(45),
+        @stateConnection INT
 AS 
 BEGIN 
      SET NOCOUNT ON 
@@ -37,10 +38,11 @@ BEGIN
             userInput,
             passwordInput,
             DBMSOutput,
-			ipOutput,
+	    ipOutput,
             DBNameOutput,
-			userOutput,
-			passwordOutput
+	    userOutput,
+	    passwordOutput,
+            stateConnection
       ) 
      VALUES 
          ( 
@@ -53,7 +55,8 @@ BEGIN
 	        @ipOutput,
 	        @DBNameOutput,
 	        @userOutput,
-	        @passwordOutput	               
+	        @passwordOutput,
+                @stateConnection
           );
 
 END 
@@ -161,3 +164,16 @@ BEGIN
           );
 
 END  
+
+CREATE TABLE [Log](
+	[idLog] [int] IDENTITY(1,1) NOT NULL,
+	[table_name] [nchar](200) NULL,
+	[action] [nchar](200) NULL,
+	[row_pk] [nchar](200) NULL,
+	[field_name] [nchar](200) NULL,
+	[old_value] [nchar](200) NULL,
+	[new_value] [nchar](200) NULL,
+	[timestamp] [datetime] NULL DEFAULT (getdate()),
+	[consultado] [bit] NULL DEFAULT ((0)),
+	[nombreBaseOrigen] [nchar] (200) NULL
+) ON [PRIMARY]

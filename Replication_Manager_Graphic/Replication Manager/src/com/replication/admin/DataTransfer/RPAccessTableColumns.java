@@ -25,13 +25,13 @@ public class RPAccessTableColumns {
 
         RPBaseInformation baseInformation = new RPBaseInformation(connect);
 
-        if ("MYSQL".equals(Motor_BD)) {
+        if ("MySQL".equals(Motor_BD)) {
             for (RPTable curr = tableList.getFirst(); curr != null; curr = curr.getSucc()) {
                 curr.insertColumns(baseInformation.getColumnsMYSQL(curr.getName()));
             }
         }
 
-        if ("SQL SERVER".equals(Motor_BD)) {
+        if ("SQLMS".equals(Motor_BD)) {
             for (RPTable curr = tableList.getFirst(); curr != null; curr = curr.getSucc()) {
                 curr.insertColumns(baseInformation.getColumnsSQLMS(curr.getName()));
             }
