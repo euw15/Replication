@@ -15,6 +15,8 @@ import com.replication.admin.DataTransfer.RPCreateTableMSQL;
 import com.replication.admin.DataTransfer.RPCreateTableMYSQL;
 import com.replication.admin.DataTransfer.RPCreateTriggersMYSQL;
 import com.replication.admin.DataTransfer.RPCreateTriggersSQL;
+import com.replication.admin.DataTransfer.RPTriggersActionMSQL;
+import com.replication.admin.DataTransfer.RPTriggersActionMYSQL;
 import com.replication.admin.RPConectionData.RPBaseInformation;
 import com.replication.admin.RPConectionData.RPConection;
 import com.replication.admin.RPConectionData.RPCreateBase;
@@ -119,7 +121,7 @@ public class Frame extends javax.swing.JFrame {
         }
 
     );
-    table.setColumnSelectionAllowed(false);
+    table.setCellSelectionEnabled(true);
     table.setFocusable(false);
     table.setGridColor(new java.awt.Color(204, 204, 204));
     table.setRowHeight(20);
@@ -175,7 +177,7 @@ public class Frame extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         DefaultTableModel model = (DefaultTableModel) table.getModel();
-        String[] datos = {"MYSQL", "localhost", "perra", "root", "mjgv12", "Ver Tablas", "SQL SERVER", "localhost", "", "melvin", "mjgv12", ""};
+        String[] datos = {"SQL SERVER", "localhost", "SIMPLE", "sa", "1234", "Ver Tablas", "MYSQL", "localhost", "", "root", "mjgv12", ""};
         model.addRow(datos);
 
         TableColumn exp2 = table.getColumnModel().getColumn(0);//Agrega un combobox a la celda 
@@ -188,7 +190,7 @@ public class Frame extends javax.swing.JFrame {
         table.setValueAt(iconTables, rowCount, 5);
         table.setValueAt(iconStop, rowCount, 12);
         rowCount++;
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
