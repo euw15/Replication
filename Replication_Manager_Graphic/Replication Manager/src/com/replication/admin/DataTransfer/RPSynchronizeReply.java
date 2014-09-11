@@ -15,81 +15,123 @@ import java.sql.SQLException;
  */
 public class RPSynchronizeReply {
 
+    /**
+     * Dada una connecion, se encarga de insertar, actualizar o borrar una tupla
+     * o algun atributo de una tupla, de la table indicada en la base
+     * relacionada con la coneccion
+     *
+     * @param DBMS
+     * @param tableName
+     * @param action
+     * @param rowPK
+     * @param fieldName
+     * @param oldValue
+     * @param newValue
+     * @param connection
+     * @throws SQLException
+     */
     public void synchronizeData(String DBMS, String tableName, String action,
             String rowPK, String fieldName, String oldValue, String newValue,
             RPConnectionInterface connection) throws SQLException {
 
-        if (DBMS.equals("MySQL")) {
+        if (DBMS.equals("MySQL")) {// Caso en el motor es MySQL
 
+            //Se obtiene  la llave primaria de la tupla en la cual
+            //se va a realizar la accion
             ResultSet query = connection.makeQuery("SHOW KEYS FROM "
                     + tableName + " WHERE Key_name = 'PRIMARY';");
             query.next();
             String namePK = query.getString("Column_name");
 
             if ("INSERT".equals(action)) {
-
-                query = connection.makeQuery("SELECT COUNT((SELECT " + namePK + "  FROM " + tableName + " AS C "
+                //Para saber si lo que se va a insertar es un atributo en una
+                //tupla ya existente o insertar una nueva, se consulta si ya 
+                //existe la  PK
+                query = connection.makeQuery("SELECT COUNT((SELECT " + namePK
+                        + "  FROM " + tableName + " AS C "
                         + "WHERE C." + namePK + " = '" + rowPK + "' )) AS C");
                 query.next();
                 int exist = query.getInt("C");
 
                 if (exist == 1) {//Update
-
+                    //Si ya existe una tupla con esa PK entonces lo que 
+                    //se hace es una actualizacion del atributo indicado
                     connection.executeUpdate("UPDATE " + tableName + " SET "
-                            + fieldName + "='" + newValue + "' WHERE " + namePK + " = '" + rowPK + "';");
+                            + fieldName + "='" + newValue + "' WHERE " + namePK
+                            + " = '" + rowPK + "';");
 
                 } else {//Insert
+                    //Si aun no existe la tupla con esa PK, entonces, se insert
+                    //como una nueva
                     connection.executeUpdate("INSERT INTO " + tableName
                             + " (" + namePK + ") VALUES('" + newValue + "');");
                 }
 
             } else if ("UPDATE".equals(action)) {
+                //Actualizar un atributo en una tupla dada
                 connection.executeUpdate("UPDATE " + tableName + " SET "
-                        + fieldName + "='" + newValue + "' WHERE " + namePK + " = '" + rowPK + "';");
+                        + fieldName + "='" + newValue + "' WHERE " + namePK
+                        + " = '" + rowPK + "';");
 
             } //DELETE
             else {
+                //Borrar una tupla de la tabla
                 connection.executeUpdate("DELETE  FROM " + tableName
                         + " WHERE " + namePK + " = '" + rowPK + "';");
 
             }
-        } else {//SQL SERVER
+        } else {//Caso en el motor MSSQL 
 
-            ResultSet query = connection.makeQuery("SELECT COL_NAME(ic.OBJECT_ID,ic.column_id) AS ColumnName \n"
-                    + "FROM sys.indexes AS i INNER JOIN sys.index_columns AS ic ON i.OBJECT_ID = ic.OBJECT_ID AND i.index_id = ic.index_id\n"
-                    + " WHERE i.is_primary_key = 1 AND OBJECT_NAME(ic.object_id)='" + tableName + "';");
+            ResultSet query = connection.makeQuery("SELECT COL_NAME"
+                    + "(ic.OBJECT_ID,ic.column_id) AS ColumnName \n"
+                    + "FROM sys.indexes AS i INNER JOIN "
+                    + "sys.index_columns AS ic ON i.OBJECT_ID = ic.OBJECT_ID"
+                    + " AND i.index_id = ic.index_id\n"
+                    + " WHERE i.is_primary_key = 1 AND"
+                    + " OBJECT_NAME(ic.object_id)"
+                    + "='" + tableName + "';");
             query.next();
             String namePK = query.getString("ColumnName");
 
             if ("INSERT".equals(action)) {
-
-                query = connection.makeQuery("SELECT COUNT(" + namePK + ") AS C FROM " + tableName + " WHERE " + namePK + "='" + rowPK + "';");
+                //Para saber si lo que se va a insertar es un atributo en una
+                //tupla ya existente o insertar una nueva, se consulta si ya 
+                //existe la  PK
+                query = connection.makeQuery("SELECT COUNT(" + namePK
+                        + ") AS C FROM " + tableName + " WHERE " + namePK
+                        + "='" + rowPK + "';");
 
                 query.next();
                 int exist = query.getInt("C");
 
                 if (exist == 1) {//Update
-
+                    //Si ya existe una tupla con esa PK entonces lo que 
+                    //se hace es una actualacion de el atributo indicado
                     connection.executeUpdate("UPDATE " + tableName + " SET "
-                            + fieldName + "='" + newValue + "' WHERE " + namePK + " = '" + rowPK + "';");
+                            + fieldName + "='" + newValue + "' WHERE " + namePK
+                            + " = '" + rowPK + "';");
 
                 } else {//Insert
-
+                    //Si aun no existe la tupla con esa PK, entonces, se insert
+                    //como una nueva 
                     connection.executeUpdate("SET IDENTITY_INSERT " + tableName
-                                + " ON  "+  "INSERT INTO " + tableName + "(" + namePK
-                            + ") VALUES('" + newValue + "') "+" SET IDENTITY_INSERT "
-                                + tableName + " OFF"+";");
-                   
+                            + " ON  " + "INSERT INTO " + tableName + "("
+                            + namePK + ") VALUES('" + newValue + "') "
+                            + " SET IDENTITY_INSERT " + tableName + " OFF"
+                            + ";");
+
                 }
 
             } else if ("UPDATE".equals(action)) {
+                //Actualizar un atributo en una tupla dada
                 connection.executeUpdate("UPDATE " + tableName + " SET "
-                            + fieldName + "='" + newValue + "' WHERE " + namePK + " = '" + rowPK + "';");
+                        + fieldName + "='" + newValue + "' WHERE " + namePK
+                        + " = '" + rowPK + "';");
 
             } //DELETE
             else {
-
-                 connection.executeUpdate("DELETE  FROM " + tableName
+                //Borrar una tupla de la tabla
+                connection.executeUpdate("DELETE  FROM " + tableName
                         + " WHERE " + namePK + " = '" + rowPK + "';");
             }
 
