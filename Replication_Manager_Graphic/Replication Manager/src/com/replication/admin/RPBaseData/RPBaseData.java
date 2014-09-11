@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
+ * Se encarga de administrar la base del proyecto Repication Manager
  *
  * @author Melvin
  */
@@ -22,13 +23,19 @@ public class RPBaseData {
 
     }
 
+    /**
+     * Permite cambiar el estado pausa/Active(0/1) de una replicacion
+     *
+     * @param idConnection
+     */
     public void setActiveOrPause(int idConnection) {
         try {
             RPConnectionInterface RPconnect;
 
             RPConection connection = new RPConection();
-            connection.setDatabase("RPDataBase");
-            connection.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            connection.setDatabase("MotorBase");
+            connection.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver"
+            );
             connection.setIp("localhost");
             connection.setPass("1234");
             connection.setPort("1433");
@@ -37,7 +44,10 @@ public class RPBaseData {
             RPconnect = RPConnectionsFactory.createConnection("SQLMS");
             RPconnect.setConection(connection);
 
-            RPconnect.executeUpdate("exec setActiveOrPause   @idConnection =" + idConnection + ";");
+            // Llama el preceso almacenado encargado de cambiar el estado de la
+            // replica(idConnection)
+            RPconnect.executeUpdate("exec setActiveOrPause   @idConnection ="
+                    + idConnection + ";");
 
         } catch (Exception e) {
             System.out.println("Error al ejecutar proceso setActiveOrPause");
@@ -46,12 +56,18 @@ public class RPBaseData {
 
     }
 
+    /**
+     * Permite insertar un evento/error ocurrido en el Replication Manager,
+     * en la tabla historial
+     * @param typeEvent
+     * @param description 
+     */
     public void insertHistoryEvent(int typeEvent, String description) {
         try {
             RPConnectionInterface RPconnect;
 
             RPConection connection = new RPConection();
-            connection.setDatabase("RPDataBase");
+            connection.setDatabase("MotorBase");
             connection.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection.setIp("localhost");
             connection.setPass("1234");
@@ -60,8 +76,10 @@ public class RPBaseData {
 
             RPconnect = RPConnectionsFactory.createConnection("SQLMS");
             RPconnect.setConection(connection);
-
-            RPconnect.executeUpdate("exec InsertHistoryEvent  @typeEvent = " + typeEvent + ","
+            
+            //Llama al proceso almacenado encargado de insertar eventos
+            RPconnect.executeUpdate("exec InsertHistoryEvent  @typeEvent = "
+                    + typeEvent + ","
                     + " @description  	= '" + description + "';");
 
         } catch (Exception e) {
@@ -70,7 +88,21 @@ public class RPBaseData {
         }
 
     }
-
+ 
+    /**
+     * Permiete guardar una nueva replica(coneccion) hecha entre una base de 
+     * entrada y una base destino 
+     * @param dbmsInput
+     * @param ipInput
+     * @param dbNameInput
+     * @param userInput
+     * @param passwordInput
+     * @param dbmsOutput
+     * @param ipOutput
+     * @param dbNameOutput
+     * @param userOutput
+     * @param passwordOutput 
+     */
     public void RPSaveConnecton(String dbmsInput, String ipInput,
             String dbNameInput, String userInput, String passwordInput,
             String dbmsOutput, String ipOutput, String dbNameOutput,
@@ -81,7 +113,8 @@ public class RPBaseData {
 
             RPConection connection = new RPConection();
             connection.setDatabase("MotorBase");
-            connection.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            connection.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver"
+            );
             connection.setIp("localhost");
             connection.setPass("1234");
             connection.setPort("1433");
@@ -89,9 +122,14 @@ public class RPBaseData {
 
             RPconnect = RPConnectionsFactory.createConnection("SQLMS");
             RPconnect.setConection(connection);
-
-            RPconnect.executeUpdate("InsertConnection  '" + dbmsInput + "','" + ipInput + "','" + dbNameInput
-                    + "','" + userInput + "','" + passwordInput + "','" + dbmsOutput + "','" + ipOutput + "','" + dbNameOutput + "','"
+    
+            //Llama al proceso almacenado para insertar una nueva coneccion en 
+            // la tabla de conecciones
+            RPconnect.executeUpdate("InsertConnection  '" + dbmsInput + "','"
+                    + ipInput + "','" + dbNameInput
+                    + "','" + userInput + "','" + passwordInput + "','"
+                    + dbmsOutput + "','" + ipOutput + "','" + dbNameOutput
+                    + "','"
                     + userOutput + "','"
                     + passwordOutput + "'" + ",'" + 1 + "'" + ";");
 
@@ -101,7 +139,12 @@ public class RPBaseData {
         }
 
     }
-
+ 
+    /**
+     * Permite consultar las conecciones(replicas) existentes en Replication 
+     * Manager
+     * @return 
+     */
     public ArrayList<String[]> getConnection() {
         ArrayList<String[]> data = new ArrayList<>();
         try {
@@ -109,7 +152,8 @@ public class RPBaseData {
 
             RPConection connection = new RPConection();
             connection.setDatabase("MotorBase");
-            connection.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            connection.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver"
+            );
             connection.setIp("localhost");
             connection.setPass("1234");
             connection.setPort("1433");
@@ -147,13 +191,15 @@ public class RPBaseData {
 
                 String[] datos = {dbmsInput, ipInput, dbNameInput, userInput,
                     passwordInput, "Ver Tablas", dbmsOutput, ipOutput,
-                    dbNameOutput, userOutput, passwordOutput, "", "", idConnection};
+                    dbNameOutput, userOutput, passwordOutput, "", "",
+                    idConnection};
 
                 data.add(datos);
             }
 
         } catch (SQLException e) {
-            System.out.println("Error al ejecutar proceso de obtencion de connexiones");
+            System.out.println("Error al ejecutar proceso de obtencion"
+                    + " de connexiones");
 
         }
         return data;
