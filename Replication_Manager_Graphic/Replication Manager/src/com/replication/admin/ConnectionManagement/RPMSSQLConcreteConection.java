@@ -53,6 +53,7 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
             }
 
         } catch (SQLException e) {
+            e.printStackTrace();
             InfError.showInformation(null, "Error al realizar consulta");
         }
 

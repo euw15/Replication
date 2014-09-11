@@ -17,9 +17,8 @@ public class ComboBoxEditor extends AbstractCellEditor implements TableCellEdito
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 
         JComboBox<String> comboBox = new JComboBox<>();
-        comboBox.addItem("MYSQL");
-        comboBox.addItem("SQL SERVER");
-        comboBox.addItem("ORACLE DB");
+        comboBox.addItem("MySQL");
+        comboBox.addItem("SQLMS");
         current = new DefaultCellEditor(comboBox);
         return comboBox;
 

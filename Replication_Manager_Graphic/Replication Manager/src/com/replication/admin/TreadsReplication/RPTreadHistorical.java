@@ -108,23 +108,12 @@ public class RPTreadHistorical {
                     String newValue = historialResultSet.getString("new_value");
                     String tiempo = historialResultSet.getString("timestamp");
 
-//                    System.out.println("*******************************");
-//                    System.out.println(nombreTabla);
-//                    System.out.println(action);
-//                    System.out.println(rowPk);
-//                    System.out.println(fieldName);
-//                    //    System.out.println(oldValue);
-//                    System.out.println(newValue);
-//                    //    System.out.println(tiempo);
-//                    System.out.println("*******************************");
-
                     String nombreBaseOrigen = conexionActual.getDatabase();
 
-                    //System.out.print("Prueba "+historialResultSet.getString("action")+" row "+fieldName+")");
-                    String a = "'"+ nombreTabla + "','" + action + "','" + rowPk + "','" + fieldName + "','" + oldValue + "','" + newValue + "','" + nombreBaseOrigen+"'";
+                    String a = "'" + nombreTabla + "','" + action + "','" + rowPk + "','" + fieldName + "','" + oldValue + "','" + newValue + "','" + nombreBaseOrigen + "'";
 
                     String replaceAll = a.replaceAll("\\s", "");
-                                      
+
                     String queryInsert = "INSERT INTO [MotorBase].[dbo].[Log] ([table_name],[action],[row_pk],[field_name],[old_value],[new_value],[nombreBaseOrigen]) VALUES (" + replaceAll + ")";
                     System.out.println(queryInsert);
                     conexionBaseDatosSQL.execute(queryInsert);

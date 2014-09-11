@@ -25,7 +25,8 @@ CREATE TABLE connections(
 	@ipOutput		VARCHAR(45),
 	@DBNameOutput	VARCHAR(45),
 	@userOutput		VARCHAR(45),
-	@passwordOutput	VARCHAR(45)
+	@passwordOutput	VARCHAR(45),
+        @stateConnection INT
 AS 
 BEGIN 
      SET NOCOUNT ON 
@@ -37,10 +38,11 @@ BEGIN
             userInput,
             passwordInput,
             DBMSOutput,
-			ipOutput,
+	    ipOutput,
             DBNameOutput,
-			userOutput,
-			passwordOutput
+	    userOutput,
+	    passwordOutput,
+            stateConnection
       ) 
      VALUES 
          ( 
@@ -53,7 +55,8 @@ BEGIN
 	        @ipOutput,
 	        @DBNameOutput,
 	        @userOutput,
-	        @passwordOutput	               
+	        @passwordOutput,
+                @stateConnection
           );
 
 END 
