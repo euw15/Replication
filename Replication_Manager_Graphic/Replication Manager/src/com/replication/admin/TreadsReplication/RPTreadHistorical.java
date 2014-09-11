@@ -16,8 +16,7 @@ import java.util.logging.Logger;
  */
 public class RPTreadHistorical extends Thread{
 
-    List<RPConection> dataBaseConections;   //conexion con todas la bases de datos que son origenes 
-
+    List<RPConection> dataBaseConections;   //conexion con todas la bases de datos que son origenes
     RPConection conexionBaseAplicion;
     RPConnectionInterface conexionBaseDatosSQL;
     boolean Pausar;
