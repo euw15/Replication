@@ -26,7 +26,6 @@ public class RPTriggersActionMSQL {
 
     public void stopTriggersMSQL() {
         connection.executeUpdate("EXEC sp_msforeachtable \"ALTER TABLE ? DISABLE TRIGGER ALL\";");
-        // String path3 = "INSERT INTO `variable` (`valor`) VALUES ('1');";
     }
 
 }

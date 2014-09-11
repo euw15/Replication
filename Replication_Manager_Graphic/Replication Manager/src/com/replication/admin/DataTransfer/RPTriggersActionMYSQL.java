@@ -26,7 +26,6 @@ public class RPTriggersActionMYSQL {
 
     public void stopTriggersMYSQL() {
         connection.executeUpdate("UPDATE `variable` SET `valor`='0' WHERE `idValor`='1';");
-         // String path3 = "INSERT INTO `variable` (`valor`) VALUES ('1');";
     }
 
 }

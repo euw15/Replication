@@ -176,6 +176,7 @@ public class Frame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+      
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         String[] datos = {"SQL SERVER", "localhost", "SIMPLE", "sa", "1234", "Ver Tablas", "MYSQL", "localhost", "", "root", "mjgv12", ""};
         model.addRow(datos);
