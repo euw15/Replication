@@ -216,12 +216,8 @@ public class Frame extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
         RPTreadHistorical historical = new RPTreadHistorical();
-        historical.askForConections();
-        try {
-            historical.hasNewData();
-        } catch (SQLException ex) {
-            Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        historical.setPausar(true);
+        historical.start();
     }//GEN-LAST:event_jButton2ActionPerformed
 
 

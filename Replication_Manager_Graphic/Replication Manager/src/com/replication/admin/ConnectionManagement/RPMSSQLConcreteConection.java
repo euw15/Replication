@@ -35,7 +35,7 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
                 rs = statement.executeQuery(query);
             }
         } catch (SQLException e) {
-            InfError.showInformation(null, "Error al realizar consulta");
+            //InfError.showInformation(null, "Error al realizar consulta");
         }
         return rs;
 
@@ -71,7 +71,7 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            InfError.showInformation(null, "Error al realizar consulta");
+           // InfError.showInformation(null, "Error al realizar consulta");
         }
 
     }
@@ -99,7 +99,7 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
                     conection.getPass());
         } catch (SQLException | ClassNotFoundException ex) {
             ex.printStackTrace();
-            InfError.showInformation(null, "Error al conectar a Base de Datos");
+            //InfError.showInformation(null, "Error al conectar a Base de Datos");
         }
     }
 
@@ -118,7 +118,7 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
             flag = true;
 
         } catch (SQLException | ClassNotFoundException ex) {
-            InfError.showInformation(null, "*Error al conectar a Base de Datos");
+            //InfError.showInformation(null, "*Error al conectar a Base de Datos");
         }
         return flag;
     }

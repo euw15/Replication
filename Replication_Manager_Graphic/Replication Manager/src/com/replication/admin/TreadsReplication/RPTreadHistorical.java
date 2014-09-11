@@ -14,12 +14,13 @@ import java.util.logging.Logger;
  *
  * @author Edward
  */
-public class RPTreadHistorical {
+public class RPTreadHistorical extends Thread{
 
     List<RPConection> dataBaseConections;   //conexion con todas la bases de datos que son origenes 
 
     RPConection conexionBaseAplicion;
     RPConnectionInterface conexionBaseDatosSQL;
+    boolean Pausar;
 
     public RPTreadHistorical() {
 
@@ -27,7 +28,7 @@ public class RPTreadHistorical {
         connection.setDatabase("MotorBase");
         connection.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         connection.setIp("localhost");
-        connection.setPass("1234");
+        connection.setPass("123456");
         connection.setPort("1433");
         connection.setUser("sa");
 
@@ -52,36 +53,49 @@ public class RPTreadHistorical {
     public void setdataBaseConections(ResultSet basesOrigenes) {
         try {
             while (basesOrigenes.next()) {
-                String tipodbms = basesOrigenes.getString("DBMSInput");
+                if (basesOrigenes != null) {
+                    String tipodbms = basesOrigenes.getString("DBMSInput");
 
-                RPConection connection = new RPConection();
-                connection.setDatabase(basesOrigenes.getString("DBNameInput"));
+                    RPConection connection = new RPConection();
+                    connection.setDatabase(basesOrigenes.getString("DBNameInput"));
 
-                System.out.println("Creando la conexion para " + basesOrigenes.getString("DBNameInput"));
-                if (tipodbms.equals("SQLMS")) {
-                    connection.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                    connection.setPort("1433");
-                    connection.setTypeDatabase("SQLMS");
-                } else {
-                    connection.setDriver("com.mysql.jdbc.Driver");
-                    connection.setPort("3306");
-                    connection.setTypeDatabase("MySQL");
+                    if (tipodbms.equals("SQLMS")) {
+                        connection.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                        connection.setPort("1433");
+                        connection.setTypeDatabase("SQLMS");
+                    } else {
+                        connection.setDriver("com.mysql.jdbc.Driver");
+                        connection.setPort("3306");
+                        connection.setTypeDatabase("MySQL");
+                    }
+             
+                    connection.setIp(basesOrigenes.getString("ipInput"));
+                    connection.setPass(basesOrigenes.getString("passwordInput"));
+                    connection.setUser(basesOrigenes.getString("userInput"));
+
+                    this.dataBaseConections.add(connection);
+
                 }
-                connection.setIp(basesOrigenes.getString("ipInput"));
-                connection.setPass(basesOrigenes.getString("passwordInput"));
-                connection.setUser(basesOrigenes.getString("userInput"));
-
-                this.dataBaseConections.add(connection);
-
             }
-        } catch (SQLException ex) {
+        } 
+        catch (SQLException ex) {
             Logger.getLogger(RPTreadHistorical.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
+        }       
+        finally {
 
         }
     }
 
-    public void hasNewData() throws SQLException {
+    public boolean isPausar() {
+        return Pausar;
+    }
+
+    public void setPausar(boolean Pausar) {
+        this.Pausar = Pausar;
+    }
+    
+    public void hasNewData() throws SQLException 
+    {
         //crea la conexion
         //seleciona la base
         for (RPConection conexionActual : this.dataBaseConections) {
@@ -118,8 +132,66 @@ public class RPTreadHistorical {
                     System.out.println(queryInsert);
                     conexionBaseDatosSQL.execute(queryInsert);
 
+                ResultSet historicalResultSet = baseConexion.makeQuery(query);
+                //si es nula no hace nada
+                if (historicalResultSet != null) {
+                       
+                    //crea el metodo de insert
+                    while (historicalResultSet.next()) 
+                    {
+                       
+                        String idHistorial = historicalResultSet.getString("idHistorial");
+                        String nombreTabla = historicalResultSet.getString("table_name");
+                        String action = historicalResultSet.getString("action");
+                        String rowPk = historicalResultSet.getString("row_pk");
+                        String fieldName = historicalResultSet.getString("field_name");
+                        String oldValue = historicalResultSet.getString("old_value");
+                        String newValue = historicalResultSet.getString("new_value");
+                        String tiempo = historicalResultSet.getString("timestamp");
+                        String nombreBaseOrigen = conexionActual.getDatabase();
+
+                        String valores = "'" + nombreTabla + "','" + action + "','" + rowPk + "','" + fieldName + "','" + oldValue + "','" + newValue + "','" + nombreBaseOrigen + "'";
+
+                        String valoresSinEspacio = valores.replaceAll("\\s", "");
+
+                        String queryInsert = "INSERT INTO [MotorBase].[dbo].[Log] ([table_name],[action],[row_pk],[field_name],[old_value],[new_value],[nombreBaseOrigen]) VALUES (" + valoresSinEspacio + ")";
+                        String queryUpdateHistorical= "";
+                         if (conexionActual.getTypeDatabase().equals("SQLMS")) 
+                         {
+                            queryUpdateHistorical = "UPDATE [" + conexionActual.getDatabase() + "].[dbo].[Historial] SET [consultado] = 1 WHERE [idHistorial] = " + idHistorial;
+                         }
+                         else
+                         {
+                            queryUpdateHistorical = "update Historical set consultado = 1 where idHistorial=" + idHistorial;
+                         }
+                         System.out.println(queryUpdateHistorical);
+                         System.out.println(queryInsert);
+                        baseConexion.executeUpdate(queryUpdateHistorical);
+                        conexionBaseDatosSQL.executeUpdate(queryInsert);
+
+                    }
                 }
             }
         }
     }
+    @Override
+     public void run()
+     {
+       while(Pausar)
+       {
+           try {
+               askForConections();
+               hasNewData();
+               sleep(1000);
+              
+           } catch (SQLException ex) {
+               Logger.getLogger(RPTreadHistorical.class.getName()).log(Level.SEVERE, null, ex);
+           
+               
+            }   catch (InterruptedException ex) {
+               Logger.getLogger(RPTreadHistorical.class.getName()).log(Level.SEVERE, null, ex);
+           }
+        }
+     }
+
 }
