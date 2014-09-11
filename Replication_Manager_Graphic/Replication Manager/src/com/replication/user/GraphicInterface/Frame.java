@@ -99,7 +99,7 @@ public class Frame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Motor Origen\n", "IP Origen\n", "Nombre BD\n", "Usuario Origen\n", "Contraseña\nOrigen\n", "\n-\n", "Motor Destino\n", "IP Destino\n", "Nombre BD\n", "Usuario Destino\n", "Contraseña\nDestino\n", "Sincronizar\n", "Acción\n"
+                "Motor Origen\n", "IP Origen\n", "Nombre BD\n", "Usuario Origen\n", "Contraseña\nOrigen\n", "\n-\n", "Motor Destino\n", "IP Destino\n", "Nombre BD\n", "Usuario Destino\n", "Contraseña\nDestino\n", "Sincronizar\n", "Detener\n"
             }
         ){
             Class[] types = new Class [] {
@@ -119,7 +119,7 @@ public class Frame extends javax.swing.JFrame {
         }
 
     );
-    table.setCellSelectionEnabled(true);
+    table.setColumnSelectionAllowed(false);
     table.setFocusable(false);
     table.setGridColor(new java.awt.Color(204, 204, 204));
     table.setRowHeight(20);
