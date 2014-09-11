@@ -451,6 +451,7 @@ public class Frame extends javax.swing.JFrame {
 
                         RPCreateTableMSQL rp_createMSQL = new RPCreateTableMSQL(DataBases.get(0), Nombre_BD_Destino);
                         rp_createMSQL.createScript();
+                        
 
 
                         // crea la base de datos
