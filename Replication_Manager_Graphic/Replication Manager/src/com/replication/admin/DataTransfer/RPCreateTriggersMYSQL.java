@@ -53,6 +53,7 @@ public class RPCreateTriggersMYSQL {
                         String triggersINSERT = makeQuery.getString("_outputINSERT");
                         String triggersDELETE = makeQuery.getString("_outputDELETE");
 
+                        //  System.out.println(triggersINSERT);
                         connection.executeUpdate(triggersUPDATE);
                         connection.executeUpdate(triggersINSERT);
                         connection.executeUpdate(triggersDELETE);
