@@ -24,7 +24,8 @@ public class RPCreateBase {
     public void replicTables(RPTableSLL tableList, String MotorDestino, String BaseName) {
         switch (MotorDestino) {
             case "SQL SERVER": {        
-                for (RPTable table = tableList.getFirst(); table != null; table = table.getSucc()) {            
+                for (RPTable table = tableList.getFirst(); table != null; table = table.getSucc()) {    
+                   // System.out.println(table.getScript_MSSQL());
                     connection.execute(table.getScript_MSSQL());
                 }
                 break;

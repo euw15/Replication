@@ -22,10 +22,10 @@ public class RPCreateTableMSQL {
     public RPCreateTableMSQL(RPTableSLL tableList, String DataBaseName) {
         this.tableList = tableList;
         this.DataBaseName = DataBaseName;
-        createScript();
+        
     }
 
-    private void createScript() {
+    public void createScript() {
 
         for (RPTable table = tableList.getFirst(); table != null; table = table.getSucc()) {
 
@@ -46,7 +46,7 @@ public class RPCreateTableMSQL {
             _script = _script.substring(0, _script.length() - 2);
             _script += "\n);\n";
             table.setScript_MSSQL(_script);
-
+            System.out.println(_script);
         }
 
     }
