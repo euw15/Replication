@@ -22,11 +22,12 @@ public class RPTreadHistorical {
     RPConnectionInterface conexionBaseDatosSQL;
 
     public RPTreadHistorical() {
+
         RPConection connection = new RPConection();
         connection.setDatabase("MotorBase");
         connection.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         connection.setIp("localhost");
-        connection.setPass("123456");
+        connection.setPass("1234");
         connection.setPort("1433");
         connection.setUser("sa");
 
@@ -94,9 +95,8 @@ public class RPTreadHistorical {
             ResultSet historialResultSet = baseConexion.makeQuery(query);
 
             //si es nula no hace nada
-            if (historialResultSet != null) 
-            {
-                
+            if (historialResultSet != null) {
+
                 //crea el metodo de insert
                 while (historialResultSet.next()) {
 
@@ -107,16 +107,28 @@ public class RPTreadHistorical {
                     String oldValue = historialResultSet.getString("old_value");
                     String newValue = historialResultSet.getString("new_value");
                     String tiempo = historialResultSet.getString("timestamp");
+
+//                    System.out.println("*******************************");
+//                    System.out.println(nombreTabla);
+//                    System.out.println(action);
+//                    System.out.println(rowPk);
+//                    System.out.println(fieldName);
+//                    //    System.out.println(oldValue);
+//                    System.out.println(newValue);
+//                    //    System.out.println(tiempo);
+//                    System.out.println("*******************************");
+
                     String nombreBaseOrigen = conexionActual.getDatabase();
 
                     //System.out.print("Prueba "+historialResultSet.getString("action")+" row "+fieldName+")");
-                    
-                    String a = nombreTabla + "," + action + "," + rowPk + "," + fieldName + "," + oldValue + "," + newValue + "," + tiempo + "," + nombreBaseOrigen;
-                    
+                    String a = "'"+ nombreTabla + "','" + action + "','" + rowPk + "','" + fieldName + "','" + oldValue + "','" + newValue + "','" + nombreBaseOrigen+"'";
 
-                    String b= "'Hola','Hola','5','Hola','Hola','Hola','Hola'";
-                    String queryInsert = "INSERT INTO [MotorBase].[dbo].[Log] ([table_name],[action],[row_pk],[field_name],[old_value],[new_value],[nombreBaseOrigen]) VALUES (" + a + ")";
+                    String replaceAll = a.replaceAll("\\s", "");
+                                      
+                    String queryInsert = "INSERT INTO [MotorBase].[dbo].[Log] ([table_name],[action],[row_pk],[field_name],[old_value],[new_value],[nombreBaseOrigen]) VALUES (" + replaceAll + ")";
+                    System.out.println(queryInsert);
                     conexionBaseDatosSQL.execute(queryInsert);
+
                 }
             }
         }
