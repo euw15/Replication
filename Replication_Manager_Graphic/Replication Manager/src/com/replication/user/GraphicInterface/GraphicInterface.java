@@ -22,46 +22,17 @@ public class GraphicInterface {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args)  {
 
-//        try {
-//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//        } catch (ClassNotFoundException | InstantiationException |
-//                IllegalAccessException | UnsupportedLookAndFeelException e) {
-//        }
-//
-//        Frame a = new Frame();
-//        a.setLocationRelativeTo(null);
-//        a.setVisible(true);
-        
-        
-        RPConnectionInterface RPconnect;
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException |
+                IllegalAccessException | UnsupportedLookAndFeelException e) {
+        }
 
-        RPConection conectionMySql = new RPConection();
-        conectionMySql.setDatabase("COMPANY");
-        conectionMySql.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        conectionMySql.setPort("1433");
-        conectionMySql.setUser("sa");
-        conectionMySql.setPass("1234");
-        conectionMySql.setIp("localhost");
-
-        RPconnect = RPConnectionsFactory.createConnection("SQLMS");
-        RPconnect.setConection(conectionMySql);
-
-//------------------Prueba de connection-----------------------------------------////////////////////////////
-//        ResultSet makeQuery = RPconnect.makeQuery("SELECT * FROM billing;");
-//        makeQuery.next();
-//        System.out.println(makeQuery.getString("idBilling"));
-        ///-----------------------------------------------------
-        
-        RPSynchronizeReply prueba = new RPSynchronizeReply();
-
-        prueba.synchronizeData("SQL", "prueba", "INSERT",
-                "90", "id", "NULL", "90",
-                RPconnect);
-        
-        
-        
+        Frame a = new Frame();
+        a.setLocationRelativeTo(null);
+        a.setVisible(true);   
     }
 
 }
