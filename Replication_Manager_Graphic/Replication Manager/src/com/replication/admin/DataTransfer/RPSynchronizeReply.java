@@ -74,30 +74,23 @@ public class RPSynchronizeReply {
                             + fieldName + "='" + newValue + "' WHERE " + namePK + " = '" + rowPK + "';");
 
                 } else {//Insert
-                    try {
-                        connection.executeUpdate("SET IDENTITY_INSERT " + tableName
-                                + " ON");
-                    } catch (Exception e) {
-                    }
 
-                    connection.executeUpdate("INSERT INTO " + tableName + "(" + namePK
-                            + ") VALUES('" + newValue + "');");
-                    try {
-                        connection.executeUpdate(" SET IDENTITY_INSERT "
-                                + tableName + " OFF");
-                    } catch (Exception e) {
-                    }
+                    connection.executeUpdate("SET IDENTITY_INSERT " + tableName
+                                + " ON  "+  "INSERT INTO " + tableName + "(" + namePK
+                            + ") VALUES('" + newValue + "') "+" SET IDENTITY_INSERT "
+                                + tableName + " OFF"+";");
                    
                 }
 
             } else if ("UPDATE".equals(action)) {
-                
                 connection.executeUpdate("UPDATE " + tableName + " SET "
                             + fieldName + "='" + newValue + "' WHERE " + namePK + " = '" + rowPK + "';");
 
             } //DELETE
             else {
 
+                 connection.executeUpdate("DELETE  FROM " + tableName
+                        + " WHERE " + namePK + " = '" + rowPK + "';");
             }
 
         }
