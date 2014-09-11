@@ -11,7 +11,7 @@ package com.replication.admin.RPConectionData;
  */
 public class RPConection {
 
-    //Parametros de conexion
+    //Contine los parametros de la coneccion
     private String driver;
     private String database;
     private String user;
@@ -19,8 +19,6 @@ public class RPConection {
     private String port;
     private String ip;
     private String typeDatabase;
-
-   
 
     public RPConection(RPConection mConection) {
 
@@ -32,15 +30,15 @@ public class RPConection {
         this.ip = mConection.ip;
 
     }
-    
-     public String getTypeDatabase() {
+
+    public String getTypeDatabase() {
         return typeDatabase;
     }
 
     public void setTypeDatabase(String typeDatabase) {
         this.typeDatabase = typeDatabase;
     }
-    
+
     public RPConection() {
     }
 

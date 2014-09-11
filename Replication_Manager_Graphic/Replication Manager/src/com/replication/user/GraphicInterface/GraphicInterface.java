@@ -5,11 +5,7 @@
  */
 package com.replication.user.GraphicInterface;
 
-import com.replication.admin.ConnectionManagement.RPConnectionInterface;
-import com.replication.admin.ConnectionManagement.RPConnectionsFactory;
-import com.replication.admin.DataTransfer.RPSynchronizeReply;
-import com.replication.admin.RPConectionData.RPConection;
-import java.sql.SQLException;
+
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
