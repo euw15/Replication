@@ -46,6 +46,7 @@ public class RPCreateTableMYSQL {
             _script = _script.substring(0, _script.length() - 2);
             _script += "\n);\n";
             table.setScript_MYSQL(_script);
+
         }
     }
 
@@ -75,7 +76,8 @@ public class RPCreateTableMYSQL {
 
     private String defaultCheck(String Default) {
         if (Default != null) {
-            Default = Default.substring(1, Default.length() - 1);
+            //  System.out.println("Default: " + Default);
+            //   Default = Default.substring(1, Default.length() - 1);
             return " DEFAULT " + Default + " ";
         } else {
             return "";

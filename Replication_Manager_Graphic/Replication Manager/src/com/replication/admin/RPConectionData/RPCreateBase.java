@@ -33,7 +33,7 @@ public class RPCreateBase {
                 String crearBase = "CREATE DATABASE IF NOT EXISTS `" + BaseName + "`;";
                 connection.execute(crearBase);
                 for (RPTable table = tableList.getFirst(); table != null; table = table.getSucc()) {
-                    connection.execute(table.getScript_MYSQL());
+                    connection.execute(table.getScript_MYSQL());               
                 }
                 break;
             }

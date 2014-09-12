@@ -134,6 +134,7 @@ public class RPBaseData {
                     + "','"
                     + userOutput + "','"
                     + passwordOutput + "'" + ",'" + 1 + "'" + ";");
+           
 
         } catch (Exception e) {
             System.out.println("Error al ejecutar proceso InsertTable");

@@ -22,7 +22,7 @@ public class RPCreateTableMSQL {
     public RPCreateTableMSQL(RPTableSLL tableList, String DataBaseName) {
         this.tableList = tableList;
         this.DataBaseName = DataBaseName;
-        
+
     }
 
     public void createScript() {
@@ -40,7 +40,7 @@ public class RPCreateTableMSQL {
                 String extra_check = extraCheck(column.getExtra());
                 String key_check = keyCheck(column.getKey());
 
-                _script += "    " + column.getColumn_name() + "     " + type_check + extra_check + "  " + null_check + key_check + default_check + primary_check;
+                _script += "    [" + column.getColumn_name() + "]     " + type_check + extra_check + "  " + null_check + key_check + default_check + primary_check;
 
             }
             _script = _script.substring(0, _script.length() - 2);
@@ -68,14 +68,14 @@ public class RPCreateTableMSQL {
 
     private String primaryCheck(boolean isPK, String column_name) {
         if (isPK) {
-            return ",\n" + "    PRIMARY KEY (" + column_name + "),\n";
+            return ",\n" + "    PRIMARY KEY ([" + column_name + "]),\n";
         }
         return ",\n";
     }
 
     private String defaultCheck(String Default) {
         if (Default != null) {
-            return " DEFAULT (1)";
+            return " DEFAULT (" + Default + ")";
         } else {
             return "";
         }

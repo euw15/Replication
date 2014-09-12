@@ -227,6 +227,7 @@ public class Frame extends javax.swing.JFrame {
         TableColumn exp3 = table.getColumnModel().getColumn(6);//Agrega un combobox a la celda 
         exp3.setCellEditor(new ComboBoxEditor());
 
+        
         table.setValueAt(iconEdit, rowCount, 11);
         table.setValueAt(iconTables, rowCount, 5);
         table.setValueAt(iconStop, rowCount, 12);
@@ -240,8 +241,9 @@ public class Frame extends javax.swing.JFrame {
         RPTreadHistorical historical = new RPTreadHistorical();
         historical.setPausar(true);
         historical.start();
-
-        //  baseIndividual.consultarHistorial();
+    
+        
+        
         RPTreadIndividualBase baseIndividual = new RPTreadIndividualBase();
         baseIndividual.start();
     }//GEN-LAST:event_jButton2ActionPerformed

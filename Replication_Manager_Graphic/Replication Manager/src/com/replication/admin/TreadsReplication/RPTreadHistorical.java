@@ -146,7 +146,6 @@ public class RPTreadHistorical extends Thread {
                             queryUpdateHistorical = "UPDATE [" + conexionActual.getDatabase() + "].[dbo].[Historial] SET [consultado] = 1 WHERE [idHistorial] = " + idHistorial;
                         } else {
                             queryUpdateHistorical = "update Historial set consultado = 1 where idHistorial=" + idHistorial;
-                            System.out.println(queryUpdateHistorical);
                         }
 
                         baseConexion.executeUpdate(queryUpdateHistorical);
