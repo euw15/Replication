@@ -11,6 +11,7 @@ import com.replication.admin.DataTransfer.RPSynchronizeReply;
 import com.replication.admin.DataTransfer.RPTriggersActionMSQL;
 import com.replication.admin.DataTransfer.RPTriggersActionMYSQL;
 import com.replication.admin.RPConectionData.RPConection;
+import static java.lang.Thread.sleep;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class RPTreadIndividualBase extends Thread {
     }
 
     public List<RPConection> getBasesAReplicar(String nombreBaseOrigen) {
-        ResultSet conexionesAReplicar = conexionBaseDatosSQL.makeQuery("SELECT TOP 1000 [idConnection],[DBMSInput],[ipInput],[DBNameInput],[userInput],[passwordInput],[DBMSOutput],[ipOutput],[DBNameOutput],[userOutput],[passwordOutput],[stateConnection] FROM [MotorBase].[dbo].[connections] where DBNameInput ='" + nombreBaseOrigen + "'");
+        ResultSet conexionesAReplicar = conexionBaseDatosSQL.makeQuery("SELECT TOP 1000 [idConnection],[DBMSInput],[ipInput],[DBNameInput],[userInput],[passwordInput],[DBMSOutput],[ipOutput],[DBNameOutput],[userOutput],[passwordOutput],[stateConnection] FROM [MotorBase].[dbo].[connections] where DBNameInput ='" + nombreBaseOrigen + "' and stateConnection= 1");
         List<RPConection> basesAReplicar = new ArrayList<>();
 
         try {
@@ -84,6 +85,7 @@ public class RPTreadIndividualBase extends Thread {
 
                 }
             }
+            conexionesAReplicar.close();
             return basesAReplicar;
 
         } catch (SQLException ex) {
@@ -130,6 +132,7 @@ public class RPTreadIndividualBase extends Thread {
             while (resultado.next()) {
                 nombre = resultado.getString("nombreBaseOrigen");
             }
+            resultado.close();
         } catch (SQLException ex) {
             Logger.getLogger(RPTreadIndividualBase.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -150,6 +153,7 @@ public class RPTreadIndividualBase extends Thread {
                while (PK.next()) {
                     String nombreBaseOrigen = replace(PK.getString("nombreBaseOrigen"));
                     List<RPConection> basesAReplicar = getBasesAReplicar(nombreBaseOrigen);
+                    
                     for (RPConection conexionActual : basesAReplicar) {
                         String dbms = replace(conexionActual.getTypeDatabase());
                         String tableName = replace(PK.getString("table_name"));

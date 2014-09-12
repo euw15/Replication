@@ -52,6 +52,7 @@ public class RPTreadHistorical extends Thread {
     public void setdataBaseConections(ResultSet basesOrigenes) {
         try {
             while (basesOrigenes.next()) {
+
                 if (basesOrigenes != null) {
                     String tipodbms = basesOrigenes.getString("DBMSInput");
 
@@ -73,9 +74,10 @@ public class RPTreadHistorical extends Thread {
                     connection.setUser(basesOrigenes.getString("userInput"));
 
                     this.dataBaseConections.add(connection);
-
+                   
                 }
             }
+             basesOrigenes.close();
         } catch (SQLException ex) {
             Logger.getLogger(RPTreadHistorical.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -125,10 +127,16 @@ public class RPTreadHistorical extends Thread {
                         String fieldName = historicalResultSet.getString("field_name");
                         String oldValue = historicalResultSet.getString("old_value");
                         String newValue = "";
+                        
                         if (conexionActual.getTypeDatabase().equals("SQLMS")) {
                             newValue = historicalResultSet.getString("new_value");
                         } else {
-                            newValue = historicalResultSet.getString("old_value");
+                            if (action.equals("INSERT")) {
+                                newValue = historicalResultSet.getString("old_value");
+                            } else {
+                                newValue = historicalResultSet.getString("new_value");
+                            }
+
                         }
 
                         // String tiempo = historicalResultSet.getString("timestamp");
@@ -151,6 +159,7 @@ public class RPTreadHistorical extends Thread {
                         conexionBaseDatosSQL.executeUpdate(queryInsert);
 
                     }
+                    historicalResultSet.close();
                 }
             }
         }

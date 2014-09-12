@@ -7,11 +7,13 @@ package com.replication.admin.ConnectionManagement;
 
 import com.replication.admin.RPConectionData.RPConection;
 import com.replication.user.Error.InfError;
+import com.sun.rowset.CachedRowSetImpl;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.sql.rowset.CachedRowSet;
 
 /**
  *
@@ -27,16 +29,28 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
 
     @Override
     public ResultSet makeQuery(String query) {
+
         ResultSet rs = null;
+
         try {
             makeConnection();
             if (conectionMS_SQL != null) {
                 Statement statement = conectionMS_SQL.createStatement();
                 rs = statement.executeQuery(query);
+                //    rs = copyResultSet(rs);
+                //    conectionMS_SQL.close();
             }
         } catch (SQLException e) {
+
             //InfError.showInformation(null, "Error al realizar consulta");
-        }
+        } /*finally {
+         try {
+         conectionMS_SQL.close();
+         } catch (SQLException ex) {
+         System.out.println("Error al cerrar conexion");
+         }
+         }*/
+
         return rs;
 
     }
@@ -51,10 +65,18 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
                 Statement statement = conectionMS_SQL.createStatement();
                 statement.executeUpdate(query);
             }
+            conectionMS_SQL.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
             InfError.showInformation(null, "Error al realizar consulta");
+
+        } finally {
+
+            try {
+                conectionMS_SQL.close();
+            } catch (SQLException ex) {
+                System.out.println("Error al cerrar conexion");
+            }
         }
 
     }
@@ -68,10 +90,17 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
                 Statement statement = conectionMS_SQL.createStatement();
                 statement.execute(query);
             }
+            conectionMS_SQL.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
             // InfError.showInformation(null, "Error al realizar consulta");
+        } finally {
+            try {
+                conectionMS_SQL.close();
+            } catch (SQLException ex) {
+                System.out.println("Error al cerrar conexion");
+            }
         }
 
     }
@@ -98,7 +127,6 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
                     + conection.getDatabase(), conection.getUser(),
                     conection.getPass());
         } catch (SQLException | ClassNotFoundException ex) {
-            ex.printStackTrace();
             //InfError.showInformation(null, "Error al conectar a Base de Datos");
         }
     }
@@ -116,16 +144,28 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
                     + conection.getDatabase(), conection.getUser(),
                     conection.getPass());
             flag = true;
-
+            conectionMS_SQL.close();
         } catch (SQLException | ClassNotFoundException ex) {
             //InfError.showInformation(null, "*Error al conectar a Base de Datos");
         }
+
         return flag;
     }
 
     @Override
     public String getTypeConnection() {
         return "MSSQL";
+    }
+
+    private ResultSet copyResultSet(ResultSet state) {
+        CachedRowSet rowset = null;
+        try {
+            rowset = new CachedRowSetImpl();
+            rowset.populate(state);
+        } catch (SQLException ex) {
+            System.out.println("Error al copiar resultset");
+        }
+        return rowset;
     }
 
 }

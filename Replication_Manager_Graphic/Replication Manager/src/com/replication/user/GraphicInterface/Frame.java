@@ -149,7 +149,13 @@ public class Frame extends javax.swing.JFrame {
         }
     });
 
-    jButton2.setText("jButton2");
+    jButton2.setFont(new java.awt.Font("Calibri Light", 0, 12)); // NOI18N
+    jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/replication/user/Images/1410575171_Controller-32.png"))); // NOI18N
+    jButton2.setText("Jugar");
+    jButton2.setFocusPainted(false);
+    jButton2.setFocusable(false);
+    jButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+    jButton2.setOpaque(false);
     jButton2.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             jButton2ActionPerformed(evt);
@@ -175,7 +181,7 @@ public class Frame extends javax.swing.JFrame {
         .addGroup(jPanel1Layout.createSequentialGroup()
             .addContainerGap()
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1442, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1443, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addComponent(jButton1)
                     .addGap(6, 6, 6)
@@ -194,9 +200,9 @@ public class Frame extends javax.swing.JFrame {
             .addGap(10, 10, 10)
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jButton1))
-            .addGap(18, 30, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 669, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addContainerGap())
     );
@@ -612,6 +618,8 @@ public class Frame extends javax.swing.JFrame {
             if (idConnection != null) {
                 RPBaseData baseData = new RPBaseData();
                 baseData.setActiveOrPause(Integer.parseInt(idConnection));
+            } else {
+                System.out.println("null");
             }
         }
 

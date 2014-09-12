@@ -7,11 +7,13 @@ package com.replication.admin.ConnectionManagement;
 
 import com.replication.admin.RPConectionData.RPConection;
 import com.replication.user.Error.InfError;
+import com.sun.rowset.CachedRowSetImpl;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.sql.rowset.CachedRowSet;
 
 /**
  *
@@ -34,11 +36,20 @@ public class RPMysqlConcreteConection implements RPConnectionInterface {
             if (conectionMySQL != null) {
                 Statement statement = conectionMySQL.createStatement();
                 rs = statement.executeQuery(query);
+                //      rs = copyResultSet(rs);
+                //    conectionMySQL.close();
             }
         } catch (SQLException e) {
             InfError.showInformation(null, "Error al realizar consulta");
 
-        }
+        } /*finally {
+         try {
+         conectionMySQL.close();
+         } catch (SQLException ex) {
+         System.out.println("Error al cerrar conexion");
+         }
+         }*/
+
         return rs;
     }
 
@@ -53,10 +64,16 @@ public class RPMysqlConcreteConection implements RPConnectionInterface {
             if (conectionMySQL != null) {
                 Statement statement = conectionMySQL.createStatement();
                 statement.executeUpdate(query);
+                conectionMySQL.close();
             }
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
             InfError.showInformation(null, "Error al realizar consulta");
+        } finally {
+            try {
+                conectionMySQL.close();
+            } catch (SQLException ex) {
+                System.out.println("Error al cerrar conexion");
+            }
         }
 
     }
@@ -85,7 +102,7 @@ public class RPMysqlConcreteConection implements RPConnectionInterface {
                     getConection().getUser(), getConection().getPass());
 
         } catch (ClassNotFoundException | SQLException ex) {
-            ex.printStackTrace();
+
             InfError.showInformation(null, "Error al conectar a Base de Datos");
         }
     }
@@ -100,11 +117,17 @@ public class RPMysqlConcreteConection implements RPConnectionInterface {
                 Statement statement = conectionMySQL.createStatement();
                 statement.execute(query);
             }
+            conectionMySQL.close();
 
         } catch (SQLException e) {
             InfError.showInformation(null, "Error al realizar consulta");
+        } finally {
+            try {
+                conectionMySQL.close();
+            } catch (SQLException ex) {
+                System.out.println("Error al cerrar conexion");
+            }
         }
-
     }
 
     @Override
@@ -118,9 +141,17 @@ public class RPMysqlConcreteConection implements RPConnectionInterface {
                     + getConection().getPort() + "/" + getConection().getDatabase(),
                     getConection().getUser(), getConection().getPass());
             flag = true;
-
+            conectionMySQL.close();
         } catch (ClassNotFoundException | SQLException ex) {
+
             InfError.showInformation(null, "* Error al conectar a Base de Datos");
+
+        } finally {
+            try {
+                conectionMySQL.close();
+            } catch (SQLException ex) {
+                System.out.println("Error al cerrar conexion");
+            }
         }
         return flag;
     }
@@ -128,5 +159,18 @@ public class RPMysqlConcreteConection implements RPConnectionInterface {
     @Override
     public String getTypeConnection() {
         return "MySQL";
+    }
+
+    private ResultSet copyResultSet(ResultSet state) {
+
+        CachedRowSet rowset = null;
+        try {
+            rowset = new CachedRowSetImpl();
+            rowset.populate(state);
+        } catch (SQLException ex) {
+            System.out.println("Error al copiar resultset");
+        }
+        return rowset;
+
     }
 }

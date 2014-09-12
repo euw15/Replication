@@ -63,7 +63,7 @@ BEGIN
     -- ------------------------------------ THE INSERT TRIGGER ------------------------------------\
     SELECT  concat('CREATE TRIGGER ', tableName, '_INSERT_AU AFTER INSERT ON ', 
 tableName, ' FOR EACH ROW BEGIN \n','DECLARE timestamp DATE DEFAULT now();\n',
-'DECLARE valorF int;\n','SET valorF=(select valor from variable);\n','if(valorF = 1) then\n') into _outputINSERT;
+'DECLARE valorF int;\n','SET valorF=(select valor from variable where idValor=1);\n','if(valorF = 1) then\n') into _outputINSERT;
     SET done = 0;
     OPEN curInsert;
     
@@ -84,7 +84,7 @@ tableName, ' FOR EACH ROW BEGIN \n','DECLARE timestamp DATE DEFAULT now();\n',
 
     SELECT  concat('CREATE TRIGGER ', tableName, '_UPDATE_AU AFTER UPDATE ON ', 
 tableName, ' FOR EACH ROW BEGIN \n','DECLARE timestamp DATE DEFAULT now();\n',
-'DECLARE valorFU int;\n','SET valorFU=(select valor from variable);\n','if(valorFU = 1) then\n') into _outputUPDATE;
+'DECLARE valorFU int;\n','SET valorFU=(select valor from variable where idValor=1);\n','if(valorFU = 1) then\n') into _outputUPDATE;
 
     SET done = 0;
     # SET _outputUPDATE = CONCAT(_outputUPDATE, _partial, '\n' );
@@ -106,7 +106,7 @@ tableName, ' FOR EACH ROW BEGIN \n','DECLARE timestamp DATE DEFAULT now();\n',
     -- ------------------------------------ THE DELETE TRIGGER ------------------------------------
     SELECT  concat('CREATE TRIGGER ', tableName, '_DELETE_AU AFTER DELETE ON ', 
 tableName, ' FOR EACH ROW BEGIN \n','DECLARE timestamp DATE DEFAULT now();\n',
-'DECLARE valorFD int;\n','SET valorFD=(select valor from variable);\n','if(valorFD = 1) then\n') into _outputDELETE;
+'DECLARE valorFD int;\n','SET valorFD=(select valor from variable where idValor=1);\n','if(valorFD = 1) then\n') into _outputDELETE;
 
     # SET _outputDELETE = CONCAT(_outputDELETE, _partial, '\n' );
     SELECT concat('INSERT INTO Historial (',
