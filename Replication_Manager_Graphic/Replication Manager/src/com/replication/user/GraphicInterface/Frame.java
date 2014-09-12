@@ -196,7 +196,7 @@ public class Frame extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
         DefaultTableModel model = (DefaultTableModel) table.getModel();
-        String[] datos = {"SQL SERVER", "localhost", "SIMPLE", "sa", "1234", "Ver Tablas", "MYSQL", "localhost", "", "root", "mjgv12", ""};
+        String[] datos = {"", "localhost", "", "sa", "1234", "Ver Tablas", "", "localhost", "", "", "", ""};
         model.addRow(datos);
 
         TableColumn exp2 = table.getColumnModel().getColumn(0);//Agrega un combobox a la celda 
@@ -447,8 +447,6 @@ public class Frame extends javax.swing.JFrame {
 
                         RPCreateTableMSQL rp_createMSQL = new RPCreateTableMSQL(DataBases.get(0), Nombre_BD_Destino);
                         rp_createMSQL.createScript();
-                        
-
 
                         // crea la base de datos
                         String crearBase = "CREATE DATABASE " + Nombre_BD_Destino + ";";
@@ -480,9 +478,65 @@ public class Frame extends javax.swing.JFrame {
                     System.out.println("No se ha creado codigo para ello");
             }
 
-            /* RPSaveConnecton("DBMSInput", "ipInput", "DBNameInput",
-             "userInput", "passwordInput", "DBMSOutput", "ipOutput",
-             "DBNameOutput", "userOutput", "passwordOutput");*/
+            switch (Motor_Origen) {
+
+                case "MySQL":
+
+                    RPConection conectionMySql = new RPConection();
+                    conectionMySql.setDatabase(Nombre_BD);
+                    conectionMySql.setDriver("com.mysql.jdbc.Driver");
+                    conectionMySql.setUser(Usuario);
+                    conectionMySql.setPass(Contraseña);
+                    conectionMySql.setIp(IP_Origen);
+                    conectionMySql.setPort("3306");
+
+                    RPconnect = RPConnectionsFactory.createConnection("MySQL");
+                    RPconnect.setConection(conectionMySql);
+
+                    if (RPconnect.validConnection()) {
+
+                        //se agrega la tabla de historial
+                        RPCreateHistoricalMYSQL historialMYSQL = new RPCreateHistoricalMYSQL(RPconnect);
+                        historialMYSQL.createHistorical();
+
+                        //se agregan los trigers a cada tabla
+                        RPCreateTriggersMYSQL trigger = new RPCreateTriggersMYSQL(RPconnect, DataBases.get(0));
+                        trigger.CreateInsertTrigger();
+                    }
+                    break;
+
+                case "SQLMS":
+
+                    RPConection conectionMSQL = new RPConection();
+
+                    conectionMSQL.setDatabase(Nombre_BD);
+                    conectionMSQL.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                    conectionMSQL.setUser(Usuario);
+                    conectionMSQL.setPass(Contraseña);
+                    conectionMSQL.setIp(IP_Origen);
+                    conectionMSQL.setPort("1433");
+
+                    RPconnect = RPConnectionsFactory.createConnection("SQLMS");
+                    RPconnect.setConection(conectionMSQL);
+
+                    if (RPconnect.validConnection()) {
+
+                        //se agrega la tabla de historial
+                        RPCreateHistoricalMSQL historialMSQL = new RPCreateHistoricalMSQL(RPconnect);
+                        historialMSQL.createHistorical();
+
+                        //se agregan los trigers a cada tabla        
+                        RPCreateTriggersSQL.CreateDeleteTrigger(DataBases.get(0), RPconnect);
+                        RPCreateTriggersSQL.CreateInsertTrigger(DataBases.get(0), RPconnect);
+                        RPCreateTriggersSQL.CreateUpdateTrigger(DataBases.get(0), RPconnect);
+
+                    }
+                    break;
+
+                default:
+                    System.out.println("No se ha creado codigo para ello");
+            }
+
         }
 
     };
@@ -501,6 +555,7 @@ public class Frame extends javax.swing.JFrame {
         ArrayList<String[]> connection = baseData.getConnection();
         connection.stream().forEach((connection1) -> {
             model.addRow(connection1);
+            rowCount++;
         });
     }
 
