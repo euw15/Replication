@@ -495,6 +495,9 @@ public class Frame extends javax.swing.JFrame {
 
                     if (RPconnect.validConnection()) {
 
+                        
+                        
+                    
                         //se agrega la tabla de historial
                         RPCreateHistoricalMYSQL historialMYSQL = new RPCreateHistoricalMYSQL(RPconnect);
                         historialMYSQL.createHistorical();
