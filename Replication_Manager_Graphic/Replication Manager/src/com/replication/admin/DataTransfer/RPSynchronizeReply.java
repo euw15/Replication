@@ -114,12 +114,13 @@ public class RPSynchronizeReply {
                   
                     //Si ya existe una tupla con esa PK entonces lo que 
                     //se hace es una actualacion de el atributo indicado
-                    connection.executeUpdate("UPDATE " + tableName + " SET "
-                            + fieldName + "='" + newValue + "' WHERE " + namePK
-                            + " = '" + rowPK + "';");
                     System.out.println("UPDATE " + tableName + " SET "
                             + fieldName + "='" + newValue + "' WHERE " + namePK
                             + " = '" + rowPK + "';");
+                    connection.executeUpdate("UPDATE " + tableName + " SET "
+                            + fieldName + "='" + newValue + "' WHERE " + namePK
+                            + " = '" + rowPK + "';");
+                    
                 } else {//Insert
                     //Si aun no existe la tupla con esa PK, entonces, se insert
                     //como una nueva 

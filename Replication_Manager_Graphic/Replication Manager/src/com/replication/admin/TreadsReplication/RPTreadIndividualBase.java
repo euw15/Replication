@@ -91,19 +91,19 @@ public class RPTreadIndividualBase extends Thread {
         } finally {
             return basesAReplicar;
         }
-
-    }
-
-    public void desactivarTriggers(String dbms, RPConnectionInterface conexionBaseActual) {
-        if (dbms.equals("SQLMS")) {
-            RPTriggersActionMSQL controlTriggersSQL = new RPTriggersActionMSQL(conexionBaseActual);
-            controlTriggersSQL.stopTriggersMSQL();
-        } else {
-            RPTriggersActionMYSQL controlTriggersMySql = new RPTriggersActionMYSQL(conexionBaseActual);
-            controlTriggersMySql.stopTriggersMYSQL();
-        }
-    }
-
+     
+   }
+   
+   public void desactivarTriggers(String dbms,RPConnectionInterface conexionBaseActual ){
+       if (dbms.equals("SQLMS")) {
+           RPTriggersActionMSQL controlTriggersSQL = new RPTriggersActionMSQL(conexionBaseActual);
+           controlTriggersSQL.stopTriggersMSQL();
+       } else {
+           RPTriggersActionMYSQL controlTriggersMySql = new RPTriggersActionMYSQL(conexionBaseActual);
+           controlTriggersMySql.stopTriggersMYSQL();
+       }
+   }
+   
     public void activarTriggers(String dbms, RPConnectionInterface conexionBaseActual) {
         if (dbms.equals("SQLMS")) {
             RPTriggersActionMSQL controlTriggersSQL = new RPTriggersActionMSQL(conexionBaseActual);
@@ -122,20 +122,35 @@ public class RPTreadIndividualBase extends Thread {
         this.pausa = pausa;
     }
 
+    public String getNombreDataBase(String idLog) {
+        String consulta = "SELECT TOP 1000 [nombreBaseOrigen] FROM [MotorBase].[dbo].[Log] where [idLog]=" + idLog;
+        ResultSet resultado = this.conexionBaseDatosSQL.makeQuery(consulta);
+        String nombre = "";
+        try {
+            while (resultado.next()) {
+                nombre = resultado.getString("nombreBaseOrigen");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RPTreadIndividualBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return nombre;
+    }
+
     public void replicate() {
+
         //llama al metodoConsultarHistorial
         ResultSet Historial = consultarHistorial();
         ResultSet PK = consultarHistorial();
+        ResultSet bases = consultarHistorial();
 
         if (Historial != null) {
+
             try {
-
-                //consulta las bases a la que este destino
-                String nombreBaseOrigen = "Origen";
-                List<RPConection> basesAReplicar = getBasesAReplicar(nombreBaseOrigen);
-
-                for (RPConection conexionActual : basesAReplicar) {
-                    while (PK.next()) {
+                    //consulta las bases a la que este destino
+               while (PK.next()) {
+                    String nombreBaseOrigen = replace(PK.getString("nombreBaseOrigen"));
+                    List<RPConection> basesAReplicar = getBasesAReplicar(nombreBaseOrigen);
+                    for (RPConection conexionActual : basesAReplicar) {
                         String dbms = replace(conexionActual.getTypeDatabase());
                         String tableName = replace(PK.getString("table_name"));
                         String action = replace(PK.getString("action"));
@@ -158,7 +173,12 @@ public class RPTreadIndividualBase extends Thread {
                         }
 
                     }
-                    while (Historial.next()) {
+
+                }
+                while (Historial.next()) {
+                    String nombreBaseOrigen = replace(Historial.getString("nombreBaseOrigen"));
+                    List<RPConection> basesAReplicar = getBasesAReplicar(nombreBaseOrigen);
+                    for (RPConection conexionActual : basesAReplicar) {
                         String dbms = replace(conexionActual.getTypeDatabase());
                         String tableName = replace(Historial.getString("table_name"));
                         String action = replace(Historial.getString("action"));
@@ -187,19 +207,21 @@ public class RPTreadIndividualBase extends Thread {
                         activarTriggers(dbms, conexionBaseActual);
 
                     }
+
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(RPTreadIndividualBase.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+
     }
 
-    public String replace(String stringConEspacios) {
-        String stringSinEspacios = stringConEspacios.replace(" ", "");
-        return stringSinEspacios;
-    }
-
-    @Override
+   public String replace(String stringConEspacios)
+   {
+       String stringSinEspacios = stringConEspacios.replace(" ", "");
+       return stringSinEspacios;
+   }
+     @Override
     public void run() {
         while (pausa) {
             try {
