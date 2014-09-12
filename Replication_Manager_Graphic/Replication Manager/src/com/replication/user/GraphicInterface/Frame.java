@@ -238,6 +238,8 @@ public class Frame extends javax.swing.JFrame {
         historical.setPausar(true);
         historical.start();
     
+        
+        
         RPTreadIndividualBase baseIndividual = new RPTreadIndividualBase();
         baseIndividual.start();
     }//GEN-LAST:event_jButton2ActionPerformed
