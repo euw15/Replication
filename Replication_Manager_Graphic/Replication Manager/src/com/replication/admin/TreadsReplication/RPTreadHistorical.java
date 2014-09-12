@@ -51,7 +51,8 @@ public class RPTreadHistorical extends Thread {
 
     public void setdataBaseConections(ResultSet basesOrigenes) {
         try {
-            while (basesOrigenes.next()) {
+            while (basesOrigenes.next()) 
+            {
                 if (basesOrigenes != null) {
                     String tipodbms = basesOrigenes.getString("DBMSInput");
 

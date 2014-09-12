@@ -216,13 +216,14 @@ public class Frame extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
-      //  RPTreadHistorical historical = new RPTreadHistorical();
-    //    historical.setPausar(true);
-     //   historical.start();
-        RPTreadIndividualBase baseIndividual = new RPTreadIndividualBase();
-      
-            baseIndividual.consultarHistorial();
+        RPTreadHistorical historical = new RPTreadHistorical();
+        historical.setPausar(true);
+        historical.start();
     
+      
+      //  baseIndividual.consultarHistorial();
+        RPTreadIndividualBase baseIndividual = new RPTreadIndividualBase();
+        baseIndividual.start();
     }//GEN-LAST:event_jButton2ActionPerformed
 
 

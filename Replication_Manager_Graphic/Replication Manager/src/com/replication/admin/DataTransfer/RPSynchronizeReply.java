@@ -30,7 +30,7 @@ public class RPSynchronizeReply {
      * @param connection
      * @throws SQLException
      */
-    public void synchronizeData(String DBMS, String tableName, String action,
+    public static void synchronizeData(String DBMS, String tableName, String action,
             String rowPK, String fieldName, String oldValue, String newValue,
             RPConnectionInterface connection) throws SQLException {
 
