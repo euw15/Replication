@@ -20,6 +20,7 @@ import com.replication.admin.RPConectionData.RPBaseInformation;
 import com.replication.admin.RPConectionData.RPConection;
 import com.replication.admin.RPConectionData.RPCreateBase;
 import com.replication.admin.TreadsReplication.RPTreadHistorical;
+import com.replication.admin.TreadsReplication.RPTreadIndividualBase;
 import com.replication.user.Error.InfError;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -232,9 +233,13 @@ public class Frame extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
-        RPTreadHistorical historical = new RPTreadHistorical();
-        historical.setPausar(true);
-        historical.start();
+      //  RPTreadHistorical historical = new RPTreadHistorical();
+    //    historical.setPausar(true);
+     //   historical.start();
+        RPTreadIndividualBase baseIndividual = new RPTreadIndividualBase();
+      
+            baseIndividual.consultarHistorial();
+    
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
