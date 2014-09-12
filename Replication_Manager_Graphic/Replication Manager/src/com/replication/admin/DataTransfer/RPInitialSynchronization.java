@@ -8,6 +8,7 @@ package com.replication.admin.DataTransfer;
 import com.replication.admin.ConnectionManagement.RPConnectionInterface;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -19,58 +20,75 @@ public class RPInitialSynchronization {
     private String[] colums;
     private Object[][] Informacion;
 
-    public  RPInitialSynchronization() {
+    public RPInitialSynchronization() {
         colums = null;
         Informacion = null;
     }
 
+    /**
+     * Permite hacer una sincronizacion inicial de los datos de una base origen
+     * a la base destino
+     *
+     * @param tablas
+     * @param connectionInput
+     * @param connectionOutPut
+     * @throws SQLException
+     */
     public void InitialSynchronization(ArrayList<String> tablas,
             RPConnectionInterface connectionInput,
-            RPConnectionInterface connectionOutPut) {
+            RPConnectionInterface connectionOutPut) throws SQLException {
 
-        //Obtener las columnas vs datos para cada tabla en la coneccion input
+        //Obtener las columnas y sus datos para cada tabla en la coneccion input
         for (int i = 0; i < tablas.size(); i++) {
-           
+
             ResultSet ColumsData
                     = connectionInput.makeQuery("SELECT * FROM "
-                            + tablas.get(i));
+                            + tablas.get(i) + ";");
+
             //Se obtiene las columnas de las tablas
             setColums(Get_Columnas(ColumsData));
+
             //Se obtiene los datos de las tablas
-            setData(ResultSet_Array(ColumsData));
-            
-            //////////////****pruebas print************
-//            for (int j = 0; j < Informacion.length; j++) {
-//                for (int k = 0; k < colums.length; k++) {
-//                   
-//                    System.out.println(Informacion[j][k]);
-//                    
-//                }
-//                 
-//                
-//            }
-            //////////////////////////////////////
-           
-            
-            ///////////////////////////
-            /////para cada columnas vs datos de cada tabla: escribir los datos en la connecion destino
+            if (connectionInput.getTypeConnection() == "MySQL") {
+
+                setData(ResultSet_ArrayMysql(ColumsData));
+            } else {
+
+                setData(ResultSet_ArrayMSSQL(ColumsData));
+
+            }
+
+            //Para cada columnas con sus datos de cada tabla: 
+            //escribir los datos en la connecion destino
             for (int j = 0; j < Informacion.length; j++) {
-                String datos = "";
+                String datos = "'";
                 for (int k = 0; k < colums.length; k++) {
                     //Se obtiene el dato para cada columna
-                    datos += Informacion[j][k] + ",";
+                    datos += Informacion[j][k] + "','";
 
                 }
-                datos = datos.substring(0, datos.length() - 1);
-                //System.out.println("INSERT INTO " + tablas.get(i) + " VALUES(" + datos + ");");
-                connectionOutPut.executeUpdate("INSERT INTO " + tablas.get(i) + " VALUES(" + datos + ");");
+                //los datos que se van a insertar en la tabla en una pluta
+                datos = datos.substring(0, datos.length() - 2);
 
+                if (connectionInput.getTypeConnection() == "MySQL") {
+                    connectionOutPut.executeUpdate("INSERT INTO "
+                            + tablas.get(i) + " VALUES(" + datos + ");");
+                } else {
+                    connectionOutPut.executeUpdate("INSERT INTO "
+                            + tablas.get(i) + " VALUES(" + datos + ") "
+                            + ";");
+                }
             }
         }
 
-        ///////////////////////////////////////////////////////////
     }
 
+    /**
+     * Permite obtener los nombres de las columnas de una tabla
+     *
+     * @param rs
+     * @return
+     */
     private String[] Get_Columnas(ResultSet rs) {
         String[] etiquetas = null;
         try {
@@ -91,9 +109,17 @@ public class RPInitialSynchronization {
         this.colums = colums;
     }
 
-    private Object[][] ResultSet_Array(ResultSet rs) {
+    /**
+     * Permite obtener los datos de un result en forma de matriz esto para el
+     * caso de MySQL
+     *
+     * @param rs
+     * @return
+     */
+    private Object[][] ResultSet_ArrayMysql(ResultSet rs) {
         Object[][] lista_datos = null;
         try {
+
             rs.last();
             ResultSetMetaData rsmd = rs.getMetaData();
             int numCols = rsmd.getColumnCount();
@@ -103,12 +129,14 @@ public class RPInitialSynchronization {
             rs.beforeFirst();
             while (rs.next()) {
                 for (int i = 0; i < numCols; i++) {
+
                     lista_datos[j][i] = rs.getObject(i + 1);
                 }
                 j++;
 
             }
         } catch (Exception e) {
+
             System.out.println("No se pudo convertir en arreglo");
 
         }
@@ -119,4 +147,44 @@ public class RPInitialSynchronization {
         this.Informacion = data;
     }
 
+    /**
+     * Permite obtener los datos de un result en forma de matriz esto para el
+     * caso de MSSQL
+     *
+     * @param rs
+     * @return
+     * @throws SQLException
+     */
+    private Object[][] ResultSet_ArrayMSSQL(ResultSet rs) throws SQLException {
+
+        ArrayList<Object> tmp = new ArrayList();
+        Object[][] lista_datos = null;
+        try {
+
+            int count = 0;
+            while (rs.next()) {
+
+                int cantidadColumnas = rs.getMetaData().getColumnCount();
+                Object[] listaTmp = new Object[cantidadColumnas];
+                for (int i = 1; i <= cantidadColumnas; i++) {
+                    Object objects = rs.getObject(i);
+                    listaTmp[i - 1] = objects;
+
+                }
+                count++;
+                tmp.add(listaTmp);
+
+            }
+            lista_datos = new Object[count][];
+            for (int i = 0; i < count; i++) {
+                lista_datos[i] = (Object[]) tmp.get(i);
+            }
+
+        } catch (Exception e) {
+
+            System.out.println("No se pudo convertir en arreglo");
+
+        }
+        return lista_datos;
+    }
 }
