@@ -27,15 +27,17 @@ public class RPCreateHistoricalMYSQL {
     public void createHistorical() {
         try {
 
-            String path = "/com/replication/admin/Scripts/InsertHistorical.sql";
-            String path2 = "/com/replication/admin/Scripts/InsertTableVariable.sql";
-            String path1 = "/com/replication/admin/Scripts/InsertStoreProcedureMYSQL.sql";
-            String path3 = "INSERT INTO `variable` (`valor`) VALUES ('1');";
+            String historial = "/com/replication/admin/Scripts/InsertHistorical.sql";
+            String variable = "/com/replication/admin/Scripts/InsertTableVariable.sql";
+            String dropProcedure = "DROP PROCEDURE IF EXISTS addLogTrigger;";
+            String procedure = "/com/replication/admin/Scripts/InsertStoreProcedureMYSQL.sql";
+            String valor = "INSERT INTO `variable` (`valor`) VALUES ('1');";
 
-            this.connection.executeUpdate(readQuery(path));
-            this.connection.executeUpdate(readQuery(path1));
-            this.connection.executeUpdate(readQuery(path2));
-            this.connection.executeUpdate((path3));
+            this.connection.executeUpdate(readQuery(historial));
+            this.connection.executeUpdate(readQuery(variable));
+            this.connection.executeUpdate(dropProcedure);
+            this.connection.executeUpdate(readQuery(procedure));
+            this.connection.executeUpdate((valor));
 
         } catch (Exception ex) {
             InfError.showInformation(null, "No se pudo crear la tabla historial en la base de datos MYSQL");
