@@ -57,10 +57,11 @@ public class RPBaseData {
     }
 
     /**
-     * Permite insertar un evento/error ocurrido en el Replication Manager,
-     * en la tabla historial
+     * Permite insertar un evento/error ocurrido en el Replication Manager, en
+     * la tabla historial
+     *
      * @param typeEvent
-     * @param description 
+     * @param description
      */
     public void insertHistoryEvent(int typeEvent, String description) {
         try {
@@ -76,7 +77,7 @@ public class RPBaseData {
 
             RPconnect = RPConnectionsFactory.createConnection("SQLMS");
             RPconnect.setConection(connection);
-            
+
             //Llama al proceso almacenado encargado de insertar eventos
             RPconnect.executeUpdate("exec InsertHistoryEvent  @typeEvent = "
                     + typeEvent + ","
@@ -88,10 +89,11 @@ public class RPBaseData {
         }
 
     }
- 
+
     /**
-     * Permiete guardar una nueva replica(coneccion) hecha entre una base de 
-     * entrada y una base destino 
+     * Permiete guardar una nueva replica(coneccion) hecha entre una base de
+     * entrada y una base destino
+     *
      * @param dbmsInput
      * @param ipInput
      * @param dbNameInput
@@ -101,7 +103,7 @@ public class RPBaseData {
      * @param ipOutput
      * @param dbNameOutput
      * @param userOutput
-     * @param passwordOutput 
+     * @param passwordOutput
      */
     public void RPSaveConnecton(String dbmsInput, String ipInput,
             String dbNameInput, String userInput, String passwordInput,
@@ -122,7 +124,7 @@ public class RPBaseData {
 
             RPconnect = RPConnectionsFactory.createConnection("SQLMS");
             RPconnect.setConection(connection);
-    
+
             //Llama al proceso almacenado para insertar una nueva coneccion en 
             // la tabla de conecciones
             RPconnect.executeUpdate("InsertConnection  '" + dbmsInput + "','"
@@ -139,11 +141,12 @@ public class RPBaseData {
         }
 
     }
- 
+
     /**
-     * Permite consultar las conecciones(replicas) existentes en Replication 
+     * Permite consultar las conecciones(replicas) existentes en Replication
      * Manager
-     * @return 
+     *
+     * @return
      */
     public ArrayList<String[]> getConnection() {
         ArrayList<String[]> data = new ArrayList<>();
@@ -190,7 +193,7 @@ public class RPBaseData {
                 String idConnection = makeQuery.getString("idConnection");
 
                 String[] datos = {dbmsInput, ipInput, dbNameInput, userInput,
-                    passwordInput, "Ver Tablas", dbmsOutput, ipOutput,
+                    passwordInput, "", dbmsOutput, ipOutput,
                     dbNameOutput, userOutput, passwordOutput, "", "",
                     idConnection};
 
@@ -203,5 +206,19 @@ public class RPBaseData {
 
         }
         return data;
+    }
+
+    public void removeConnection(String idConnection) {
+        RPConnectionInterface RPconnect;
+        RPConection connection = new RPConection();
+        connection.setDatabase("MotorBase");
+        connection.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        connection.setIp("localhost");
+        connection.setPass("1234");
+        connection.setPort("1433");
+        connection.setUser("sa");
+        RPconnect = RPConnectionsFactory.createConnection("SQLMS");
+        RPconnect.setConection(connection);
+        RPconnect.executeUpdate("DELETE FROM [MotorBase].[dbo].[connections] WHERE idConnection = " + idConnection);
     }
 }

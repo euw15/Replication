@@ -161,7 +161,7 @@ public class RPTreadIndividualBase extends Thread {
                      //desactiva los triggers
                  //   desactivarTriggers(dbms,conexionBaseActual);
                     //ejecuta el query
-                   // RPSynchronizeReply.synchronizeData(dbms,tableName,action,rowPK,fieldName,oldValue,newValue,conexionBaseActual);
+                  RPSynchronizeReply.synchronizeData(dbms,tableName,action,rowPK,fieldName,oldValue,newValue,conexionBaseActual);
                     //re-activa los triggers
                  //   activarTriggers(dbms,conexionBaseActual);
                 

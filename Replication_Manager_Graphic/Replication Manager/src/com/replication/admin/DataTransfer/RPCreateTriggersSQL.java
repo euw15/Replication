@@ -25,13 +25,6 @@ public class RPCreateTriggersSQL {
 
     public void createTriggersOnDataBase(RPTableSLL database, RPConnectionInterface coneccionBaseDatos) {
         String queryCompleto = "";
-
-        // String insertsTrigger = CreateInsertTrigger(database,coneccionBaseDatos);
-        //String deleteTrigger  = CreateDeleteTrigger(database,coneccionBaseDatos);
-        // String updateTrigger  = CreateUpdateTrigger(database,coneccionBaseDatos);
-        // System.out.println(insertsTrigger);
-        // System.out.println(deleteTrigger);
-        // System.out.println(updateTrigger);
     }
 
     public static String createStament(String nombreTabla, String nombreColumna, String Tipo, String ColumnaPK, String Accion) {
@@ -71,7 +64,6 @@ public class RPCreateTriggersSQL {
                 }
 
             }
-
             String completeTriggerTable = "";
             //String base para trigger de insert
             String insertTrigger = " create TRIGGER insertNotification" + tablaActual.getName() + " ON " + tablaActual.getName() + " FOR INSERT AS Begin begin";
@@ -84,10 +76,13 @@ public class RPCreateTriggersSQL {
             //create el triger para la tabla 
             for (RPColumn columnaActual = ColumnasActuales.getFirst(); columnaActual != null; columnaActual = columnaActual.getSucc()) {
                 statementInsert += RPCreateTriggersSQL.createStament(tablaActual.getName(), columnaActual.getColumn_name(), columnaActual.getType(), pkColumna, "INSERT");
-
             }
 
             completeTriggerTable = insertTrigger + statementInsert + finalInsert;
+
+            String tiggerName = "insertNotification" + tablaActual.getName();
+            String dropInsert = "IF EXISTS (SELECT * FROM sys.objects WHERE [type] = 'TR' AND [name] = '" + tiggerName + "') DROP TRIGGER " + tiggerName + ";";
+            coneccionBaseDatos.executeUpdate(dropInsert);
 
             coneccionBaseDatos.execute(completeTriggerTable);
         }
@@ -128,6 +123,11 @@ public class RPCreateTriggersSQL {
             }
 
             completeTriggerTable = insertTrigger + statementDelete + finalInsert;
+
+            String tiggerName = "deleteNotification" + tablaActual.getName();
+            String dropDelete = "IF EXISTS (SELECT * FROM sys.objects WHERE [type] = 'TR' AND [name] = '" + tiggerName + "') DROP TRIGGER " + tiggerName + ";";
+            coneccionBaseDatos.executeUpdate(dropDelete);
+
             coneccionBaseDatos.execute(completeTriggerTable);
         }
 
@@ -164,6 +164,11 @@ public class RPCreateTriggersSQL {
 
             }
             completeTriggerTable = insertTrigger + statementDelete + finalInsert;
+
+            String tiggerName = "updateNotification" + tablaActual.getName();
+            String dropUpdate = "IF EXISTS (SELECT * FROM sys.objects WHERE [type] = 'TR' AND [name] = '" + tiggerName + "') DROP TRIGGER " + tiggerName + ";";
+            coneccionBaseDatos.executeUpdate(dropUpdate);
+
             coneccionBaseDatos.executeUpdate(completeTriggerTable);
         }
 

@@ -47,8 +47,10 @@ public class SeleccionarTablas extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
 
         for (String listTable : listTables) {
-            Object[] datos = {listTable, false};
-            model.addRow(datos);
+            if (!"historial".equals(listTable) & !"variable".equals(listTable)) {
+                Object[] datos = {listTable, false};
+                model.addRow(datos);
+            }
         }
 
         final Timer timer = new Timer(30, null);
@@ -238,7 +240,7 @@ public class SeleccionarTablas extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-      
+
         if (validateUI()) {
             for (int i = 0; i < table.getRowCount(); i++) {// Se crean las rutas por hoja en excel
                 boolean isSelected = (boolean) table.getValueAt(i, 1);
@@ -248,11 +250,11 @@ public class SeleccionarTablas extends javax.swing.JDialog {
                 }
             }
             dispose();
-            
+
         } else {
             InfError.showMessage(this, "Debe seleccionar al menos una tabla");
         }
-        
+
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
