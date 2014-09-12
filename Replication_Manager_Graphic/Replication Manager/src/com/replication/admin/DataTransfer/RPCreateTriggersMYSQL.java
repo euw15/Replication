@@ -45,6 +45,7 @@ public class RPCreateTriggersMYSQL {
             }
 
             ResultSet makeQuery = connection.makeQuery("call addLogTrigger('" + tablaActual.getName() + "','" + pkColumna + "');");
+
             if (makeQuery != null) {
                 try {
                     while (makeQuery.next()) {
@@ -53,7 +54,14 @@ public class RPCreateTriggersMYSQL {
                         String triggersINSERT = makeQuery.getString("_outputINSERT");
                         String triggersDELETE = makeQuery.getString("_outputDELETE");
 
-                        //  System.out.println(triggersINSERT);
+                        String dropInsert = "DROP TRIGGER IF EXISTS " + tablaActual.getName() + "_INSERT_AU;";
+                        String dropUpdate = "DROP TRIGGER IF EXISTS " + tablaActual.getName() + "_UPDATE_AU;";
+                        String dropDelete = "DROP TRIGGER IF EXISTS " + tablaActual.getName() + "_DELETE_AU;";
+
+                        connection.executeUpdate(dropInsert);
+                        connection.executeUpdate(dropDelete);
+                        connection.executeUpdate(dropUpdate);
+
                         connection.executeUpdate(triggersUPDATE);
                         connection.executeUpdate(triggersINSERT);
                         connection.executeUpdate(triggersDELETE);

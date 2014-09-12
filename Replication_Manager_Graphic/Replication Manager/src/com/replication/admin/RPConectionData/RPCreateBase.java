@@ -25,13 +25,11 @@ public class RPCreateBase {
         switch (MotorDestino) {
             case "SQL SERVER": {        
                 for (RPTable table = tableList.getFirst(); table != null; table = table.getSucc()) {    
-                   // System.out.println(table.getScript_MSSQL());
                     connection.execute(table.getScript_MSSQL());
                 }
                 break;
             }
             case "MYSQL": {
-
                 String crearBase = "CREATE DATABASE IF NOT EXISTS `" + BaseName + "`;";
                 connection.execute(crearBase);
                 for (RPTable table = tableList.getFirst(); table != null; table = table.getSucc()) {

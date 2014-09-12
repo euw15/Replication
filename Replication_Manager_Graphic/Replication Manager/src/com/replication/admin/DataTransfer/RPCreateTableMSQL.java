@@ -46,7 +46,6 @@ public class RPCreateTableMSQL {
             _script = _script.substring(0, _script.length() - 2);
             _script += "\n);\n";
             table.setScript_MSSQL(_script);
-            System.out.println(_script);
         }
 
     }
