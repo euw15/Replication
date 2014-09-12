@@ -28,8 +28,10 @@ public interface RPConnectionInterface {
     public RPConection getConection();
 
     public void makeConnection();
-    
+
     public void execute(String query);
-    
+
     public boolean validConnection();
+
+    public String getTypeConnection();
 }

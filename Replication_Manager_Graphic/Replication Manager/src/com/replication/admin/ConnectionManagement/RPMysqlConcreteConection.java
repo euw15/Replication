@@ -124,4 +124,9 @@ public class RPMysqlConcreteConection implements RPConnectionInterface {
         }
         return flag;
     }
+
+    @Override
+    public String getTypeConnection() {
+        return "MySQL";
+    }
 }

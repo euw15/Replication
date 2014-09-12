@@ -71,7 +71,7 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
 
         } catch (SQLException e) {
             e.printStackTrace();
-           // InfError.showInformation(null, "Error al realizar consulta");
+            // InfError.showInformation(null, "Error al realizar consulta");
         }
 
     }
@@ -121,6 +121,11 @@ public class RPMSSQLConcreteConection implements RPConnectionInterface {
             //InfError.showInformation(null, "*Error al conectar a Base de Datos");
         }
         return flag;
+    }
+
+    @Override
+    public String getTypeConnection() {
+        return "MSSQL";
     }
 
 }
