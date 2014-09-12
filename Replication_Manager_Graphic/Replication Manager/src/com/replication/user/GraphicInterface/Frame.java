@@ -437,7 +437,7 @@ public class Frame extends javax.swing.JFrame {
                         case "MySQL":
 
                             RPConection conectionMySql = new RPConection();
-                            conectionMySql.setDatabase("dbo");
+                            conectionMySql.setDatabase("mydb");///CAMBIAR ESTO 
                             conectionMySql.setDriver("com.mysql.jdbc.Driver");
                             conectionMySql.setUser(Usuario_Destino);
                             conectionMySql.setPass(Contraseña_Destino);
