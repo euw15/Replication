@@ -10,6 +10,8 @@ import com.replication.admin.ConnectionManagement.RPConnectionInterface;
 import com.replication.admin.ConnectionManagement.RPConnectionsFactory;
 import com.replication.admin.RPConectionData.RPConection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
@@ -18,14 +20,16 @@ import java.sql.ResultSet;
 public class RPTreadIndividualBase {
   
     RPConnectionInterface conexionBaseDatosSQL;  //conexion para hacer consultas
-   
+    List<RPConection> dataBaseConectionsOrigenes;   //conexion con todas la bases de datos que son origenes
+     List<RPConection> dataBaseConectionsDestinos;   //conexion con todas la bases de datos que son origenes
+     
    public RPTreadIndividualBase()
    {
        RPConection connection = new RPConection();
         connection.setDatabase("MotorBase");
         connection.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         connection.setIp("localhost");
-        connection.setPass("123456");
+        connection.setPass("1234");
         connection.setPort("1433");
         connection.setUser("sa");
         
@@ -33,16 +37,22 @@ public class RPTreadIndividualBase {
         conexionBaseDatosSQL.setConection(connection);
    }
    
-   public ResultSet consultarHistorial()
+   public ResultSet consultarHistorial() 
    {
         ResultSet historial = conexionBaseDatosSQL.makeQuery("SELECT TOP 1000 [idLog],[table_name],[action],[row_pk],[field_name],[old_value],[new_value],[timestamp],[consultado],[nombreBaseOrigen] FROM [MotorBase].[dbo].[Log] where consultado = 0");
+ 
         return historial;
+   }
+   
+   public void getBasesAReplicar()
+   {
+       
    }
    
    public void replicate()
    {
        //llama al metodoConsultarHistorial
-       
+       consultarHistorial();
        //analiza el ResultSet
        
        //Busca que tipo de accion es

@@ -28,7 +28,7 @@ public class RPBaseInformation {
     }
 
     /**
-     * Permite obtener una lista de taplas que componen la base de datos, en
+     * Permite obtener una lista de tuplas que componen la base de datos, en
      * este caso es para MySQL
      *
      * @return

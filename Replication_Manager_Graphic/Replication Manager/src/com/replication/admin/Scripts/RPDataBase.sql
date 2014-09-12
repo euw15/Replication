@@ -175,5 +175,6 @@ CREATE TABLE [Log](
 	[new_value] [nchar](200) NULL,
 	[timestamp] [datetime] NULL DEFAULT (getdate()),
 	[consultado] [bit] NULL DEFAULT ((0)),
-	[nombreBaseOrigen] [nchar] (200) NULL
+	[nombreBaseOrigen] [nchar] (200) NULL,
+        [idBase] 
 ) ON [PRIMARY]
