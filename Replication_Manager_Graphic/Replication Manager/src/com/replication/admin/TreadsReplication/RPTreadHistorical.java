@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  *
  * @author Edward
  */
-public class RPTreadHistorical extends Thread{
+public class RPTreadHistorical extends Thread {
 
     List<RPConection> dataBaseConections;   //conexion con todas la bases de datos que son origenes
     RPConection conexionBaseAplicion;
@@ -27,7 +27,7 @@ public class RPTreadHistorical extends Thread{
         connection.setDatabase("MotorBase");
         connection.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         connection.setIp("localhost");
-        connection.setPass("123456");
+        connection.setPass("1234");
         connection.setPort("1433");
         connection.setUser("sa");
 
@@ -67,7 +67,7 @@ public class RPTreadHistorical extends Thread{
                         connection.setPort("3306");
                         connection.setTypeDatabase("MySQL");
                     }
-             
+
                     connection.setIp(basesOrigenes.getString("ipInput"));
                     connection.setPass(basesOrigenes.getString("passwordInput"));
                     connection.setUser(basesOrigenes.getString("userInput"));
@@ -76,11 +76,9 @@ public class RPTreadHistorical extends Thread{
 
                 }
             }
-        } 
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(RPTreadHistorical.class.getName()).log(Level.SEVERE, null, ex);
-        }       
-        finally {
+        } finally {
 
         }
     }
@@ -92,44 +90,48 @@ public class RPTreadHistorical extends Thread{
     public void setPausar(boolean Pausar) {
         this.Pausar = Pausar;
     }
-    
-    public void hasNewData() throws SQLException 
-    {
+
+    public void hasNewData() throws SQLException {
         //crea la conexion
         //seleciona la base
         for (RPConection conexionActual : this.dataBaseConections) {
             if (conexionActual != null) {
                 //crea la conexion
                 RPConnectionInterface baseConexion = RPConnectionsFactory.createConnection(conexionActual.getTypeDatabase());
-                baseConexion.setConection(conexionBaseAplicion);
+                baseConexion.setConection(conexionActual);
 
                 String query = "";
-                
+
                 if (conexionActual.getTypeDatabase().equals("SQLMS")) {
                     //crea el query
                     query = "SELECT TOP 1000 [idHistorial],[table_name],[action],[row_pk],[field_name],[old_value],[new_value],"
                             + "[timestamp],[consultado] FROM [" + conexionActual.getDatabase() + "].[dbo].[Historial] where [consultado] = 0";
-                    
+
                 } else {
                     query = "select idHistorial,table_name,action,row_pk,field_name,old_value,new_value from Historial where consultado = 0";
-                }
 
+                }
                 ResultSet historicalResultSet = baseConexion.makeQuery(query);
                 //si es nula no hace nada
                 if (historicalResultSet != null) {
-                       
+
                     //crea el metodo de insert
-                    while (historicalResultSet.next()) 
-                    {
-                       
+                    while (historicalResultSet.next()) {
+
                         String idHistorial = historicalResultSet.getString("idHistorial");
                         String nombreTabla = historicalResultSet.getString("table_name");
                         String action = historicalResultSet.getString("action");
                         String rowPk = historicalResultSet.getString("row_pk");
                         String fieldName = historicalResultSet.getString("field_name");
                         String oldValue = historicalResultSet.getString("old_value");
-                        String newValue = historicalResultSet.getString("new_value");
-                        String tiempo = historicalResultSet.getString("timestamp");
+                        String newValue = "";
+                        if (conexionActual.getTypeDatabase().equals("SQLMS")) {
+                            newValue = historicalResultSet.getString("new_value");
+                        } else {
+                            newValue = historicalResultSet.getString("old_value");
+                        }
+
+                        // String tiempo = historicalResultSet.getString("timestamp");
                         String nombreBaseOrigen = conexionActual.getDatabase();
 
                         String valores = "'" + nombreTabla + "','" + action + "','" + rowPk + "','" + fieldName + "','" + oldValue + "','" + newValue + "','" + nombreBaseOrigen + "'";
@@ -137,17 +139,15 @@ public class RPTreadHistorical extends Thread{
                         String valoresSinEspacio = valores.replaceAll("\\s", "");
 
                         String queryInsert = "INSERT INTO [MotorBase].[dbo].[Log] ([table_name],[action],[row_pk],[field_name],[old_value],[new_value],[nombreBaseOrigen]) VALUES (" + valoresSinEspacio + ")";
-                        String queryUpdateHistorical= "";
-                         if (conexionActual.getTypeDatabase().equals("SQLMS")) 
-                         {
+
+                        String queryUpdateHistorical = "";
+                        if (conexionActual.getTypeDatabase().equals("SQLMS")) {
                             queryUpdateHistorical = "UPDATE [" + conexionActual.getDatabase() + "].[dbo].[Historial] SET [consultado] = 1 WHERE [idHistorial] = " + idHistorial;
-                         }
-                         else
-                         {
-                            queryUpdateHistorical = "update Historical set consultado = 1 where idHistorial=" + idHistorial;
-                         }
-                         System.out.println(queryUpdateHistorical);
-                         System.out.println(queryInsert);
+                        } else {
+                            queryUpdateHistorical = "update Historial set consultado = 1 where idHistorial=" + idHistorial;
+                            System.out.println(queryUpdateHistorical);
+                        }
+
                         baseConexion.executeUpdate(queryUpdateHistorical);
                         conexionBaseDatosSQL.executeUpdate(queryInsert);
 
@@ -156,24 +156,22 @@ public class RPTreadHistorical extends Thread{
             }
         }
     }
+
     @Override
-     public void run()
-     {
-       while(Pausar)
-       {
-           try {
-               askForConections();
-               hasNewData();
-               sleep(1000);
-              
-           } catch (SQLException ex) {
-               Logger.getLogger(RPTreadHistorical.class.getName()).log(Level.SEVERE, null, ex);
-           
-               
-            }   catch (InterruptedException ex) {
-               Logger.getLogger(RPTreadHistorical.class.getName()).log(Level.SEVERE, null, ex);
-           }
+    public void run() {
+        while (Pausar) {
+            try {
+                askForConections();
+                hasNewData();
+                sleep(1000);
+
+            } catch (SQLException ex) {
+                Logger.getLogger(RPTreadHistorical.class.getName()).log(Level.SEVERE, null, ex);
+
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RPTreadHistorical.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-     }
+    }
 
 }
