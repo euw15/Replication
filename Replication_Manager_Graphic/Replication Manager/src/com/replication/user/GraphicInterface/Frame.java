@@ -188,10 +188,10 @@ public class Frame extends javax.swing.JFrame {
             .addContainerGap()
             .addComponent(jLabel1)
             .addGap(10, 10, 10)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jButton1)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButton1))
             .addGap(18, 30, Short.MAX_VALUE)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 669, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addContainerGap())
@@ -223,6 +223,7 @@ public class Frame extends javax.swing.JFrame {
         TableColumn exp3 = table.getColumnModel().getColumn(6);//Agrega un combobox a la celda 
         exp3.setCellEditor(new ComboBoxEditor());
 
+        
         table.setValueAt(iconEdit, rowCount, 11);
         table.setValueAt(iconTables, rowCount, 5);
         table.setValueAt(iconStop, rowCount, 12);
@@ -234,12 +235,12 @@ public class Frame extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
       //  RPTreadHistorical historical = new RPTreadHistorical();
-    //    historical.setPausar(true);
-     //   historical.start();
+        //    historical.setPausar(true);
+        //   historical.start();
         RPTreadIndividualBase baseIndividual = new RPTreadIndividualBase();
-      
-            baseIndividual.consultarHistorial();
-    
+
+        baseIndividual.consultarHistorial();
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -603,6 +604,7 @@ public class Frame extends javax.swing.JFrame {
         int rows = model.getRowCount();
         for (int i = rows - 1; i >= 0; i--) {
             model.removeRow(i);
+            rowCount--;
         }
         RPBaseData baseData = new RPBaseData();
         ArrayList<String[]> connection = baseData.getConnection();
