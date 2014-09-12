@@ -227,7 +227,6 @@ public class Frame extends javax.swing.JFrame {
         TableColumn exp3 = table.getColumnModel().getColumn(6);//Agrega un combobox a la celda 
         exp3.setCellEditor(new ComboBoxEditor());
 
-        
         table.setValueAt(iconEdit, rowCount, 11);
         table.setValueAt(iconTables, rowCount, 5);
         table.setValueAt(iconStop, rowCount, 12);
@@ -241,9 +240,7 @@ public class Frame extends javax.swing.JFrame {
         RPTreadHistorical historical = new RPTreadHistorical();
         historical.setPausar(true);
         historical.start();
-    
-        
-        
+
         RPTreadIndividualBase baseIndividual = new RPTreadIndividualBase();
         baseIndividual.start();
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -437,7 +434,7 @@ public class Frame extends javax.swing.JFrame {
                         case "MySQL":
 
                             RPConection conectionMySql = new RPConection();
-                            conectionMySql.setDatabase("mydb");///CAMBIAR ESTO 
+                            conectionMySql.setDatabase("dbo");///CAMBIAR ESTO 
                             conectionMySql.setDriver("com.mysql.jdbc.Driver");
                             conectionMySql.setUser(Usuario_Destino);
                             conectionMySql.setPass(Contraseña_Destino);
@@ -498,7 +495,12 @@ public class Frame extends javax.swing.JFrame {
                                 rp_createMSQL.createScript();
 
                                 // crea la base de datos
-                                String crearBase = "CREATE DATABASE " + Nombre_BD_Destino + ";";
+                                String crearBase = "IF NOT EXISTS ( SELECT name FROM sys.databases WHERE name = '$(" + Nombre_BD_Destino + ")' )\n"
+                                        + "BEGIN\n"
+                                        + "CREATE DATABASE " + Nombre_BD_Destino + ";"
+                                        + "END\n";
+
+                                //  String crearBase = "CREATE DATABASE " + Nombre_BD_Destino + ";";
                                 RPconnect.execute(crearBase);
 
                                 //Se vuelve a conectar la base de datos
@@ -635,6 +637,7 @@ public class Frame extends javax.swing.JFrame {
             RPTableSLL tablas, String IPOrigen,
             String NombreBD, String Usuario, String Contraseña,
             String MotorOrigen) {
+
         RPConnectionInterface RPconnectOrigen = null;
 
         switch (MotorOrigen) {
