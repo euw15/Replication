@@ -17,7 +17,6 @@ public class RPTableSLL {
     public String getIdentifier() {
         return Identifier;
     }
-   
 
     public RPTableSLL(String Identifier) {
         this.first = null;
@@ -70,7 +69,7 @@ public class RPTableSLL {
         return count--;
     }
 
-    private RPTable getElement(int pos) {
+    public RPTable getElement(int pos) {
 
         RPTable aux = null;
         int i = 0;
@@ -92,16 +91,26 @@ public class RPTableSLL {
     }
 
     public void printTables() {
-        
+
         for (RPTable curr = first; curr != null; curr = curr.succ) {
-           
+
             System.out.println("-----------------");
             System.out.println(curr.name);
             System.out.println("-----------------");
             curr.colums.printColums();
-            
+
         }
         System.out.println("");
+    }
+
+    public int size() {
+        int count = 0;
+        for (RPTable curr = first; curr != null; curr = curr.succ) {
+
+            count++;
+
+        }
+        return count;
     }
 
 }

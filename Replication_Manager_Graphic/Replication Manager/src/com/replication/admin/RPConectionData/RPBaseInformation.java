@@ -212,7 +212,11 @@ public class RPBaseInformation {
                 if (_extra == 1) {
                     extraString = "auto_increment";
                 }
-                _default = _default.substring(1, _default.length() - 1);
+
+                if (_default != null) {
+
+                    _default = _default.substring(1, _default.length() - 1);
+                }
 
                 listColums.insert(_column_Name, _type, _null, keyString, _default, extraString);
 
