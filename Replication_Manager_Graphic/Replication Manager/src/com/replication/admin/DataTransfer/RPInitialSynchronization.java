@@ -6,6 +6,7 @@
 package com.replication.admin.DataTransfer;
 
 import com.replication.admin.ConnectionManagement.RPConnectionInterface;
+import com.replication.admin.DataStructure.RPTableSLL;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -34,7 +35,7 @@ public class RPInitialSynchronization {
      * @param connectionOutPut
      * @throws SQLException
      */
-    public void InitialSynchronization(ArrayList<String> tablas,
+    public void InitialSynchronization(RPTableSLL tablas,
             RPConnectionInterface connectionInput,
             RPConnectionInterface connectionOutPut) throws SQLException {
 
@@ -43,7 +44,7 @@ public class RPInitialSynchronization {
 
             ResultSet ColumsData
                     = connectionInput.makeQuery("SELECT * FROM "
-                            + tablas.get(i) + ";");
+                            + tablas.getElement(i).getName() + ";");
 
             //Se obtiene las columnas de las tablas
             setColums(Get_Columnas(ColumsData));
@@ -72,10 +73,10 @@ public class RPInitialSynchronization {
 
                 if (connectionInput.getTypeConnection() == "MySQL") {
                     connectionOutPut.executeUpdate("INSERT INTO "
-                            + tablas.get(i) + " VALUES(" + datos + ");");
+                            + tablas.getElement(i).getName() + " VALUES(" + datos + ");");
                 } else {
                     connectionOutPut.executeUpdate("INSERT INTO "
-                            + tablas.get(i) + " VALUES(" + datos + ") "
+                            + tablas.getElement(i).getName() + " VALUES(" + datos + ") "
                             + ";");
                 }
             }
@@ -187,4 +188,5 @@ public class RPInitialSynchronization {
         }
         return lista_datos;
     }
+
 }

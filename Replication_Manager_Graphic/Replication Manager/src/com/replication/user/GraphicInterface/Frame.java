@@ -15,6 +15,7 @@ import com.replication.admin.DataTransfer.RPCreateTableMSQL;
 import com.replication.admin.DataTransfer.RPCreateTableMYSQL;
 import com.replication.admin.DataTransfer.RPCreateTriggersMYSQL;
 import com.replication.admin.DataTransfer.RPCreateTriggersSQL;
+import com.replication.admin.DataTransfer.RPInitialSynchronization;
 import com.replication.admin.RPBaseData.RPBaseData;
 import com.replication.admin.RPConectionData.RPBaseInformation;
 import com.replication.admin.RPConectionData.RPConection;
@@ -25,10 +26,13 @@ import com.replication.user.Error.InfError;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -188,10 +192,10 @@ public class Frame extends javax.swing.JFrame {
             .addContainerGap()
             .addComponent(jLabel1)
             .addGap(10, 10, 10)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jButton1)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButton1))
             .addGap(18, 30, Short.MAX_VALUE)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 669, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addContainerGap())
@@ -236,9 +240,8 @@ public class Frame extends javax.swing.JFrame {
         RPTreadHistorical historical = new RPTreadHistorical();
         historical.setPausar(true);
         historical.start();
-    
-      
-      //  baseIndividual.consultarHistorial();
+
+        //  baseIndividual.consultarHistorial();
         RPTreadIndividualBase baseIndividual = new RPTreadIndividualBase();
         baseIndividual.start();
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -452,6 +455,12 @@ public class Frame extends javax.swing.JFrame {
                                 //Se vuelve a conectar la base de datos
                                 conectionMySql.setDatabase(Nombre_BD_Destino);
 
+                                //
+                                initialSynchronize(RPconnect, DataBases.get(0),
+                                        IP_Origen, Nombre_BD, Usuario,
+                                        Contraseña, Motor_Origen);
+                                //
+
                                 //se agrega la tabla de historial
                                 RPCreateHistoricalMYSQL historialMYSQL = new RPCreateHistoricalMYSQL(RPconnect);
                                 historialMYSQL.createHistorical();
@@ -495,6 +504,12 @@ public class Frame extends javax.swing.JFrame {
                                 RPCreateBase creatorMSQL = new RPCreateBase(RPconnect);
                                 creatorMSQL.replicTables(DataBases.get(0), "SQL SERVER", Nombre_BD_Destino);
 
+                                //
+                                initialSynchronize(RPconnect, DataBases.get(0),
+                                        IP_Origen, Nombre_BD, Usuario,
+                                        Contraseña, Motor_Origen);
+
+                                ///
                                 //se agrega la tabla de historial
                                 RPCreateHistoricalMSQL historialMSQL = new RPCreateHistoricalMSQL(RPconnect);
                                 historialMSQL.createHistorical();
@@ -604,6 +619,7 @@ public class Frame extends javax.swing.JFrame {
         int rows = model.getRowCount();
         for (int i = rows - 1; i >= 0; i--) {
             model.removeRow(i);
+            rowCount--;
         }
         RPBaseData baseData = new RPBaseData();
         ArrayList<String[]> connection = baseData.getConnection();
@@ -611,6 +627,60 @@ public class Frame extends javax.swing.JFrame {
             model.addRow(connection1);
             rowCount++;
         });
+    }
+
+    private void initialSynchronize(RPConnectionInterface RPconnectDestino,
+            RPTableSLL tablas, String IPOrigen,
+            String NombreBD, String Usuario, String Contraseña,
+            String MotorOrigen) {
+        RPConnectionInterface RPconnectOrigen = null;
+
+        switch (MotorOrigen) {
+
+            case "MySQL":
+
+                RPConection conectionMySql = new RPConection();
+                conectionMySql.setDatabase(NombreBD);
+                conectionMySql.setDriver("com.mysql.jdbc.Driver");
+                conectionMySql.setUser(Usuario);
+                conectionMySql.setPass(Contraseña);
+                conectionMySql.setIp(IPOrigen);
+                conectionMySql.setPort("3306");
+
+                RPconnectOrigen = RPConnectionsFactory.createConnection("MySQL");
+                RPconnectOrigen.setConection(conectionMySql);
+
+                break;
+
+            case "SQLMS":
+
+                RPConection conectionMSQL = new RPConection();
+
+                conectionMSQL.setDatabase(NombreBD);
+                conectionMSQL.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                conectionMSQL.setUser(Usuario);
+                conectionMSQL.setPass(Contraseña);
+                conectionMSQL.setIp(IPOrigen);
+                conectionMSQL.setPort("1433");
+
+                RPconnectOrigen = RPConnectionsFactory.createConnection("SQLMS");
+                RPconnectOrigen.setConection(conectionMSQL);
+
+                break;
+
+            default:
+                InfError.showInformation(null, "Debe seleccionar un Motor de Base de Datos");
+        }
+        RPInitialSynchronization initialsyn = new RPInitialSynchronization();
+        try {
+
+            initialsyn.InitialSynchronization(tablas, RPconnectOrigen,
+                    RPconnectDestino);
+
+        } catch (Exception ex) {
+            System.out.println("No se pudo hacer sincronizacio inicial");
+        }
+
     }
 
 }
