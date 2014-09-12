@@ -47,10 +47,10 @@ public class SeleccionarTablas extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
 
         for (String listTable : listTables) {
-           // if (!"historial".equals(listTable) & !"variable".equals(listTable)) {
-                Object[] datos = {listTable, false};
-                model.addRow(datos);
-          //  }
+            //  if (!"historial".equals(listTable) & !"variable".equals(listTable)) {
+            Object[] datos = {listTable, false};
+            model.addRow(datos);
+            //   }
         }
 
         final Timer timer = new Timer(30, null);

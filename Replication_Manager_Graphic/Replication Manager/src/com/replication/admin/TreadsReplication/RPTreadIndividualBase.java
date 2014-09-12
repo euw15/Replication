@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.replication.admin.TreadsReplication;
 
 import com.replication.admin.ConnectionManagement.RPConnectionInterface;
@@ -24,47 +23,43 @@ import java.util.logging.Logger;
  * @author Edward
  */
 public class RPTreadIndividualBase extends Thread {
-  
+
     RPConnectionInterface conexionBaseDatosSQL;  //conexion para hacer consultas
     List<RPConection> dataBaseConectionsOrigenes;   //conexion con todas la bases de datos que son origenes
     boolean pausa;
-     
-   public RPTreadIndividualBase()
-   {
-       //crea la conexion con la base
-       RPConection connection = new RPConection();
+
+    public RPTreadIndividualBase() {
+        //crea la conexion con la base
+        RPConection connection = new RPConection();
         connection.setDatabase("MotorBase");
         connection.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         connection.setIp("localhost");
         connection.setPass("1234");
         connection.setPort("1433");
         connection.setUser("sa");
-        
+
         //estado del hilo
-        pausa= true;
-        
+        pausa = true;
+
         //setea algunas variables
         conexionBaseDatosSQL = RPConnectionsFactory.createConnection("SQLMS");
         conexionBaseDatosSQL.setConection(connection);
-   }
-   
-   //consulto 
-   public ResultSet consultarHistorial()
-   {
+    }
+
+    //consulto 
+    public ResultSet consultarHistorial() {
         ResultSet historial = conexionBaseDatosSQL.makeQuery("SELECT TOP 1000 [idLog],[table_name],[action],[row_pk],[field_name],[old_value],[new_value],[timestamp],[consultado],[nombreBaseOrigen] FROM [MotorBase].[dbo].[Log] where consultado = 0 order by [idLog]");
-        
+
         return historial;
-   }
-   
-   public List<RPConection> getBasesAReplicar(String nombreBaseOrigen)
-   {
-        ResultSet conexionesAReplicar = conexionBaseDatosSQL.makeQuery("SELECT TOP 1000 [idConnection],[DBMSInput],[ipInput],[DBNameInput],[userInput],[passwordInput],[DBMSOutput],[ipOutput],[DBNameOutput],[userOutput],[passwordOutput],[stateConnection] FROM [MotorBase].[dbo].[connections] where DBNameInput ='"+ nombreBaseOrigen+"'");
-        List<RPConection> basesAReplicar= new ArrayList<>();
-        
+    }
+
+    public List<RPConection> getBasesAReplicar(String nombreBaseOrigen) {
+        ResultSet conexionesAReplicar = conexionBaseDatosSQL.makeQuery("SELECT TOP 1000 [idConnection],[DBMSInput],[ipInput],[DBNameInput],[userInput],[passwordInput],[DBMSOutput],[ipOutput],[DBNameOutput],[userOutput],[passwordOutput],[stateConnection] FROM [MotorBase].[dbo].[connections] where DBNameInput ='" + nombreBaseOrigen + "'");
+        List<RPConection> basesAReplicar = new ArrayList<>();
+
         try {
             //analiza el ResultSet
-             while (conexionesAReplicar.next()) 
-            {
+            while (conexionesAReplicar.next()) {
                 if (conexionesAReplicar != null) {
                     String tipodbms = conexionesAReplicar.getString("DBMSOutput");
 
@@ -89,12 +84,11 @@ public class RPTreadIndividualBase extends Thread {
 
                 }
             }
-          return basesAReplicar;
-          
+            return basesAReplicar;
+
         } catch (SQLException ex) {
             Logger.getLogger(RPTreadIndividualBase.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally{
+        } finally {
             return basesAReplicar;
         }
      
@@ -238,5 +232,5 @@ public class RPTreadIndividualBase extends Thread {
             }
         }
     }
-   
+
 }

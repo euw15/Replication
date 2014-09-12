@@ -22,7 +22,7 @@ public class RPCreateTableMSQL {
     public RPCreateTableMSQL(RPTableSLL tableList, String DataBaseName) {
         this.tableList = tableList;
         this.DataBaseName = DataBaseName;
-        
+
     }
 
     public void createScript() {
@@ -75,7 +75,7 @@ public class RPCreateTableMSQL {
 
     private String defaultCheck(String Default) {
         if (Default != null) {
-            return " DEFAULT (1)";
+            return " DEFAULT (" + Default + ")";
         } else {
             return "";
         }
