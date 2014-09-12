@@ -44,6 +44,11 @@ public class RPTreadIndividualBase {
         return historial;
    }
    
+   public void getBasesAReplicar()
+   {
+       
+   }
+   
    public void replicate()
    {
        //llama al metodoConsultarHistorial

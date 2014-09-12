@@ -5,6 +5,7 @@
  */
 package com.replication.user.GraphicInterface;
 
+
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -17,7 +18,7 @@ public class GraphicInterface {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
 
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -27,7 +28,7 @@ public class GraphicInterface {
 
         Frame a = new Frame();
         a.setLocationRelativeTo(null);
-        a.setVisible(true);
+        a.setVisible(true);   
     }
 
 }
