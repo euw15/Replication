@@ -110,15 +110,15 @@ public class RPTreadIndividualBase extends Thread {
        }
    }
    
-    public void activarTriggers(String dbms,RPConnectionInterface conexionBaseActual ){
-       if (dbms.equals("SQLMS")) {
-           RPTriggersActionMSQL controlTriggersSQL = new RPTriggersActionMSQL(conexionBaseActual);
-           controlTriggersSQL.startTriggersMSQL();
-       } else {
-           RPTriggersActionMYSQL controlTriggersMySql = new RPTriggersActionMYSQL(conexionBaseActual);
-           controlTriggersMySql.startTriggersMYSQL();
-       }
-   }
+    public void activarTriggers(String dbms, RPConnectionInterface conexionBaseActual) {
+        if (dbms.equals("SQLMS")) {
+            RPTriggersActionMSQL controlTriggersSQL = new RPTriggersActionMSQL(conexionBaseActual);
+            controlTriggersSQL.startTriggersMSQL();
+        } else {
+            RPTriggersActionMYSQL controlTriggersMySql = new RPTriggersActionMYSQL(conexionBaseActual);
+            controlTriggersMySql.startTriggersMYSQL();
+        }
+    }
 
     public boolean isPausa() {
         return pausa;
@@ -127,87 +127,100 @@ public class RPTreadIndividualBase extends Thread {
     public void setPausa(boolean pausa) {
         this.pausa = pausa;
     }
-   
-    
-   public void replicate()
-   {
-        //llama al metodoConsultarHistorial
-        ResultSet Historial = consultarHistorial();
-        ResultSet PK= consultarHistorial();
 
-        if(Historial!=null){
-        try 
-        {
-           
-            //consulta las bases a la que este destino
-            String nombreBaseOrigen = "Origen";
-            List<RPConection> basesAReplicar = getBasesAReplicar(nombreBaseOrigen);
-            
-            for(RPConection conexionActual: basesAReplicar)
-            {
-                while(PK.next())
-                {
-                   String dbms      = replace(conexionActual.getTypeDatabase());
-                   String tableName = replace(PK.getString("table_name"));
-                   String action    = replace(PK.getString("action"));
-                   String rowPK     = replace(PK.getString("row_pk"));
-                   String fieldName = replace(PK.getString("field_name"));
-                   String oldValue  = "null";
-                   String newValue  = replace(PK.getString("new_value"));
-                   
-                  //crea una conexionBASE con la conexion actual
-                  RPConnectionInterface conexionBaseActual= RPConnectionsFactory.createConnection(dbms);
-                  conexionBaseActual.setConection(conexionActual);
-                  if(rowPK.equalsIgnoreCase(newValue))
-                  {
-                        //desactiva los triggers
-                     desactivarTriggers(dbms,conexionBaseActual);
-                    String update= "UPDATE [MotorBase].[dbo].[Log] SET [consultado] = 1 WHERE [idLog] = " +  replace(PK.getString("idLog"));
-                    this.conexionBaseDatosSQL.executeUpdate(update);
-                    RPSynchronizeReply.synchronizeData(dbms,tableName,action,rowPK,fieldName,oldValue,newValue,conexionBaseActual,false);
-                     desactivarTriggers(dbms,conexionBaseActual);
-                    break;
-                  }
-                 
-                }
-                while(Historial.next())
-                {
-                   String dbms      = replace(conexionActual.getTypeDatabase());
-                   String tableName = replace(Historial.getString("table_name"));
-                   String action    = replace(Historial.getString("action"));
-                   String rowPK     = replace(Historial.getString("row_pk"));
-                   String fieldName = replace(Historial.getString("field_name"));
-                   String oldValue  = "null";
-                   String newValue  = replace(Historial.getString("new_value"));
-                   
-                  //crea una conexionBASE con la conexion actual
-                  RPConnectionInterface conexionBaseActual= RPConnectionsFactory.createConnection(dbms);
-                  conexionBaseActual.setConection(conexionActual);
-                 
-                     //desactiva los triggers
-                  desactivarTriggers(dbms,conexionBaseActual);
-                    //ejecuta el query
-                  if(rowPK.equalsIgnoreCase(newValue)){
-                      
-                  }
-                  else{
-                     
-                      String update= "UPDATE [MotorBase].[dbo].[Log] SET [consultado] = 1 WHERE [idLog] = " +  replace(Historial.getString("idLog"));
-                      this.conexionBaseDatosSQL.executeUpdate(update);
-                      RPSynchronizeReply.synchronizeData(dbms,tableName,action,rowPK,fieldName,oldValue,newValue,conexionBaseActual,true);
-                  }
-                  
-                    //re-activa los triggers
-                   activarTriggers(dbms,conexionBaseActual);
-                
-                }
+    public String getNombreDataBase(String idLog) {
+        String consulta = "SELECT TOP 1000 [nombreBaseOrigen] FROM [MotorBase].[dbo].[Log] where [idLog]=" + idLog;
+        ResultSet resultado = this.conexionBaseDatosSQL.makeQuery(consulta);
+        String nombre = "";
+        try {
+            while (resultado.next()) {
+                nombre = resultado.getString("nombreBaseOrigen");
             }
-        }
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(RPTreadIndividualBase.class.getName()).log(Level.SEVERE, null, ex);
         }
-     }
-   }
+        return nombre;
+    }
+
+    public void replicate() {
+
+        //llama al metodoConsultarHistorial
+        ResultSet Historial = consultarHistorial();
+        ResultSet PK = consultarHistorial();
+        ResultSet bases = consultarHistorial();
+
+        if (Historial != null) {
+
+            try {
+                    //consulta las bases a la que este destino
+               while (PK.next()) {
+                    String nombreBaseOrigen = replace(PK.getString("nombreBaseOrigen"));
+                    List<RPConection> basesAReplicar = getBasesAReplicar(nombreBaseOrigen);
+                    for (RPConection conexionActual : basesAReplicar) {
+                        String dbms = replace(conexionActual.getTypeDatabase());
+                        String tableName = replace(PK.getString("table_name"));
+                        String action = replace(PK.getString("action"));
+                        String rowPK = replace(PK.getString("row_pk"));
+                        String fieldName = replace(PK.getString("field_name"));
+                        String oldValue = "null";
+                        String newValue = replace(PK.getString("new_value"));
+
+                        //crea una conexionBASE con la conexion actual
+                        RPConnectionInterface conexionBaseActual = RPConnectionsFactory.createConnection(dbms);
+                        conexionBaseActual.setConection(conexionActual);
+                        if (rowPK.equalsIgnoreCase(newValue)) {
+                            //desactiva los triggers
+                            desactivarTriggers(dbms, conexionBaseActual);
+                            String update = "UPDATE [MotorBase].[dbo].[Log] SET [consultado] = 1 WHERE [idLog] = " + replace(PK.getString("idLog"));
+                            this.conexionBaseDatosSQL.executeUpdate(update);
+                            RPSynchronizeReply.synchronizeData(dbms, tableName, action, rowPK, fieldName, oldValue, newValue, conexionBaseActual, false);
+                            desactivarTriggers(dbms, conexionBaseActual);
+                            break;
+                        }
+
+                    }
+
+                }
+                while (Historial.next()) {
+                    String nombreBaseOrigen = replace(Historial.getString("nombreBaseOrigen"));
+                    List<RPConection> basesAReplicar = getBasesAReplicar(nombreBaseOrigen);
+                    for (RPConection conexionActual : basesAReplicar) {
+                        String dbms = replace(conexionActual.getTypeDatabase());
+                        String tableName = replace(Historial.getString("table_name"));
+                        String action = replace(Historial.getString("action"));
+                        String rowPK = replace(Historial.getString("row_pk"));
+                        String fieldName = replace(Historial.getString("field_name"));
+                        String oldValue = "null";
+                        String newValue = replace(Historial.getString("new_value"));
+
+                        //crea una conexionBASE con la conexion actual
+                        RPConnectionInterface conexionBaseActual = RPConnectionsFactory.createConnection(dbms);
+                        conexionBaseActual.setConection(conexionActual);
+
+                        //desactiva los triggers
+                        desactivarTriggers(dbms, conexionBaseActual);
+                        //ejecuta el query
+                        if (rowPK.equalsIgnoreCase(newValue)) {
+
+                        } else {
+
+                            String update = "UPDATE [MotorBase].[dbo].[Log] SET [consultado] = 1 WHERE [idLog] = " + replace(Historial.getString("idLog"));
+                            this.conexionBaseDatosSQL.executeUpdate(update);
+                            RPSynchronizeReply.synchronizeData(dbms, tableName, action, rowPK, fieldName, oldValue, newValue, conexionBaseActual, true);
+                        }
+
+                        //re-activa los triggers
+                        activarTriggers(dbms, conexionBaseActual);
+
+                    }
+
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(RPTreadIndividualBase.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
 
    public String replace(String stringConEspacios)
    {
